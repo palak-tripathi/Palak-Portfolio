@@ -1,0 +1,256 @@
+{
+  "profile": {
+    "name": "Palak Tripathi",
+    "headline": "Aspiring Full-Stack Developer • CSBS Student • Creative Technologist",
+    "location": "India",
+    "bio": "I am Palak Tripathi, an aspiring full-stack developer and student of Computer Science and Business Systems (CSBS). I bridge software engineering with business logic and creative technology, turning complex problems into elegant, user-friendly digital experiences.",
+    "education": {
+      "degree": "B.Tech in Computer Science and Business Systems (CSBS)",
+      "status": "Undergraduate Student",
+      "focus": "Full-stack web engineering, data structures, algorithms, database management, and business systems design."
+    },
+    "careerGoals": {
+      "targetRoles": [
+        "Full-Stack Developer",
+        "Software Engineer",
+        "Frontend Engineer",
+        "Backend Developer"
+      ],
+      "availability": "Actively seeking and available for Software Development and Full-Stack Internships and early-career opportunities.",
+      "mission": "To craft intuitive, high-performance software that solves real-world challenges while continuously expanding mastery across modern frameworks and cloud architectures."
+    },
+    "contacts": {
+      "email": "palak09.learner@gmail.com",
+      "linkedin": "https://linkedin.com",
+      "github": "https://github.com",
+      "instagram": "https://instagram.com/palak.tripathi_",
+      "phone": ""
+    }
+  },
+  "technicalSkills": {
+    "frontend": [
+      {
+        "name": "React.js",
+        "level": "Proficient",
+        "highlight": "Component architecture, hooks, state management, and modern SPA performance."
+      },
+      {
+        "name": "JavaScript (ES6+)",
+        "level": "Proficient",
+        "highlight": "Async/await, DOM manipulation, closures, and modern modular syntax."
+      },
+      {
+        "name": "HTML5 & CSS3",
+        "level": "Proficient",
+        "highlight": "Semantic HTML, responsive layouts, flexbox, CSS grid, and modern web standards."
+      },
+      {
+        "name": "Tailwind CSS",
+        "level": "Proficient",
+        "highlight": "Utility-first design, custom design tokens, dark/light themes, and glassmorphism."
+      }
+    ],
+    "backend": [
+      {
+        "name": "Node.js",
+        "level": "Intermediate",
+        "highlight": "Event-driven runtime, asynchronous I/O, server-side APIs, and microservices."
+      },
+      {
+        "name": "Express.js",
+        "level": "Intermediate",
+        "highlight": "RESTful API design, routing, middleware pipelines, and error handling."
+      },
+      {
+        "name": "REST APIs",
+        "level": "Proficient",
+        "highlight": "HTTP methods, status codes, payload validation, and client-server integration."
+      }
+    ],
+    "languages": [
+      {
+        "name": "Java",
+        "level": "Proficient",
+        "highlight": "Object-Oriented Programming (OOP), Collections framework, exception handling, data structures."
+      },
+      {
+        "name": "JavaScript",
+        "level": "Proficient",
+        "highlight": "Full-stack scripting, Node.js and browser environments."
+      },
+      {
+        "name": "SQL",
+        "level": "Intermediate",
+        "highlight": "Complex queries, joins, indexing, relational schema design, and ACID transactions."
+      }
+    ],
+    "databases": [
+      {
+        "name": "Relational Databases / SQL",
+        "level": "Intermediate",
+        "highlight": "Schema design, relational normalization, PostgreSQL / SQLite / MySQL."
+      },
+      {
+        "name": "Supabase / JSON Store",
+        "level": "Intermediate",
+        "highlight": "BaaS integration, authentication models, and persistent file stores."
+      }
+    ],
+    "tools": [
+      {
+        "name": "Git & GitHub",
+        "level": "Proficient",
+        "highlight": "Version control, branching workflows, PRs, and collaborative repo management."
+      },
+      {
+        "name": "VS Code",
+        "level": "Proficient",
+        "highlight": "Primary IDE, debugging, extensions, and automated linting."
+      },
+      {
+        "name": "Vite & Modern Build Tools",
+        "level": "Proficient",
+        "highlight": "Fast bundling, SSR/SSG workflows, and hot-module replacement."
+      },
+      {
+        "name": "Web Audio API",
+        "level": "Intermediate",
+        "highlight": "Real-time acoustic sound synthesis, harmonic oscillators, and audio graph routing."
+      }
+    ],
+    "aiTechnologies": [
+      {
+        "name": "AI Prompt Engineering & LLM Integration",
+        "level": "Intermediate",
+        "highlight": "System prompt design, structured output parsing, multi-provider API integration (OpenAI, Gemini)."
+      }
+    ]
+  },
+  "projects": [
+    {
+      "name": "PRICORA-AI",
+      "summary": "An AI-powered content and marketing intelligence suite engineered to generate optimized product copy, pricing insights, and high-converting campaign assets.",
+      "role": "Full-Stack Developer & Creator",
+      "technologies": ["React", "TypeScript", "Tailwind CSS", "Node.js", "AI / LLM APIs", "Vite"],
+      "contributions": "Designed and built the full application including the interactive dashboard, AI prompt orchestrations, dynamic pricing strategy tools, and deployed it on Vercel.",
+      "githubUrl": "https://github.com/palak-tripathi/pricora-ai-content-generator",
+      "liveUrl": "https://pricora-ai-content-generator.vercel.app",
+      "keyFeatures": [
+        "AI-driven content and marketing copy generator",
+        "Dynamic pricing strategy intelligence and product copy optimization",
+        "Clean, modern responsive dashboard with instant generation workflows",
+        "Robust client-side error handling and fast API response streaming"
+      ]
+    },
+    {
+      "name": "Sentinel AI",
+      "summary": "An intelligent AI-assisted security and automated monitoring system.",
+      "role": "Frontend Architecture & API Integration Lead",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "REST APIs",
+        "Tailwind CSS",
+        "AI Analytics"
+      ],
+      "contributions": "Engineered the responsive monitoring dashboard, designed real-time event visualization components, connected AI backend detection endpoints, and ensured seamless alerting workflows.",
+      "githubUrl": "https://github.com",
+      "liveUrl": "",
+      "keyFeatures": [
+        "Real-time event feed and threat level telemetry",
+        "Modular dashboard cards with high-contrast data visualization",
+        "Asynchronous alerting and filterable incident history",
+        "Clean, robust error-handling and REST API integration"
+      ]
+    },
+    {
+      "name": "Story in Stills and Sound — Interactive Portfolio & 3D Storybook",
+      "summary": "A developer portfolio combining full-stack engineering with an interactive 3D fairytale diary.",
+      "role": "Solo Creator & Full-Stack Developer",
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "TanStack Router",
+        "Web Audio API",
+        "Tailwind CSS"
+      ],
+      "contributions": "Built the entire application from scratch including the 3D book-turn physics, felt-piano synthesizer, day/night celestial modes, and multi-tier persistence engine.",
+      "githubUrl": "https://github.com",
+      "liveUrl": "http://localhost:8081",
+      "keyFeatures": [
+        "Full-screen 1-2-3 cinematic countdown splash intro",
+        "Handcrafted 3D storybook with realistic paper turn and ambient sparkles",
+        "Pure Web Audio API acoustic piano synthesizer with chord progressions",
+        "Day and Night Mode with starlit celestial parchment and moonlit effects",
+        "Intelligent conversational AI chatbot with dynamic knowledge updates"
+      ]
+    },
+    {
+      "name": "Full-Stack Task & Systems Manager",
+      "summary": "A full-featured responsive web application designed for agile task management and workflow organization.",
+      "role": "Full-Stack Developer",
+      "technologies": ["React", "Node.js", "Express", "SQL / PostgreSQL", "REST APIs"],
+      "contributions": "Developed CRUD API endpoints, relational schema design, interactive drag-and-drop task boards, and token-based state persistence.",
+      "githubUrl": "https://github.com",
+      "liveUrl": "",
+      "keyFeatures": [
+        "RESTful API design with structured validation",
+        "Relational database integration with foreign keys and cascade rules",
+        "Responsive, mobile-first interface with instant optimistic UI updates"
+      ]
+    }
+  ],
+  "creativeInterests": [
+    {
+      "title": "Singing & Vocal Music",
+      "description": "Singing is one of my deepest creative passions. I perform vocal covers across romantic ballads, Bollywood melodies, and acoustic arrangements, bringing emotional resonance to music."
+    },
+    {
+      "title": "Digital Crafting & Aesthetic Scrapbooking",
+      "description": "I love creating handcrafted-style journals, washi tape collages, Polaroid layouts, and artistic visual storytelling."
+    },
+    {
+      "title": "Travel & Exploration",
+      "description": "Documenting scenic landscapes, architectural landmarks, mountain horizons, and quiet moments that inspire fresh perspectives."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Who is Palak Tripathi?",
+      "a": "Palak Tripathi is a Computer Science and Business Systems (CSBS) student and aspiring full-stack developer who combines technical engineering with creative technology and thoughtful design."
+    },
+    {
+      "q": "What technologies does Palak know?",
+      "a": "Palak works with React.js, JavaScript (ES6+), HTML5, CSS3, Tailwind CSS on the frontend; Node.js, Express.js, and REST APIs on the backend; Java (OOP & Data Structures) and SQL for core software and databases; plus Git, GitHub, Vite, and Web Audio API."
+    },
+    {
+      "q": "Is Palak a frontend or backend developer?",
+      "a": "Palak is an aspiring full-stack developer. She has strong strengths in frontend architecture (React, UI/UX, responsive layouts) as well as solid backend foundations in Node.js, Express, REST APIs, Java, and SQL databases."
+    },
+    {
+      "q": "What is PRICORA-AI?",
+      "a": "PRICORA-AI is an AI-powered content and marketing generator created by Palak Tripathi. It generates high-converting marketing copy, pricing intelligence, and campaign assets. Code: https://github.com/palak-tripathi/pricora-ai-content-generator | Live demo: https://pricora-ai-content-generator.vercel.app"
+    },
+    {
+      "q": "What projects has Palak built?",
+      "a": "Palak has built 'PRICORA-AI' (an AI content and pricing intelligence generator), 'Sentinel AI' (an AI-assisted security and monitoring dashboard), 'Story in Stills and Sound' (this interactive portfolio featuring an acoustic piano synthesizer and 3D diary), and full-stack web applications with React, Node, Express, and SQL."
+    },
+    {
+      "q": "What was Palak's role in Sentinel AI?",
+      "a": "In Sentinel AI, Palak was the Frontend Architecture and API Integration Lead. She designed the responsive monitoring dashboard, real-time alert widgets, and connected the AI analytics endpoints."
+    },
+    {
+      "q": "Is Palak available for internships?",
+      "a": "Yes! Palak is actively open and available for software engineering and full-stack development internships. You can reach her directly at palak09.learner@gmail.com."
+    },
+    {
+      "q": "Why should I hire Palak?",
+      "a": "Palak combines strong technical fundamentals (Java OOP, React, Node, SQL) with a CSBS background that understands business systems and product outcomes. She is a dedicated builder, self-driven learner, and brings genuine creativity and attention to detail to every project."
+    },
+    {
+      "q": "How can I contact Palak?",
+      "a": "You can contact Palak via email at palak09.learner@gmail.com, connect on LinkedIn, check her code on GitHub, or follow her creative journey on Instagram (@palak.tripathi_)."
+    }
+  ]
+}

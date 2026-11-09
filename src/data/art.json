@@ -1,0 +1,75 @@
+{
+  "title": "Palak's Sketchbook & Art Corner",
+  "subtitle": "Colored pencil sketches, watercolor doodles, botanical studies and cozy illustrations",
+  "artistBio": "Drawing has always been my quiet refuge away from screens and syntax. When I sketch, time dissolves into pencil strokes, paper texture, and blended shades of earth, flora, and warmth.",
+  "tools": [
+    "Prismacolor Premier Pencils",
+    "Winsor & Newton Cotman Watercolors",
+    "Sakura Pigma Micron 0.05 - 0.5",
+    "Fabriano 300gsm Cold Pressed Paper"
+  ],
+  "artworks": [
+    {
+      "id": "art-1",
+      "title": "Cozy Thatched Cottage in Blossom Garden",
+      "image": "/assets/art/cozy-cottage-garden.png",
+      "category": "Illustration & Colored Pencil",
+      "medium": "Colored pencil & light gouache wash on toned tan paper",
+      "year": "2024",
+      "dimensions": "A4 (210 x 297 mm)",
+      "featured": true,
+      "tapeColor": "#fef08a",
+      "rotation": "-1.5deg",
+      "palette": ["#4d7c0f", "#fef08a", "#ea580c", "#78350f", "#0284c7"],
+      "story": "Drawn on a slow Sunday afternoon while listening to lo-fi beats. I wanted to capture the fairytale warmth of stone chimneys, creeping morning glories, stone pathways, and tiny cottage windows glowing warmly from inside.",
+      "details": [
+        "Delicate stippling on the thatched straw roof",
+        "Multi-layered greens for ivy creepers",
+        "Hand-shaded stone masonry texture"
+      ]
+    },
+    {
+      "id": "art-2",
+      "title": "Cute Chibi Character with Little Bunny Companion",
+      "image": "/assets/art/chibi-girl-doodle.png",
+      "category": "Character Art & Doodles",
+      "medium": "Micron pen lineart with soft watercolor pastel gradients",
+      "year": "2024",
+      "dimensions": "A5 (148 x 210 mm)",
+      "featured": true,
+      "tapeColor": "#fbcfe8",
+      "rotation": "2deg",
+      "palette": ["#f472b6", "#fed7aa", "#818cf8", "#fde047", "#334155"],
+      "story": "A whimsical study of soft character expressions and cheerful vibes. Drawn when I needed a quick creative break between debugging sessions. Features a cute braided hairstyle, oversized cozy sweater, and a tiny curious bunny friend.",
+      "details": [
+        "Soft pink blush highlights blended with water brush",
+        "Clean 0.1 Micron outline ink strokes",
+        "Tiny stars and sparkle embellishments around hair"
+      ]
+    },
+    {
+      "id": "art-3",
+      "title": "Botanical Wildflowers & Lavender Study",
+      "image": "/assets/art/botanical-wildflowers-sketch.png",
+      "category": "Botanical Line Art",
+      "medium": "Graphite pencil and sepia archival ink on textured watercolor paper",
+      "year": "2024",
+      "dimensions": "A5 (148 x 210 mm)",
+      "featured": true,
+      "tapeColor": "#bbf7d0",
+      "rotation": "-1deg",
+      "palette": ["#65a30d", "#8b5cf6", "#a855f7", "#78350f", "#f8fafc"],
+      "story": "Inspired by pressed wild flora collected during walks in Pachmarhi. Each petal, stem, and delicate leaf node was observed and sketched with meticulous attention to natural asymmetry and organic curves.",
+      "details": [
+        "Botanical precision in lavender calyx structure",
+        "Cross-hatching shade transitions on leaves",
+        "Natural deckle-edge paper finish"
+      ]
+    }
+  ],
+  "sketchbookQuotes": [
+    "“Art washes away from the soul the dust of everyday life.” — Pablo Picasso",
+    "“The world is quiet here, between pencil and paper.”",
+    "“Code builds systems; art breathes life into thoughts.”"
+  ]
+}

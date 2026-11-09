@@ -1,0 +1,407 @@
+{
+  "title": "Palak's Travel Scrapbook & Wandering Diaries",
+  "subtitle": "Candid memories, road trips, mountain trails, temple bells, and serene skies",
+  "chapters": [
+    {
+      "id": "pachmarhi",
+      "name": "Pachmarhi & Satpura Ridges",
+      "tagline": "Queen of Satpura — misty peaks, cascading waterfalls & ancient cave shrines",
+      "location": "Madhya Pradesh, India",
+      "badge": "Monsoon & Winter 2024",
+      "stampText": "SATPURA NATIONAL PARK • POSTED",
+      "narrative": "Waking up at 5:30 AM to catch the sea of clouds rolling below Dhoopgarh. The scent of pine and wet earth after a sudden mountain shower. Climbing 1,300+ steps up to Chauragarh with bells echoing in the mist. Pure serenity.",
+      "accentColor": "#059669",
+      "photos": [
+        {
+          "id": "pach-1",
+          "title": "Dhoopgarh Golden Dawn",
+          "caption": "Watching amber sunlight break over the endless Satpura ridges from the highest point in Madhya Pradesh.",
+          "image": "/assets/travel/pachmarhi/pachmarhi-dhoopgarh-sunset.jpg",
+          "location": "Dhoopgarh, Pachmarhi",
+          "date": "Oct 2024",
+          "aspect": "wide",
+          "rotation": "-2deg",
+          "tag": "Mountain Sunsets"
+        },
+        {
+          "id": "pach-2",
+          "title": "Misty Morning in the Valley",
+          "caption": "Early morning fog clinging to pine canopy. The air was crisp, clean, and carrying pine fragrances.",
+          "image": "/assets/travel/pachmarhi/satpura-valley-morning.jpg",
+          "location": "Satpura Valley Viewpoint",
+          "date": "Oct 2024",
+          "aspect": "tall",
+          "rotation": "1.5deg",
+          "tag": "Misty Trails"
+        },
+        {
+          "id": "pach-3",
+          "title": "Apsara Vihar Natural Pool",
+          "caption": "Clear turquoise mountain water gushing into a natural rock pool. Freezing cold but magical.",
+          "image": "/assets/travel/pachmarhi/apsara-vihar-waterfall.jpg",
+          "location": "Apsara Vihar (Fairy Pool)",
+          "date": "Oct 2024",
+          "aspect": "tall",
+          "rotation": "-1deg",
+          "tag": "Hidden Waterfalls"
+        },
+        {
+          "id": "pach-4",
+          "title": "Bee Falls Roaring Cascade",
+          "caption": "The force of the falling water buzzing like bees in the gorge. Worth the steep climb back up!",
+          "image": "/assets/travel/pachmarhi/bee-falls-cascade.jpg",
+          "location": "Bee Falls Gorge",
+          "date": "Oct 2024",
+          "aspect": "square",
+          "rotation": "2deg",
+          "tag": "Cascades"
+        },
+        {
+          "id": "pach-5",
+          "title": "Chauragarh Pilgrimage Trail",
+          "caption": "The holy climb surrounded by thousands of brass trishuls left by devotees across centuries.",
+          "image": "/assets/travel/pachmarhi/chauragarh-temple-trail.jpg",
+          "location": "Chauragarh Peak",
+          "date": "Oct 2024",
+          "aspect": "wide",
+          "rotation": "-1.5deg",
+          "tag": "Spiritual Peaks"
+        },
+        {
+          "id": "pach-6",
+          "title": "Satpura Pine Woods",
+          "caption": "Tall slender pine trees framing the walking trails. Peaceful silence interrupted only by bird song.",
+          "image": "/assets/travel/pachmarhi/satpura-pine-forest-path.jpg",
+          "location": "Pachmarhi Cantonment Forest",
+          "date": "Oct 2024",
+          "aspect": "tall",
+          "rotation": "1deg",
+          "tag": "Pine Aromas"
+        },
+        {
+          "id": "pach-7",
+          "title": "Jatashankar Cave Cliffs",
+          "caption": "Enormous overhang rock cliffs sheltering naturally formed stalagmite shivlingams.",
+          "image": "/assets/travel/pachmarhi/jatashankar-cave-cliffs.jpg",
+          "location": "Jatashankar Ravine",
+          "date": "Oct 2024",
+          "aspect": "wide",
+          "rotation": "-2.5deg",
+          "tag": "Cave Rocks"
+        },
+        {
+          "id": "pach-8",
+          "title": "Monsoon Green Ridges",
+          "caption": "When the monsoon drenches the hills in velvety moss and jade greens that look straight out of a painting.",
+          "image": "/assets/travel/pachmarhi/monsoon-satpura-ridges.jpg",
+          "location": "Satpura Escarpment",
+          "date": "Oct 2024",
+          "aspect": "square",
+          "rotation": "1.5deg",
+          "tag": "Monsoon Greens"
+        }
+      ]
+    },
+    {
+      "id": "tamilnadu",
+      "name": "Tamil Nadu Heritage & Food",
+      "tagline": "Dravidian architecture, temple towers, filter kaapi & banana leaf feasts",
+      "location": "Madurai & Chennai, India",
+      "badge": "South Expedition",
+      "stampText": "MADURAI • REGISTERED AIRMAIL",
+      "narrative": "Intricate gopurams reaching toward azure blue skies, the scent of fresh jasmine flowers, sizzling ghee roast dosas on cast iron tavas, and steaming brass tumblers of dark chicory filter coffee.",
+      "accentColor": "#b45309",
+      "photos": [
+        {
+          "id": "tn-1",
+          "title": "Meenakshi Amman Gopuram",
+          "caption": "Thousands of sculpted deities and mythical creatures rising high into the tropical morning sun.",
+          "image": "/assets/travel/tamilnadu/meenakshi-temple-gopuram.jpg",
+          "location": "Madurai, Tamil Nadu",
+          "date": "Jan 2024",
+          "aspect": "tall",
+          "rotation": "-1deg",
+          "tag": "Gopuram Architecture"
+        },
+        {
+          "id": "tn-2",
+          "title": "Crispy Ghee Roast Masala Dosa",
+          "caption": "Crispy golden wafer-thin crust filled with spiced potatoes, accompanied by coconut and fiery tomato chutney.",
+          "image": "/assets/travel/tamilnadu/crispy-masala-dosa.jpg",
+          "location": "Heritage Mess, Madurai",
+          "date": "Jan 2024",
+          "aspect": "wide",
+          "rotation": "2deg",
+          "tag": "Food Trails"
+        },
+        {
+          "id": "tn-3",
+          "title": "Fluffy Steamed Idli & Sambar",
+          "caption": "Cloud-soft idlis bathing in rich drumstick sambar garnished with fresh curry leaves and mustard seeds.",
+          "image": "/assets/travel/tamilnadu/steaming-idli-sambar.jpg",
+          "location": "Traditional Breakfast",
+          "date": "Jan 2024",
+          "aspect": "square",
+          "rotation": "-2deg",
+          "tag": "Authentic Flavors"
+        },
+        {
+          "id": "tn-4",
+          "title": "Brass Tumbler Filter Kaapi",
+          "caption": "Poured from height into the brass davarah to create velvety froth. Best drink in the world.",
+          "image": "/assets/travel/tamilnadu/filter-coffee-brass-tumbler.jpg",
+          "location": "Corner Kaapi Stall",
+          "date": "Jan 2024",
+          "aspect": "tall",
+          "rotation": "1.5deg",
+          "tag": "Kaapi Love"
+        }
+      ]
+    },
+    {
+      "id": "moon-sky",
+      "name": "Moon, Stars & Cloudscapes",
+      "tagline": "Looking up at celestial wonder, golden hours, and quiet starry nights",
+      "location": "Various Skylines",
+      "badge": "Night & Twilight",
+      "stampText": "ASTRONOMY & SKYWATCH • LUNAR LOG",
+      "narrative": "Every time the sky turns pastel or a luminous full moon floats over silhouetted tree branches, time slows down. I keep a visual log of skies that made me pause and breathe.",
+      "accentColor": "#6366f1",
+      "photos": [
+        {
+          "id": "sky-1",
+          "title": "Amber Golden Hour Clouds",
+          "caption": "When the sun dips low and lights the cloud bellies with vibrant molten gold and honey tones.",
+          "image": "/assets/travel/moon-sky/golden-hour-clouds.jpg",
+          "location": "Rooftop View",
+          "date": "Summer 2024",
+          "aspect": "wide",
+          "rotation": "-1.5deg",
+          "tag": "Golden Hour"
+        },
+        {
+          "id": "sky-2",
+          "title": "Dramatic Monsoon Storm Clouds",
+          "caption": "Heavy bruised clouds rolling in right before the heavens opened. The air smelled of petrichor.",
+          "image": "/assets/travel/moon-sky/dramatic-monsoon-sky.jpg",
+          "location": "Highway Drive",
+          "date": "Aug 2024",
+          "aspect": "wide",
+          "rotation": "1deg",
+          "tag": "Storm Watching"
+        },
+        {
+          "id": "sky-3",
+          "title": "Pastel Pink Twilight",
+          "caption": "Cotton-candy clouds against soft violet evening gradient. Feels peaceful and gentle.",
+          "image": "/assets/travel/moon-sky/pink-twilight-clouds.jpg",
+          "location": "Lake Promenade",
+          "date": "Sept 2024",
+          "aspect": "square",
+          "rotation": "-2deg",
+          "tag": "Cotton Skies"
+        },
+        {
+          "id": "sky-4",
+          "title": "Silver Sunbeams Through Clouds",
+          "caption": "Crepuscular rays streaming down like ladders of divine light over the distant horizon.",
+          "image": "/assets/travel/moon-sky/sunbeams-through-clouds.jpg",
+          "location": "Valley Overlook",
+          "date": "Sept 2024",
+          "aspect": "wide",
+          "rotation": "2deg",
+          "tag": "Silver Linings"
+        },
+        {
+          "id": "sky-5",
+          "title": "Delicate Cirrus Feathers",
+          "caption": "High altitude ice-crystal cirrus clouds painted against a deep azure backdrop.",
+          "image": "/assets/travel/moon-sky/cirrus-wind-clouds.jpg",
+          "location": "Open Meadows",
+          "date": "Nov 2024",
+          "aspect": "square",
+          "rotation": "-1deg",
+          "tag": "High Sky"
+        },
+        {
+          "id": "sky-6",
+          "title": "Full Moon Floating Through Pines",
+          "caption": "A bright silver pearl illuminating the silent pine silhouettes on a crisp clear night.",
+          "image": "/assets/travel/moon-sky/full-moon-trees.jpg",
+          "location": "Hill Station Night",
+          "date": "Full Moon Night 2024",
+          "aspect": "tall",
+          "rotation": "1.5deg",
+          "tag": "Moonlit Pines"
+        },
+        {
+          "id": "sky-7",
+          "title": "Crescent Moon at Twilight",
+          "caption": "A razor-thin silver crescent hanging in deep ultramarine blue right as the first stars appear.",
+          "image": "/assets/travel/moon-sky/crescent-moon-twilight.jpg",
+          "location": "Dusk Horizon",
+          "date": "Nov 2024",
+          "aspect": "tall",
+          "rotation": "-2deg",
+          "tag": "Silver Crescent"
+        },
+        {
+          "id": "sky-8",
+          "title": "Moonrise Above Mountain Crest",
+          "caption": "Warm yellow harvest moon climbing above the dark mountain silhouette.",
+          "image": "/assets/travel/moon-sky/moon-over-hills.jpg",
+          "location": "Mountain Pass",
+          "date": "Oct 2024",
+          "aspect": "square",
+          "rotation": "1deg",
+          "tag": "Harvest Moon"
+        },
+        {
+          "id": "sky-9",
+          "title": "Quiet Starlit Galaxy",
+          "caption": "Thousands of twinkling diamonds and the faint dust lane of the Milky Way over silent hills.",
+          "image": "/assets/travel/moon-sky/starry-milky-way-night.jpg",
+          "location": "Dark Sky Reserve",
+          "date": "Winter 2024",
+          "aspect": "wide",
+          "rotation": "-1deg",
+          "tag": "Deep Space"
+        }
+      ]
+    },
+    {
+      "id": "water",
+      "name": "Rivers, Waterfalls & Reflections",
+      "tagline": "Crystal mountain streams, soothing rapids, rain ripples and serene lakes",
+      "location": "Pachmarhi, Bhopal & Valley Rivers",
+      "badge": "Water Echoes",
+      "stampText": "RIVER STUDY • WATER LOG",
+      "narrative": "There is healing magic in running water. The sound of pebbles tumbling under clear streams, the mist of waterfalls on your face, and the glassy reflections of tranquil lakes.",
+      "accentColor": "#0284c7",
+      "photos": [
+        {
+          "id": "wat-1",
+          "title": "Mountain Stream on Mossy Pebbles",
+          "caption": "Crystal clear water filtering through smooth river rocks and emerald moss cushions.",
+          "image": "/assets/travel/water/river-flowing-rocks.jpg",
+          "location": "Denwa River Tributary",
+          "date": "Oct 2024",
+          "aspect": "wide",
+          "rotation": "-1deg",
+          "tag": "Clear Streams"
+        },
+        {
+          "id": "wat-2",
+          "title": "Hidden Forest Waterfall Cascade",
+          "caption": "Secret waterfall cascading down tiered rock ledges into a pristine natural pool.",
+          "image": "/assets/travel/water/forest-waterfall-cascade.jpg",
+          "location": "Forest Gorge",
+          "date": "Oct 2024",
+          "aspect": "tall",
+          "rotation": "2deg",
+          "tag": "Forest Falls"
+        },
+        {
+          "id": "wat-3",
+          "title": "Mirror Reflection on Calm Lake",
+          "caption": "Glass-like lake surface reflecting golden dawn clouds and surrounding hill silhouettes perfectly.",
+          "image": "/assets/travel/water/serene-lake-reflection.jpg",
+          "location": "Bhopal Upper Lake View",
+          "date": "Winter 2024",
+          "aspect": "wide",
+          "rotation": "-2deg",
+          "tag": "Mirror Lakes"
+        },
+        {
+          "id": "wat-4",
+          "title": "Rushing Rapids in Stone Canyon",
+          "caption": "Roaring white-water rapids carving ancient smooth grooves through red sandstone bedrock.",
+          "image": "/assets/travel/water/rapids-wild-stream.jpg",
+          "location": "Canyon River",
+          "date": "Nov 2024",
+          "aspect": "tall",
+          "rotation": "1.5deg",
+          "tag": "Wild Rapids"
+        },
+        {
+          "id": "wat-5",
+          "title": "Raindrop Ripples on Pond",
+          "caption": "Gentle monsoon raindrops creating intricate overlapping circular ripples on water.",
+          "image": "/assets/travel/water/rain-ripples-pond.jpg",
+          "location": "Botanical Pond",
+          "date": "Monsoon 2024",
+          "aspect": "square",
+          "rotation": "-1.5deg",
+          "tag": "Rain Ripples"
+        }
+      ]
+    },
+    {
+      "id": "forest",
+      "name": "Enchanted Forests & Woodland Paths",
+      "tagline": "Golden canopy sunbeams, ancient gnarly roots, and peaceful walking trails",
+      "location": "Satpura & Central Indian Reserves",
+      "badge": "Forest Walks",
+      "stampText": "BOTANICAL TRAIL • CONSERVATION REGISTER",
+      "narrative": "Walking through dense forest where towering trees filter the morning light into bright golden beams. Nature in its undisturbed, quiet, and timeless elegance.",
+      "accentColor": "#15803d",
+      "photos": [
+        {
+          "id": "for-1",
+          "title": "Morning Sunbeams Through Pine Forest",
+          "caption": "God-rays slicing through the morning mist between tall teak and pine trunks.",
+          "image": "/assets/travel/forest/sunlight-path-morning.jpg",
+          "location": "Satpura Sanctuary Trail",
+          "date": "Oct 2024",
+          "aspect": "wide",
+          "rotation": "1deg",
+          "tag": "Sunlit Paths"
+        },
+        {
+          "id": "for-2",
+          "title": "Ancient Moss-Covered Tree Roots",
+          "caption": "Gnarled roots gripping the earth like living sculptures covered in vibrant green moss.",
+          "image": "/assets/travel/forest/ancient-mossy-trees.jpg",
+          "location": "Deep Woodland Trail",
+          "date": "Oct 2024",
+          "aspect": "tall",
+          "rotation": "-2deg",
+          "tag": "Ancient Trees"
+        },
+        {
+          "id": "for-3",
+          "title": "Looking Up to the Canopy",
+          "caption": "Tree crowns creating natural shyness patterns against the pale autumn sky.",
+          "image": "/assets/travel/forest/pine-canopy-skyward.jpg",
+          "location": "Cantonment Pine Groves",
+          "date": "Nov 2024",
+          "aspect": "tall",
+          "rotation": "1.5deg",
+          "tag": "Canopy Shyness"
+        },
+        {
+          "id": "for-4",
+          "title": "Winding Woodland Trail",
+          "caption": "A soft dirt path curving into the mystery of the quiet woods. Where will it lead?",
+          "image": "/assets/travel/forest/winding-woodland-trail.jpg",
+          "location": "Satpura Hill Trail",
+          "date": "Nov 2024",
+          "aspect": "wide",
+          "rotation": "-1.5deg",
+          "tag": "Trail Ahead"
+        },
+        {
+          "id": "for-5",
+          "title": "Golden Autumn Leaves in Light",
+          "caption": "Warm golden leaves glowing translucent in the afternoon sun before fluttering to the ground.",
+          "image": "/assets/travel/forest/golden-autumn-leaves.jpg",
+          "location": "Deciduous Forest",
+          "date": "Nov 2024",
+          "aspect": "square",
+          "rotation": "2deg",
+          "tag": "Autumn Glow"
+        }
+      ]
+    }
+  ]
+}

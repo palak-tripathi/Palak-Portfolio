@@ -1,0 +1,107 @@
+{
+  "title": "Bookshelf, Vinyl & Soundscapes",
+  "subtitle": "Books that shaped my mindset, melodies on repeat, and acoustic singing recordings",
+  "shelfIntro": "A curated corner of philosophy, technology, cozy fiction, acoustic indie playlists, and the records that spin while I write code or sketch.",
+  "books": [
+    {
+      "id": "book-1",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "spineColor": "#d97706",
+      "coverColor": "#f59e0b",
+      "textColor": "#ffffff",
+      "height": "220px",
+      "rating": 5,
+      "tag": "Productivity",
+      "favoriteQuote": "You do not rise to the level of your goals. You fall to the level of your systems.",
+      "notes": "Changed how I approach daily software craft and habit stacking. Micro-improvements compounding over years create exponential growth.",
+      "status": "Read & Re-read"
+    },
+    {
+      "id": "book-2",
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "spineColor": "#1e3a8a",
+      "coverColor": "#2563eb",
+      "textColor": "#ffffff",
+      "height": "240px",
+      "rating": 5,
+      "tag": "Engineering",
+      "favoriteQuote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+      "notes": "Essential principles of readability, meaningful naming, small single-responsibility functions, and refactoring with courage.",
+      "status": "Engineering Bible"
+    },
+    {
+      "id": "book-3",
+      "title": "The Little Prince",
+      "author": "Antoine de Saint-Exupéry",
+      "spineColor": "#7c3aed",
+      "coverColor": "#8b5cf6",
+      "textColor": "#ffffff",
+      "height": "190px",
+      "rating": 5,
+      "tag": "Literature",
+      "favoriteQuote": "It is only with the heart that one can see rightly; what is essential is invisible to the eye.",
+      "notes": "A timeless reminder to look beyond superficial metrics and retain child-like wonder, curiosity, and empathy.",
+      "status": "Cherished Classic"
+    },
+    {
+      "id": "book-4",
+      "title": "Thinking, Fast and Slow",
+      "author": "Daniel Kahneman",
+      "spineColor": "#047857",
+      "coverColor": "#10b981",
+      "textColor": "#ffffff",
+      "height": "230px",
+      "rating": 4.5,
+      "tag": "Psychology",
+      "favoriteQuote": "A reliable way to make people believe in falsehoods is frequent repetition, because familiarity is not easily distinguished from truth.",
+      "notes": "Fascinating analysis of System 1 intuition vs System 2 deliberative thought. Deeply influences UX design and user decision psychology.",
+      "status": "Mind-expanding"
+    },
+    {
+      "id": "book-5",
+      "title": "Designing Data-Intensive Applications",
+      "author": "Martin Kleppmann",
+      "spineColor": "#b91c1c",
+      "coverColor": "#ef4444",
+      "textColor": "#ffffff",
+      "height": "250px",
+      "rating": 5,
+      "tag": "Architecture",
+      "favoriteQuote": "Reliability, scalability, and maintainability are not achieved by accident; they require deliberate engineering.",
+      "notes": "The definitive masterclass on distributed systems, replication, partitioning, consistency models, and transaction semantics.",
+      "status": "Currently Studying"
+    }
+  ],
+  "musicVibes": [
+    {
+      "id": "track-1",
+      "title": "Acoustic Covers & Vocal Sessions",
+      "artist": "Palak Tripathi (Vocals)",
+      "duration": "Acoustic Melody",
+      "genre": "Indie Acoustic & Soul",
+      "vibe": "Soulful & Melodic",
+      "audioFile": "/uploads/diary/talents/voice-sample-1.mp3",
+      "notes": "Singing unplugged acoustic numbers with natural reverberation and warm chords."
+    },
+    {
+      "id": "track-2",
+      "title": "Midnight Coding Lo-Fi",
+      "artist": "Curated Chillhop & Rain Echoes",
+      "duration": "Looping Flow",
+      "genre": "Lo-Fi Beats / Ambient",
+      "vibe": "Deep Focus",
+      "notes": "Soft Rhodes electric piano keys, mellow kick drums, and subtle tape hiss for uninterrupted coding flow state."
+    },
+    {
+      "id": "track-3",
+      "title": "Classical Sitar & Morning Ragas",
+      "artist": "Hindustani Classical",
+      "duration": "Meditative",
+      "genre": "Indian Classical",
+      "vibe": "Peace & Clarity",
+      "notes": "Early morning ragas for clarity of mind before tackling complex distributed system bugs."
+    }
+  ]
+}

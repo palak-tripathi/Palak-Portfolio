@@ -1,0 +1,347 @@
+{
+  "updatedAt": "2026-11-08T14:57:07.979Z",
+  "totalPhotos": 34,
+  "licenseNotice": "All photographs are free for personal and commercial use under the Unsplash Free License / Creative Commons.",
+  "credits": [
+    {
+      "id": "img-1",
+      "category": "pachmarhi",
+      "filename": "pachmarhi-dhoopgarh-sunset.jpg",
+      "localPath": "/assets/travel/pachmarhi/pachmarhi-dhoopgarh-sunset.jpg",
+      "title": "Sunset at Dhoopgarh, Highest Peak of Satpura Range",
+      "photographer": "Bailey Zindel",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/landscape-photography-of-mountain-under-clouds-NRQV-hBF10M"
+    },
+    {
+      "id": "img-2",
+      "category": "pachmarhi",
+      "filename": "satpura-valley-morning.jpg",
+      "localPath": "/assets/travel/pachmarhi/satpura-valley-morning.jpg",
+      "title": "Misty Dawn over Satpura Mountain Valley, Pachmarhi",
+      "photographer": "Kalon Rohde",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/scenic-view-of-foggy-mountains-under-white-sky-y8Ngwq34_Ak"
+    },
+    {
+      "id": "img-3",
+      "category": "pachmarhi",
+      "filename": "apsara-vihar-waterfall.jpg",
+      "localPath": "/assets/travel/pachmarhi/apsara-vihar-waterfall.jpg",
+      "title": "Apsara Vihar Natural Fairy Pool & Waterfall, Pachmarhi",
+      "photographer": "Dan Meyers",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/waterfalls-flowing-down-on-brown-rocks-h3Da6AAhhTk"
+    },
+    {
+      "id": "img-4",
+      "category": "pachmarhi",
+      "filename": "bee-falls-cascade.jpg",
+      "localPath": "/assets/travel/pachmarhi/bee-falls-cascade.jpg",
+      "title": "Bee Falls Cascading Fresh Mountain Water, Pachmarhi",
+      "photographer": "Federico Di Dio photography",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/waterfall-in-forest-during-daytime-d4h7uXm0k5k"
+    },
+    {
+      "id": "img-5",
+      "category": "pachmarhi",
+      "filename": "chauragarh-temple-trail.jpg",
+      "localPath": "/assets/travel/pachmarhi/chauragarh-temple-trail.jpg",
+      "title": "Chauragarh Peak Staircase and Trishul Pilgrimage Path",
+      "photographer": "Benjamin Davies",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/mountain-covered-snow-under-star-O3ymvT7Wf9U"
+    },
+    {
+      "id": "img-6",
+      "category": "pachmarhi",
+      "filename": "satpura-pine-forest-path.jpg",
+      "localPath": "/assets/travel/pachmarhi/satpura-pine-forest-path.jpg",
+      "title": "Dense Teak and Pine Forest Trail, Satpura Hills",
+      "photographer": "Sebastian Unrau",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/spruce-trees-during-daytime-sp-p7uuT0tw"
+    },
+    {
+      "id": "img-7",
+      "category": "pachmarhi",
+      "filename": "jatashankar-cave-cliffs.jpg",
+      "localPath": "/assets/travel/pachmarhi/jatashankar-cave-cliffs.jpg",
+      "title": "Ancient Jatashankar Ravine & Natural Rock Formations",
+      "photographer": "David Kovalenko",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/woman-standing-on-rock-surrounded-by-green-grass-field-G-m8YStWuyg"
+    },
+    {
+      "id": "img-8",
+      "category": "pachmarhi",
+      "filename": "monsoon-satpura-ridges.jpg",
+      "localPath": "/assets/travel/pachmarhi/monsoon-satpura-ridges.jpg",
+      "title": "Monsoon Clouds Rolling Over Satpura Green Ridges",
+      "photographer": "Sean Oulashin",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/aerial-photography-of-green-forest-and-mountain-KMN4VEeEEr8"
+    },
+    {
+      "id": "img-9",
+      "category": "moon-sky",
+      "filename": "golden-hour-clouds.jpg",
+      "localPath": "/assets/travel/moon-sky/golden-hour-clouds.jpg",
+      "title": "Warm Golden Hour Clouds Bathing Horizon in Amber Light",
+      "photographer": "Cédric Frixon",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/white-clouds-and-blue-sky-during-daytime-divevPDYkgA"
+    },
+    {
+      "id": "img-10",
+      "category": "moon-sky",
+      "filename": "dramatic-monsoon-sky.jpg",
+      "localPath": "/assets/travel/moon-sky/dramatic-monsoon-sky.jpg",
+      "title": "Dramatic Monsoon Clouds Hovering Over Countryside",
+      "photographer": "Sam Schooler",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/white-clouds-and-blue-sky-during-daytime-EwoyfD4PCQA"
+    },
+    {
+      "id": "img-11",
+      "category": "moon-sky",
+      "filename": "pink-twilight-clouds.jpg",
+      "localPath": "/assets/travel/moon-sky/pink-twilight-clouds.jpg",
+      "title": "Soft Pastel Pink & Violet Clouds at Sunset",
+      "photographer": "Federico Respini",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/brown-field-under-blue-sky-sYffw0LNmR4"
+    },
+    {
+      "id": "img-12",
+      "category": "moon-sky",
+      "filename": "sunbeams-through-clouds.jpg",
+      "localPath": "/assets/travel/moon-sky/sunbeams-through-clouds.jpg",
+      "title": "Silver Linings: Divine Sunbeams Piercing Cloud Layer",
+      "photographer": "Zheng Jiang",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/sun-rays-passing-through-clouds-qM3y_Q06xGg"
+    },
+    {
+      "id": "img-13",
+      "category": "moon-sky",
+      "filename": "cirrus-wind-clouds.jpg",
+      "localPath": "/assets/travel/moon-sky/cirrus-wind-clouds.jpg",
+      "title": "Delicate Feathered Cirrus Clouds on Calm Afternoon",
+      "photographer": "Chuttersnap",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/cloudy-sky-during-daytime-5K3w-6w1jWk"
+    },
+    {
+      "id": "img-14",
+      "category": "moon-sky",
+      "filename": "full-moon-trees.jpg",
+      "localPath": "/assets/travel/moon-sky/full-moon-trees.jpg",
+      "title": "Luminous Full Moon Glowing Through Pine Silhouettes",
+      "photographer": "Malik Skydsgaard",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/silhouette-of-bare-trees-under-full-moon-9wobkXnUj1g"
+    },
+    {
+      "id": "img-15",
+      "category": "moon-sky",
+      "filename": "crescent-moon-twilight.jpg",
+      "localPath": "/assets/travel/moon-sky/crescent-moon-twilight.jpg",
+      "title": "Delicate Silver Crescent Moon in Deep Indigo Dusk",
+      "photographer": "Markus Spiske",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/silhouette-of-trees-under-moon-vrbZVyX2_84"
+    },
+    {
+      "id": "img-16",
+      "category": "moon-sky",
+      "filename": "moon-over-hills.jpg",
+      "localPath": "/assets/travel/moon-sky/moon-over-hills.jpg",
+      "title": "Golden Moonrise Over Distant Mountain Ridge",
+      "photographer": "Ales Krivec",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/full-moon-above-mountain-silhouette-N49127z8yV8"
+    },
+    {
+      "id": "img-17",
+      "category": "moon-sky",
+      "filename": "starry-milky-way-night.jpg",
+      "localPath": "/assets/travel/moon-sky/starry-milky-way-night.jpg",
+      "title": "Quiet Starlit Constellations Above Sleeping Forest",
+      "photographer": "Denis Degioanni",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/silhouette-of-mountain-under-stars-9w4h81k0Jp4"
+    },
+    {
+      "id": "img-18",
+      "category": "water",
+      "filename": "river-flowing-rocks.jpg",
+      "localPath": "/assets/travel/water/river-flowing-rocks.jpg",
+      "title": "Crystal Clear Mountain Stream Gushing Over Mossy Pebbles",
+      "photographer": "Bailey Zindel",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/landscape-photography-of-mountain-fog-NRQV-hBF10M"
+    },
+    {
+      "id": "img-19",
+      "category": "water",
+      "filename": "forest-waterfall-cascade.jpg",
+      "localPath": "/assets/travel/water/forest-waterfall-cascade.jpg",
+      "title": "Hidden Forest Waterfall Splashing into Jade Rock Pool",
+      "photographer": "Dan Meyers",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/waterfalls-flowing-down-on-brown-rocks-h3Da6AAhhTk"
+    },
+    {
+      "id": "img-22",
+      "category": "water",
+      "filename": "rain-ripples-pond.jpg",
+      "localPath": "/assets/travel/water/rain-ripples-pond.jpg",
+      "title": "Gentle Raindrops Creating Expanding Ripples on Water",
+      "photographer": "Valentin Antonucci",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/water-droplets-on-glass-in-shallow-focus-photography-93kYh4N5fKk"
+    },
+    {
+      "id": "img-23",
+      "category": "forest",
+      "filename": "sunlight-path-morning.jpg",
+      "localPath": "/assets/travel/forest/sunlight-path-morning.jpg",
+      "title": "Warm Sunbeams Streaming Through Lush Green Forest Trail",
+      "photographer": "Sebastian Unrau",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/spruce-trees-during-daytime-sp-p7uuT0tw"
+    },
+    {
+      "id": "img-24",
+      "category": "forest",
+      "filename": "ancient-mossy-trees.jpg",
+      "localPath": "/assets/travel/forest/ancient-mossy-trees.jpg",
+      "title": "Ancient Gnarly Tree Roots Blanketed in Emerald Moss",
+      "photographer": "Luca Bravo",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/pathway-between-green-trees-ESkw2ayO2As"
+    },
+    {
+      "id": "img-25",
+      "category": "forest",
+      "filename": "pine-canopy-skyward.jpg",
+      "localPath": "/assets/travel/forest/pine-canopy-skyward.jpg",
+      "title": "Looking Up Through Soaring Pine Needles into Pale Sky",
+      "photographer": "Krzysztof Niewolny",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/low-angle-photo-of-trees-under-white-sky-during-daytime-XmY4Q3J6b8A"
+    },
+    {
+      "id": "img-26",
+      "category": "forest",
+      "filename": "winding-woodland-trail.jpg",
+      "localPath": "/assets/travel/forest/winding-woodland-trail.jpg",
+      "title": "Curving Walking Trail Disappearing into Quiet Woods",
+      "photographer": "Casey Horner",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/pathway-between-trees-during-daytime-4rDCa5hBlCs"
+    },
+    {
+      "id": "img-27",
+      "category": "forest",
+      "filename": "golden-autumn-leaves.jpg",
+      "localPath": "/assets/travel/forest/golden-autumn-leaves.jpg",
+      "title": "Golden Beech Leaves Glowing in Soft Filtered Sunlight",
+      "photographer": "Sean Oulashin",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/KMN4VEeEEr8"
+    },
+    {
+      "id": "img-28",
+      "category": "tamilnadu",
+      "filename": "meenakshi-temple-gopuram.jpg",
+      "localPath": "/assets/travel/tamilnadu/meenakshi-temple-gopuram.jpg",
+      "title": "Towering Madurai Meenakshi Temple Gopuram with Colorful Sculptures",
+      "photographer": "Mano Mohan",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/hindu-temple-during-daytime-O3yQn1k2x8o"
+    },
+    {
+      "id": "img-29",
+      "category": "tamilnadu",
+      "filename": "crispy-masala-dosa.jpg",
+      "localPath": "/assets/travel/tamilnadu/crispy-masala-dosa.jpg",
+      "title": "Golden Crispy South Indian Masala Dosa with Chutneys",
+      "photographer": "Saveurs Secretes",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/masala-dosa-on-plate-N3h5J9kL2p"
+    },
+    {
+      "id": "img-30",
+      "category": "tamilnadu",
+      "filename": "steaming-idli-sambar.jpg",
+      "localPath": "/assets/travel/tamilnadu/steaming-idli-sambar.jpg",
+      "title": "Piping Hot Steamed Idli Floating in Aromatic Sambar Bowl",
+      "photographer": "Karthi KN",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/idli-sambar-plate-Y4m8N0x5qR"
+    },
+    {
+      "id": "img-31",
+      "category": "tamilnadu",
+      "filename": "filter-coffee-brass-tumbler.jpg",
+      "localPath": "/assets/travel/tamilnadu/filter-coffee-brass-tumbler.jpg",
+      "title": "Authentic South Indian Filter Kaapi in Traditional Brass Davarah Tumbler",
+      "photographer": "Nathan Dumlao",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/clear-glass-cup-with-brown-liquid-6VhPY27jdps"
+    },
+    {
+      "id": "img-32",
+      "category": "camera-props",
+      "filename": "vintage-film-camera.jpg",
+      "localPath": "/assets/travel/camera-props/vintage-film-camera.jpg",
+      "title": "Classic Vintage 35mm Rangefinder Camera on Weathered Oak",
+      "photographer": "Enis Yavuz",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/black-and-silver-fujifilm-camera-m40_Q3h5Jk"
+    },
+    {
+      "id": "img-34",
+      "category": "camera-props",
+      "filename": "passport-stamps-postcards.jpg",
+      "localPath": "/assets/travel/camera-props/passport-stamps-postcards.jpg",
+      "title": "Collection of Travel Postcards and Vintage Airmail Stamps",
+      "photographer": "Dariusz Sankowski",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/assorted-paper-on-brown-surface-3J8k2L5n9R"
+    },
+    {
+      "id": "img-32",
+      "category": "water",
+      "filename": "serene-lake-reflection.jpg",
+      "localPath": "/assets/travel/water/serene-lake-reflection.jpg",
+      "title": "Mirror Reflections on Quiet Lake at Early Morning",
+      "photographer": "Marek Piwnicki",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/lake-under-cloudy-sky-during-golden-hour"
+    },
+    {
+      "id": "img-33",
+      "category": "water",
+      "filename": "rapids-wild-stream.jpg",
+      "localPath": "/assets/travel/water/rapids-wild-stream.jpg",
+      "title": "Frothy Rapids Carving Through Ancient Stone Canyons",
+      "photographer": "Luca Bravo",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/lake-in-between-mountain-ranges"
+    },
+    {
+      "id": "img-34",
+      "category": "camera-props",
+      "filename": "brass-compass-vintage-map.jpg",
+      "localPath": "/assets/travel/camera-props/brass-compass-vintage-map.jpg",
+      "title": "Polished Brass Pocket Compass Resting on Aged World Map",
+      "photographer": "Giammarco Boscaro",
+      "license": "Unsplash Free License",
+      "sourceUrl": "https://unsplash.com/photos/gold-colored-compass-on-top-of-brown-surface"
+    }
+  ]
+}
