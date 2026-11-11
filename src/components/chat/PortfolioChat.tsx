@@ -49,7 +49,7 @@ export function PortfolioChat() {
   const [name, setName] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [status, setStatus] = useState<Status>("idle");
-  const [voiceOn, setVoiceOn] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [speaking, setSpeaking] = useState(false);
   const [showKnowledgeAdmin, setShowKnowledgeAdmin] = useState(false);
@@ -135,29 +135,67 @@ export function PortfolioChat() {
   const stopAudio = useCallback(() => {
     audioRef.current?.pause();
     audioRef.current = null;
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
     setSpeaking(false);
   }, []);
 
   const speak = useCallback(
     async (text: string) => {
       stopAudio();
+      const cleanText = text
+        .replace(/[*#_`~[\]]/g, "")
+        .slice(0, 700)
+        .trim();
+      if (!cleanText) return;
+
       try {
         const res = await fetch("/api/public/chat-voice", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ text: text.slice(0, 800) }),
+          body: JSON.stringify({ text: cleanText }),
         });
-        if (!res.ok) return;
-        if (urlRef.current) URL.revokeObjectURL(urlRef.current);
-        urlRef.current = URL.createObjectURL(await res.blob());
-        const audio = new Audio(urlRef.current);
-        audioRef.current = audio;
-        audio.onended = () => setSpeaking(false);
-        audio.onerror = () => setSpeaking(false);
-        await audio.play();
-        setSpeaking(true);
+        if (res.ok) {
+          if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+          urlRef.current = URL.createObjectURL(await res.blob());
+          const audio = new Audio(urlRef.current);
+          audioRef.current = audio;
+          audio.onended = () => setSpeaking(false);
+          audio.onerror = () => setSpeaking(false);
+          await audio.play();
+          setSpeaking(true);
+          return;
+        }
       } catch {
-        /* voice is optional */
+        /* Fall back to Web Speech API */
+      }
+
+      // High-quality natural browser speech synthesis fallback
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.05;
+          const voices = window.speechSynthesis.getVoices();
+          const preferred =
+            voices.find(
+              (v) =>
+                v.lang.startsWith("en") &&
+                (v.name.includes("Google") ||
+                  v.name.includes("Natural") ||
+                  v.name.includes("Samantha") ||
+                  v.name.includes("Jenny")),
+            ) || voices.find((v) => v.lang.startsWith("en"));
+          if (preferred) utterance.voice = preferred;
+          utterance.onstart = () => setSpeaking(true);
+          utterance.onend = () => setSpeaking(false);
+          utterance.onerror = () => setSpeaking(false);
+          window.speechSynthesis.speak(utterance);
+        } catch {
+          setSpeaking(false);
+        }
       }
     },
     [stopAudio],
@@ -417,7 +455,7 @@ export function PortfolioChat() {
         aria-label="Chat with Palak's assistant (Drag anywhere)"
         title="Click to chat or drag anywhere across the screen"
         className={`group fixed z-50 flex h-12 sm:h-14 items-center gap-2 rounded-full bg-brand px-4 sm:px-5 font-semibold text-primary-foreground shadow-glow transition cursor-grab active:cursor-grabbing select-none hover:-translate-y-0.5 hover:shadow-2xl active:scale-95 ${
-          !btnPosition ? "bottom-5 right-5" : ""
+          !btnPosition ? "top-20 right-4 sm:top-24 sm:right-6" : ""
         } ${isDraggingBtn ? "scale-105 shadow-2xl ring-2 ring-cyan-400" : ""}`}
       >
         <GripHorizontal className="h-3.5 w-3.5 opacity-60 hidden sm:inline" />
@@ -447,8 +485,8 @@ export function PortfolioChat() {
               }
             : undefined
         }
-        className={`fixed z-50 flex h-[min(640px,88vh)] animate-rise flex-col overflow-hidden rounded-3xl glass shadow-glow sm:w-[min(420px,calc(100vw-2.5rem))] ${
-          !position ? "inset-x-2 bottom-2 sm:inset-x-auto sm:bottom-5 sm:right-5" : ""
+        className={`fixed z-50 flex h-[min(640px,85vh)] animate-rise flex-col overflow-hidden rounded-3xl glass shadow-glow sm:w-[min(420px,calc(100vw-2.5rem))] ${
+          !position ? "top-20 right-2 sm:top-24 sm:right-6" : ""
         } ${isDragging ? "shadow-2xl scale-[1.01] transition-none ring-2 ring-cyan-400/50" : "transition-transform"}`}
       >
         {/* Header — 100% Draggable Handle */}
@@ -552,6 +590,18 @@ export function PortfolioChat() {
                   <MessageResponse className="text-sm leading-relaxed whitespace-pre-line">
                     {m.content}
                   </MessageResponse>
+                  {m.role === "assistant" && (
+                    <button
+                      type="button"
+                      onClick={() => void speak(m.content)}
+                      aria-label="Listen to voice"
+                      title="Listen aloud"
+                      className="mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition hover:bg-primary/10 hover:text-primary cursor-pointer"
+                    >
+                      <Volume2 className="h-3 w-3" />
+                      <span>Speak</span>
+                    </button>
+                  )}
                 </MessageContent>
               </Message>
             ))}

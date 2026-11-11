@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DiaryAudioControls, playPageTurnSound } from "./DiaryAudio";
 import { DiarySparkles } from "./DiarySparkles";
+import { FairyFloralElements } from "./FairyFloralElements";
 import { DiaryDeskDecorations } from "./DiaryDeskDecorations";
 import { StoryChapter } from "./chapters/StoryChapter";
 import { TalentsChapter } from "./chapters/TalentsChapter";
@@ -326,6 +327,9 @@ export function DiaryPageTurner({
                 : "bg-gradient-to-b from-rose-400 via-pink-400 to-rose-300"
             }`}
           />
+
+          {/* Fairytale Floral Petals & Glowing Butterfly Atmospheric Layer */}
+          <FairyFloralElements isNightMode={isNightMode} />
 
           {/* Dynamic Page Views */}
           <div key={currentPage} className="h-full w-full animate-in fade-in duration-300">

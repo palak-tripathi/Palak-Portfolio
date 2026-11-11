@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Sparkles, BookOpen, Layers } from "lucide-react";
+import { Sparkles, BookOpen } from "lucide-react";
 import { DiaryCover } from "./DiaryCover";
 import { DiaryPageTurner } from "./DiaryPageTurner";
 import { DiaryMediaModal } from "./DiaryMediaModal";
 import { DiaryAdminModal } from "./DiaryAdminModal";
-import { DynamicScrapbookDiary } from "./DynamicScrapbookDiary";
+import { FairyFloralElements } from "./FairyFloralElements";
 import {
   loadDiaryChapters,
   fetchPersistentChapters,
@@ -14,8 +14,8 @@ import {
 } from "@/data/diary-content";
 
 export function DiaryExperience() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"dynamic" | "book">("dynamic");
+  // Fairytale Storybook Diary is open by default so spreads are immediately visible
+  const [isOpen, setIsOpen] = useState(true);
   const [isNightMode, setIsNightMode] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("diary_night_mode") === "true";
@@ -87,14 +87,14 @@ export function DiaryExperience() {
           : "bg-gradient-to-b from-[#fff7ed]/40 via-[#fdf2f8]/50 to-[#f0f9ff]/40 text-stone-900"
       }`}
     >
-      {/* ========================================================================= */}
-      {/* CONTINUOUSLY FLOWING ANIMATED GRADIENT & SUBTLE NEON PARTICLES             */}
-      {/* ========================================================================= */}
+      {/* 3D Fairytale Floral Petals & Glowing Ambient Background */}
+      <FairyFloralElements isNightMode={isNightMode} />
+
+      {/* Continuously Flowing Animated Gradient & Neon Particles */}
       {isNightMode ? (
         <>
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-950/40 via-indigo-950/50 to-transparent" />
           <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[750px] w-[950px] rounded-full bg-gradient-to-r from-cyan-500/20 via-indigo-500/25 to-purple-600/25 blur-[150px] -z-10 animate-pulse" />
-          {/* Futuristic subtle floating neon particles */}
           <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-40">
             <span className="absolute top-1/4 left-1/6 w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-ping" />
             <span className="absolute top-1/3 right-1/5 w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_10px_#f472b6] animate-pulse" />
@@ -111,7 +111,7 @@ export function DiaryExperience() {
 
       <div className="relative mx-auto max-w-7xl px-3 sm:px-6">
         {/* Header Heading */}
-        <div className="mb-8 sm:mb-12 text-center">
+        <div className="mb-8 sm:mb-10 text-center">
           <div className="flex flex-wrap items-center justify-center gap-2.5 mb-3">
             <div
               className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-serif text-xs font-bold uppercase tracking-[0.3em] shadow-xs backdrop-blur transition-colors ${
@@ -125,7 +125,7 @@ export function DiaryExperience() {
                   isNightMode ? "text-cyan-300" : "text-pink-600"
                 }`}
               />
-              3D Interactive Scrapbook Diary
+              3D Fairytale Storybook Diary
             </div>
 
             {/* Day / Night Mode Lighting Toggle */}
@@ -148,6 +148,20 @@ export function DiaryExperience() {
                   <span className="text-sm">☀️</span> Day Mode
                 </>
               )}
+            </button>
+
+            {/* Book Cover Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setIsOpen((prev) => !prev)}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-serif text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-xs backdrop-blur cursor-pointer hover:scale-105 ${
+                isNightMode
+                  ? "border-cyan-400/60 bg-slate-900/80 text-amber-200 hover:bg-slate-800"
+                  : "border-amber-300/80 bg-amber-50/90 text-amber-950 hover:bg-amber-100"
+              }`}
+            >
+              <BookOpen className="h-3 w-3" />
+              <span>{isOpen ? "View Cover" : "Open Diary"}</span>
             </button>
           </div>
 
@@ -196,72 +210,30 @@ export function DiaryExperience() {
           >
             Where melodies, creative crafts, travel milestones, and quiet moments are bound together
           </p>
-
-          {/* Master View Mode Switcher: 3D Dynamic Scrapbook vs Multi-Chapter Flipbook */}
-          <div className="mt-5 flex items-center justify-center gap-2">
-            <div className="inline-flex rounded-full border border-stone-200 dark:border-stone-800 bg-white/70 dark:bg-stone-900/70 p-1 backdrop-blur shadow-xs">
-              <button
-                type="button"
-                onClick={() => setViewMode("dynamic")}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-serif font-bold transition-all cursor-pointer ${
-                  viewMode === "dynamic"
-                    ? "bg-brand text-primary-foreground shadow-sm"
-                    : "text-stone-600 dark:text-stone-300 hover:text-stone-900"
-                }`}
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>3D Dynamic Studio (4 Topics)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setViewMode("book");
-                  setIsOpen(true);
-                }}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-serif font-bold transition-all cursor-pointer ${
-                  viewMode === "book"
-                    ? "bg-brand text-primary-foreground shadow-sm"
-                    : "text-stone-600 dark:text-stone-300 hover:text-stone-900"
-                }`}
-              >
-                <BookOpen className="h-3.5 w-3.5" />
-                <span>Flipbook Spreads (8 Chapters)</span>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* ACTIVE VIEW: 3D Dynamic Scrapbook OR Flipbook Chapters Spreads             */}
+        {/* 3D SCRAPBOOK STORYBOOK SPREADS: Cover & Flipbook Page Turner               */}
         {/* ========================================================================= */}
-        {viewMode === "dynamic" ? (
-          <DynamicScrapbookDiary
-            isNightMode={isNightMode}
-            onSelectItem={(item) => setSelectedItem(item)}
-            onOpenAdmin={() => setShowAdmin(true)}
-          />
-        ) : (
-          <div className="relative transition-all duration-700">
-            {!isOpen ? (
-              <DiaryCover isNightMode={isNightMode} onOpen={() => setIsOpen(true)} />
-            ) : (
-              <DiaryPageTurner
-                chapters={chapters}
-                isOwner={isOwner}
-                isNightMode={isNightMode}
-                onToggleNightMode={toggleNightMode}
-                onCloseBook={() => setIsOpen(false)}
-                onSelectItem={(item) => setSelectedItem(item)}
-                onOpenAdmin={() => setShowAdmin(true)}
-                onActivateOwner={handleActivateOwner}
-              />
-            )}
-          </div>
-        )}
+        <div className="relative transition-all duration-700">
+          {!isOpen ? (
+            <DiaryCover isNightMode={isNightMode} onOpen={() => setIsOpen(true)} />
+          ) : (
+            <DiaryPageTurner
+              chapters={chapters}
+              isOwner={isOwner}
+              isNightMode={isNightMode}
+              onToggleNightMode={toggleNightMode}
+              onCloseBook={() => setIsOpen(false)}
+              onSelectItem={(item) => setSelectedItem(item)}
+              onOpenAdmin={() => setShowAdmin(true)}
+              onActivateOwner={handleActivateOwner}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Media Fullscreen Modal */}
+      {/* Media Fullscreen Inspection Modal with Deep Zoom (up to 350%) */}
       {selectedItem && (
         <DiaryMediaModal
           item={selectedItem}
