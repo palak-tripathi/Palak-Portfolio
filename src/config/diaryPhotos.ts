@@ -85,4 +85,3 @@ export const DIARY_PHOTOS = {
 export function getDiaryPhoto(key: keyof typeof DIARY_PHOTOS, fallback?: string): string {
   return DIARY_PHOTOS[key] || fallback || "/files/laptop-desk.jpg";
 }
-

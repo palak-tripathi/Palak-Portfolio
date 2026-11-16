@@ -14,8 +14,8 @@ import {
 } from "@/data/diary-content";
 
 export function DiaryExperience() {
-  // Fairytale Storybook Diary is open by default so spreads are immediately visible
-  const [isOpen, setIsOpen] = useState(true);
+  // Diary initially appears closed as required by Master Directive #3
+  const [isOpen, setIsOpen] = useState(false);
   const [isNightMode, setIsNightMode] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("diary_night_mode") === "true";

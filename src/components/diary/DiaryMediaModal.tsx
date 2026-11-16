@@ -14,6 +14,7 @@ import {
   Minimize2,
   Tag,
   Feather,
+  Download,
 } from "lucide-react";
 import type { DiaryItem } from "@/data/diary-content";
 
@@ -114,6 +115,21 @@ export function DiaryMediaModal({ item, items, onClose, onSelect }: DiaryMediaMo
       document.exitFullscreen().catch(() => {});
       setIsFullscreen(false);
     }
+  };
+
+  const handleSaveImage = () => {
+    if (!item?.mediaUrl) return;
+    const link = document.createElement("a");
+    link.href = item.mediaUrl;
+    const filename =
+      item.mediaUrl.split("/").pop()?.split("?")[0] ||
+      `${item.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}.jpg`;
+    link.download = filename;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Mouse pan handlers for magnified inspection
@@ -248,6 +264,19 @@ export function DiaryMediaModal({ item, items, onClose, onSelect }: DiaryMediaMo
                 <Maximize2 className="h-3.5 w-3.5" />
               )}
             </button>
+
+            {/* Save Image / Download */}
+            {item.mediaUrl && !isEmbed && (
+              <button
+                type="button"
+                onClick={handleSaveImage}
+                aria-label="Save image"
+                title="Save Image / Download"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-pink-100/90 dark:bg-pink-950/70 text-pink-700 dark:text-pink-300 border border-pink-300/60 dark:border-pink-800/60 transition hover:bg-pink-200 dark:hover:bg-pink-900/80 hover:scale-105 active:scale-95 cursor-pointer focus:outline-hidden"
+              >
+                <Download className="h-3.5 w-3.5" />
+              </button>
+            )}
 
             {/* High-Contrast Clickable Cross (X) Close Button */}
             <button

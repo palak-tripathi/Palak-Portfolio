@@ -23,12 +23,8 @@ import { FairyFloralElements } from "./FairyFloralElements";
 import { DiaryDeskDecorations } from "./DiaryDeskDecorations";
 import { StoryChapter } from "./chapters/StoryChapter";
 import { TalentsChapter } from "./chapters/TalentsChapter";
-import { HobbiesChapter } from "./chapters/HobbiesChapter";
 import { TravelChapter } from "./chapters/TravelChapter";
-import { DrawingsChapter } from "./chapters/DrawingsChapter";
 import { MemoriesChapter } from "./chapters/MemoriesChapter";
-import { InterestsChapter } from "./chapters/InterestsChapter";
-import { LittleWorldChapter } from "./chapters/LittleWorldChapter";
 import type { DiaryChapter, DiaryItem } from "@/data/diary-content";
 
 interface DiaryPageTurnerProps {
@@ -43,14 +39,10 @@ interface DiaryPageTurnerProps {
 }
 
 const CHAPTER_ICONS = [
-  BookOpen, // My Story
-  Star, // My Talents
-  Plane, // Travel Diaries
-  Palette, // My Drawings
-  Camera, // My Memories
-  Gamepad2, // My Hobbies
-  Heart, // My Interests
-  Coffee, // My Little World
+  BookOpen, // Chapter 1: My Story
+  Star, // Chapter 2: My Talents
+  Plane, // Chapter 3: Travel Diaries
+  Camera, // Chapter 4: Memories
 ];
 
 const RIBBON_STYLES = [
@@ -73,34 +65,10 @@ const RIBBON_STYLES = [
     shadow: "shadow-teal-200/40",
   },
   {
-    bg: "bg-orange-200 hover:bg-orange-300",
-    text: "text-orange-950",
-    border: "border-orange-300/80",
-    shadow: "shadow-orange-300/40",
-  },
-  {
-    bg: "bg-rose-200 hover:bg-rose-300",
-    text: "text-rose-950",
-    border: "border-rose-300/80",
-    shadow: "shadow-rose-300/40",
-  },
-  {
-    bg: "bg-amber-100 hover:bg-amber-200",
-    text: "text-amber-950",
-    border: "border-amber-200/80",
-    shadow: "shadow-amber-200/40",
-  },
-  {
     bg: "bg-purple-200 hover:bg-purple-300",
     text: "text-purple-950",
     border: "border-purple-300/80",
     shadow: "shadow-purple-300/40",
-  },
-  {
-    bg: "bg-amber-50 hover:bg-amber-100",
-    text: "text-stone-900",
-    border: "border-amber-200/80",
-    shadow: "shadow-amber-100/50",
   },
 ];
 
@@ -555,14 +523,6 @@ export function DiaryPageTurner({
                       onOpenAdmin={onOpenAdmin}
                     />
                   )}
-                  {activeChapter.slug === "my-hobbies" && (
-                    <HobbiesChapter
-                      chapter={activeChapter}
-                      isNightMode={isNightMode}
-                      onSelectItem={onSelectItem}
-                      onOpenAdmin={onOpenAdmin}
-                    />
-                  )}
                   {activeChapter.slug === "travel-diaries" && (
                     <TravelChapter
                       chapter={activeChapter}
@@ -571,32 +531,8 @@ export function DiaryPageTurner({
                       onOpenAdmin={onOpenAdmin}
                     />
                   )}
-                  {activeChapter.slug === "my-drawings" && (
-                    <DrawingsChapter
-                      chapter={activeChapter}
-                      isNightMode={isNightMode}
-                      onSelectItem={onSelectItem}
-                      onOpenAdmin={onOpenAdmin}
-                    />
-                  )}
                   {activeChapter.slug === "my-memories" && (
                     <MemoriesChapter
-                      chapter={activeChapter}
-                      isNightMode={isNightMode}
-                      onSelectItem={onSelectItem}
-                      onOpenAdmin={onOpenAdmin}
-                    />
-                  )}
-                  {activeChapter.slug === "my-interests" && (
-                    <InterestsChapter
-                      chapter={activeChapter}
-                      isNightMode={isNightMode}
-                      onSelectItem={onSelectItem}
-                      onOpenAdmin={onOpenAdmin}
-                    />
-                  )}
-                  {activeChapter.slug === "my-little-world" && (
-                    <LittleWorldChapter
                       chapter={activeChapter}
                       isNightMode={isNightMode}
                       onSelectItem={onSelectItem}

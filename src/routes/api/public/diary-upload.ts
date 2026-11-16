@@ -45,20 +45,26 @@ export const Route = createFileRoute("/api/public/diary-upload")({
             );
           }
 
-          // Confine upload directory strictly to public/uploads
-          const uploadsRoot = path.resolve(process.cwd(), "public", "uploads");
+          const publicRoot = path.resolve(process.cwd(), "public");
+          const isVideo = fileObj.type.startsWith("video/");
 
-          let subDir = "uploads";
+          // Organize into public/media/diary/<chapter> or public/media/videos/<chapter>
+          let subDir = isVideo
+            ? path.join("media", "videos", "general")
+            : path.join("media", "diary", "general");
+
           if (chapterParam && typeof chapterParam === "string") {
             const safeChapter = chapterParam.toLowerCase().replace(/[^a-z0-9_-]/g, "");
-            subDir = path.join("uploads", "diary", safeChapter);
+            subDir = isVideo
+              ? path.join("media", "videos", safeChapter)
+              : path.join("media", "diary", safeChapter);
           } else if (folderParam && typeof folderParam === "string") {
             const safeFolder = folderParam.toLowerCase().replace(/[^a-z0-9_-]/g, "");
-            subDir = path.join("uploads", safeFolder);
+            subDir = path.join("media", safeFolder);
           }
 
-          const targetDir = path.resolve(process.cwd(), "public", subDir);
-          if (!isPathInside(uploadsRoot, targetDir)) {
+          const targetDir = path.resolve(publicRoot, subDir);
+          if (!isPathInside(publicRoot, targetDir)) {
             return Response.json({ error: "Invalid upload directory target" }, { status: 403 });
           }
 
@@ -74,7 +80,7 @@ export const Route = createFileRoute("/api/public/diary-upload")({
           const fileName = `${Date.now()}-${safeBaseName}${ext}`;
 
           const filePath = path.join(targetDir, fileName);
-          if (!isPathInside(uploadsRoot, filePath)) {
+          if (!isPathInside(publicRoot, filePath)) {
             return Response.json({ error: "Target file path traversal detected" }, { status: 403 });
           }
 

@@ -15,8 +15,8 @@ type RuntimeErrorEvents = {
 
 declare global {
   interface Window {
-    __lovableEvents?: RuntimeErrorEvents;
-    __lovableReportRuntimeError?: (payload: {
+    __appEvents?: RuntimeErrorEvents;
+    __appReportRuntimeError?: (payload: {
       message: string;
       stack?: string;
       filename?: string;
@@ -26,7 +26,7 @@ declare global {
 
 export function reportApplicationError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
-  window.__lovableEvents?.captureException?.(
+  window.__appEvents?.captureException?.(
     error,
     {
       source: "react_error_boundary",
@@ -41,7 +41,7 @@ export function reportApplicationError(error: unknown, context: Record<string, u
   );
   // Preserve optional runtime reporting hooks when the host environment provides them.
   const stack = error instanceof Error ? error.stack : undefined;
-  window.__lovableReportRuntimeError?.({
+  window.__appReportRuntimeError?.({
     message: describeThrown(error),
     ...(stack !== undefined && { stack }),
     filename: window.location.pathname,

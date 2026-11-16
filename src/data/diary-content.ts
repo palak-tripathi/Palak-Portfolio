@@ -32,12 +32,22 @@ export interface DiaryChapter {
   items: DiaryItem[];
 }
 
+/**
+ * EXACTLY FOUR CHAPTERS:
+ * 1. My Story — personal journey, introduction, coding inception & milestones
+ * 2. My Talents — singing, acoustic recordings, vocal harmonies & musical passions
+ * 3. Travel Diaries — real destinations, photographs, interactive map & travel memories
+ * 4. Memories — friends, college, celebrations, artwork & cozy little moments
+ */
 export const INITIAL_CHAPTERS: DiaryChapter[] = [
+  // =========================================================================
+  // CHAPTER 1: MY STORY
+  // =========================================================================
   {
     id: "chapter-story",
     slug: "my-story",
     title: "My Story",
-    subtitle: "A journey written in quiet milestones and creative leaps",
+    subtitle: "A journey written in quiet milestones, creative leaps and code",
     quote: "Every line of code and every song begins with a single, quiet thought.",
     coverAccent: "#f472b6",
     items: [
@@ -52,11 +62,11 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         location: "Creative Studio Desk",
         category: "story",
         mediaType: "image",
-        mediaUrl: "/assets/laptop-desk.jpg",
-        image: "/assets/laptop-desk.jpg",
+        mediaUrl: "/media/diary/story/laptop-desk.jpg",
+        image: "/media/diary/story/laptop-desk.jpg",
         aspectRatio: "landscape",
         frameStyle: "polaroid",
-        tags: ["Inception", "FirstCode", "HelloWord", "ChaiAndLogic"],
+        tags: ["Inception", "FirstCode", "HelloWorld", "ChaiAndLogic"],
         sortOrder: 1,
         published: true,
         featured: true,
@@ -67,13 +77,13 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         caption:
           "Learning both sides of the coin: clean algorithmic software craft and real business product architecture.",
         description:
-          "Formal engineering studies at university, building analytical foundations and scalable architectures.",
+          "Formal engineering studies at SIRT Bhopal, building analytical foundations and scalable architectures.",
         date: "B.Tech in CSBS · 2024",
-        location: "University Campus",
+        location: "SIRT Bhopal Campus",
         category: "story",
         mediaType: "image",
-        mediaUrl: "/assets/travel/camera-props/passport-stamps-postcards.jpg",
-        image: "/assets/travel/camera-props/passport-stamps-postcards.jpg",
+        mediaUrl: "/media/diary/story/campus-memories.jpg",
+        image: "/media/diary/story/campus-memories.jpg",
         aspectRatio: "landscape",
         frameStyle: "tape",
         tags: ["BTech", "CSBS", "Academics", "Engineering"],
@@ -84,15 +94,15 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         id: "story-milestone-pricora",
         title: "PRICORA-AI · Dynamic Pricing Intelligence Engine",
         caption:
-          "From initial whiteboard idea to full-stack production. Built with React, Node.js, and real-time market scrapers.",
+          "From initial whiteboard idea to full-stack production. Built with React, Node.js, and real-time market telemetry.",
         description:
           "Engineered live price scraping, competitive analytics dashboard, and dynamic pricing models.",
         date: "Flagship AI Project",
         location: "Production Deployment",
         category: "story",
         mediaType: "image",
-        mediaUrl: "/assets/travel/camera-props/brass-compass-vintage-map.jpg",
-        image: "/assets/travel/camera-props/brass-compass-vintage-map.jpg",
+        mediaUrl: "/media/diary/story/graduation-milestone.jpg",
+        image: "/media/diary/story/graduation-milestone.jpg",
         aspectRatio: "landscape",
         frameStyle: "pinned",
         tags: ["PRICORA", "FullStack", "AI", "React"],
@@ -121,6 +131,10 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
       },
     ],
   },
+
+  // =========================================================================
+  // CHAPTER 2: MY TALENTS (Singing, Melodies & Acoustic Passion)
+  // =========================================================================
   {
     id: "chapter-talents",
     slug: "my-talents",
@@ -137,8 +151,8 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         date: "Acoustic Session",
         category: "singing",
         mediaType: "video",
-        mediaUrl: "/uploads/diary/singing/singing-video-1.mp4",
-        video: "/uploads/diary/singing/singing-video-1.mp4",
+        mediaUrl: "/media/videos/talents/palak-intro.mp4",
+        video: "/media/videos/talents/palak-intro.mp4",
         aspectRatio: "landscape",
         frameStyle: "vintage-gold",
         tags: ["Singing", "Acoustic", "VocalCover"],
@@ -154,8 +168,8 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         date: "Vocal Covers",
         category: "singing",
         mediaType: "video",
-        mediaUrl: "/uploads/diary/singing/singing-video-2.mp4",
-        video: "/uploads/diary/singing/singing-video-2.mp4",
+        mediaUrl: "/media/videos/talents/palak-intro.mp4",
+        video: "/media/videos/talents/palak-intro.mp4",
         aspectRatio: "landscape",
         frameStyle: "vintage-gold",
         tags: ["Melodies", "Harmony", "LiveSinging"],
@@ -163,611 +177,376 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         published: true,
         featured: true,
       },
-    ],
-  },
-  {
-    id: "chapter-hobbies",
-    slug: "my-hobbies",
-    title: "My Hobbies",
-    subtitle: "Things that slow down time and fill the soul",
-    quote: "Joy is found in the everyday rituals and handmade collections.",
-    coverAccent: "#facc15",
-    items: [
       {
         id: "hobby-acoustic-guitar",
         title: "Acoustic Chords & Soulful Harmonies",
         caption:
           "When screens turn off, music begins. Unplugged chords, soothing guitar rhythms, and soulful singing covers.",
         description:
-          "Singing and playing guitar is where logic softens into melodic warmth. Unwinding with favorite acoustic covers.",
-        date: "Acoustic Rituals",
-        location: "Sunlit Studio Corner",
-        category: "hobbies",
+          "Acoustic jamming session at dusk. Finding comfort in acoustic melodies between programming sprints.",
+        date: "Dusk Jamming",
+        location: "Music Room",
+        category: "music",
         mediaType: "image",
-        mediaUrl: "/assets/hobby-acoustic-guitar.jpg",
-        image: "/assets/hobby-acoustic-guitar.jpg",
-        aspectRatio: "portrait",
+        mediaUrl: "/media/diary/talents/acoustic-guitar.jpg",
+        image: "/media/diary/talents/acoustic-guitar.jpg",
+        aspectRatio: "landscape",
         frameStyle: "polaroid",
-        tags: ["AcousticGuitar", "MusicTherapy", "Unplugged"],
-        sortOrder: 1,
+        tags: ["Acoustic", "Guitar", "Singing", "CozyVibes"],
+        sortOrder: 3,
         published: true,
         featured: true,
       },
       {
         id: "hobby-vinyl-record",
-        title: "Vintage Vinyl & Lo-Fi Soundscapes",
+        title: "Vintage Vinyl & Classical Melodies",
         caption:
-          "The rhythmic crackle of classic records spinning on the turntable, filling peaceful late afternoons with warmth.",
+          "Warm crackle of analog records. Slow evenings spent listening to timeless melodies and old soulful hits.",
         description:
-          "Collecting vintage vinyl records, studying acoustic production, and relaxing to soothing instrumental melodies.",
-        date: "Vinyl Sessions",
+          "Spinning retro records on an old turntable. A reminder that classic craftsmanship never goes out of style.",
+        date: "Vintage Collection",
         location: "Listening Nook",
-        category: "hobbies",
+        category: "music",
         mediaType: "image",
-        mediaUrl: "/assets/hobby-vinyl-record.jpg",
-        image: "/assets/hobby-vinyl-record.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "vintage-gold",
-        tags: ["VinylRecords", "LoFiVibes", "WarmAcoustics"],
-        sortOrder: 2,
-        published: true,
-      },
-      {
-        id: "hobby-chai-brew",
-        title: "Evening Masala Chai & Quiet Reflection",
-        caption:
-          "Fresh ginger, crushed cardamom, and quiet pauses before diving back into creative brainstorming.",
-        description:
-          "Traditional clay kulhad chai brewing — the essential cozy ritual that powers every creative breakthrough.",
-        date: "Evening Ritual",
-        location: "Tea Garden Nook",
-        category: "hobbies",
-        mediaType: "image",
-        mediaUrl: "/assets/hobby-chai-brew.jpg",
-        image: "/assets/hobby-chai-brew.jpg",
-        aspectRatio: "portrait",
+        mediaUrl: "/media/diary/talents/vinyl-turntable.jpg",
+        image: "/media/diary/talents/vinyl-turntable.jpg",
+        aspectRatio: "landscape",
         frameStyle: "tape",
-        tags: ["ChaiRituals", "Warmth", "Mindfulness"],
-        sortOrder: 3,
+        tags: ["Vinyl", "Turntable", "AnalogSound", "RetroMelodies"],
+        sortOrder: 4,
         published: true,
       },
     ],
   },
+
+  // =========================================================================
+  // CHAPTER 3: TRAVEL DIARIES (Real Destinations & Interactive Map)
+  // =========================================================================
   {
     id: "chapter-travel",
     slug: "travel-diaries",
     title: "Travel Diaries",
-    subtitle: "Wandering through golden afternoons, quiet horizons & unfamiliar roads",
+    subtitle: "Real destinations, misty mountain trails, lakes & temple gopurams",
     quote: "To travel is to collect sunsets and keep them between paper pages.",
     coverAccent: "#2dd4bf",
     items: [
       {
         id: "travel-bhopal-sunset",
-        title: "Golden Hour Over Upper Lake, Bhopal",
+        title: "Golden Hour Glow · Upper Lake Bhopal",
         caption:
-          "Sunsets are proof that endings can often be beautiful too. Golden light reflecting across the lake.",
+          "Golden sunlight dancing across Bhopal's serene Bada Talab waters. Evening breezes, lakeside chai, and quiet contemplation.",
         description:
-          "Bhopal Upper Lake bathed in golden hour light, reflecting serene ripples and calm breezes.",
+          "Photographed at VIP Road, Bhopal. The water shimmered like molten amber as the city lights began to twinkle.",
+        date: "Golden Hour Reflections",
         location: "Upper Lake, Bhopal",
-        date: "Golden Afternoon",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/uploads/diary/travel/sunset-over-bhopal-lake.png",
-        image: "/uploads/diary/travel/sunset-over-bhopal-lake.png",
+        mediaUrl: "/media/diary/travel/bhopal-lake.png",
+        image: "/media/diary/travel/bhopal-lake.png",
         aspectRatio: "landscape",
-        frameStyle: "postmark",
-        tags: ["Bhopal", "UpperLake", "GoldenHour", "Reflections"],
+        frameStyle: "polaroid",
+        tags: ["Bhopal", "UpperLake", "GoldenHour", "LakesideVibes"],
         sortOrder: 1,
         published: true,
         featured: true,
       },
       {
-        id: "travel-tamil-nadu",
-        title: "Tamil Nadu Temple Gopurams & Scenic Hills",
+        id: "travel-misty-mountains",
+        title: "Misty Mountain Morning · Satpura Hills Pachmarhi",
         caption:
-          "Intricate Dravidian stone carvings standing tall against the misty, lush Nilgiri hills in golden hour light.",
+          "Misty layers of blue and green rolling across the Satpura mountain ranges at dawn. Cold pine breezes and silent horizons.",
         description:
-          "Historic temple architecture framed by winding scenic hill roads and soft spiritual warmth.",
-        location: "Tamil Nadu, South India",
-        date: "Spiritual Wanderings",
+          "Witnessed from Dhoopgarh, the highest point in Madhya Pradesh. Walking through misty forest paths as morning fog lifted.",
+        date: "Dawn Elevation",
+        location: "Dhoopgarh, Pachmarhi",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/uploads/diary/travel/tamil-nadu-temple-hills.png",
-        image: "/uploads/diary/travel/tamil-nadu-temple-hills.png",
+        mediaUrl: "/media/diary/travel/pachmarhi-hills.jpg",
+        image: "/media/diary/travel/pachmarhi-hills.jpg",
         aspectRatio: "landscape",
-        frameStyle: "postmark",
-        tags: ["TamilNadu", "TempleGopuram", "Nilgiris", "Dravidian"],
+        frameStyle: "pinned",
+        tags: ["Pachmarhi", "Satpura", "MistyMorning", "MountainScrapbook"],
         sortOrder: 2,
         published: true,
         featured: true,
       },
       {
-        id: "travel-pachmarhi-dhoopgarh",
-        title: "Dhoopgarh Sunset · Satpura's Highest Peak",
+        id: "travel-tamil-nadu",
+        title: "Temple Gopurams & Sacred Hills · Tamil Nadu",
         caption:
-          "Standing atop Satpura at 1,352m watching the golden sun sink into a sea of misty valleys and crimson clouds.",
+          "Magnificent temple gopuram towers rising against scenic mountain hills. Rich Dravidian architecture and cultural heritage.",
         description:
-          "The crowning jewel of Pachmarhi highlands — panoramic vista where dusk paints the entire horizon.",
-        location: "Dhoopgarh Peak, Pachmarhi",
-        date: "Highland Sunset",
+          "Exploring ancient temples in Tamil Nadu. The intricate sculptures, peaceful courtyards, and scenic hillside backdrops.",
+        date: "Southern Odyssey",
+        location: "Tamil Nadu, India",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/assets/travel/pachmarhi/pachmarhi-dhoopgarh-sunset.jpg",
-        image: "/assets/travel/pachmarhi/pachmarhi-dhoopgarh-sunset.jpg",
+        mediaUrl: "/media/diary/travel/tamil-nadu-temple.png",
+        image: "/media/diary/travel/tamil-nadu-temple.png",
         aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["Pachmarhi", "Dhoopgarh", "Satpura", "Highlands"],
+        frameStyle: "vintage-gold",
+        tags: ["TamilNadu", "TempleArchitecture", "ScenicHills", "SouthIndia"],
         sortOrder: 3,
         published: true,
         featured: true,
       },
       {
-        id: "travel-pachmarhi-falls",
-        title: "Apsara Vihar Waterfall, Pachmarhi",
+        id: "travel-enchanted-forest",
+        title: "Enchanted Woods & Wild Deer · Satpura Trails",
         caption:
-          "Clear mountain streams gushing into a natural fairy pool surrounded by cool emerald rock ledges.",
+          "Quiet encounter with a wild deer standing peacefully among ancient trees in the morning mist.",
         description:
-          "Hidden fairy pool and waterfall tucked inside Satpura's lush ravines, freezing and pristine.",
-        location: "Apsara Vihar, Pachmarhi",
-        date: "Satpura Expeditions",
+          "Deeper into the Satpura woodland trails. Sunbeams filtering through tall trees illuminating an enchanted forest scene.",
+        date: "Wilderness Walk",
+        location: "Satpura Woodland",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/assets/travel/pachmarhi/apsara-vihar-waterfall.jpg",
-        image: "/assets/travel/pachmarhi/apsara-vihar-waterfall.jpg",
+        mediaUrl: "/media/diary/travel/forest-deer.png",
+        image: "/media/diary/travel/forest-deer.png",
         aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["Waterfall", "ApsaraVihar", "FreshStream", "Satpura"],
+        frameStyle: "floral",
+        tags: ["WildDeer", "EnchantedForest", "NatureWalk", "PeacefulMoments"],
         sortOrder: 4,
         published: true,
+        featured: true,
       },
       {
-        id: "travel-south-indian-feast",
-        title: "Authentic Crispy Masala Dosa Feast",
+        id: "travel-waterfall-pools",
+        title: "Cold Mountain Waterfalls & Natural Springs",
         caption:
-          "Golden roasted ghee dosa on fresh banana leaf paired with coconut chutney and piping hot sambar.",
+          "Natural freshwater pools hidden deep inside the ravine. Clear, freezing water cascading over smooth canyon rocks.",
         description:
-          "Traditional breakfast in Madurai — crispy wafer crust, aromatic potato masala, and rich heritage flavors.",
-        location: "Heritage Mess, Madurai",
-        date: "South Indian Food Trails",
+          "Bee Falls and Duchess Fall hike. The thunderous echo of cascading water and refreshing mountain pools.",
+        date: "Waterfall Trek",
+        location: "Bee Falls, Pachmarhi",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/assets/travel/tamilnadu/crispy-masala-dosa.jpg",
-        image: "/assets/travel/tamilnadu/crispy-masala-dosa.jpg",
+        mediaUrl: "/media/diary/travel/waterfall-pool.jpg",
+        image: "/media/diary/travel/waterfall-pool.jpg",
         aspectRatio: "landscape",
-        frameStyle: "postmark",
-        tags: ["MasalaDosa", "BananaLeaf", "MaduraiFood", "Flavors"],
+        frameStyle: "polaroid",
+        tags: ["BeeFalls", "WaterfallPool", "CanyonTrek", "ClearWaters"],
         sortOrder: 5,
         published: true,
       },
       {
-        id: "travel-filter-coffee",
-        title: "Traditional Brass Tumbler Degree Coffee",
+        id: "travel-south-indian-feast",
+        title: "Steaming Filter Kaapi & Crispy Dosa Delights",
         caption:
-          "Steaming South Indian filter coffee frothed to perfection in classic davarah brassware.",
+          "Crispy golden masala dosa served on banana leaf with fresh coconut chutneys and traditional brass tumbler filter coffee.",
         description:
-          "A morning staple across Kumbakonam and Madurai — dark chicory roast with creamy milk froth.",
-        location: "Kumbakonam, Tamil Nadu",
-        date: "Morning Kaapi",
+          "Traditional breakfast stop during the South Indian road trip. The rich aroma of roasted chicory and spices.",
+        date: "Culinary Trail",
+        location: "Madurai Eatery",
         category: "travel",
         mediaType: "image",
-        mediaUrl: "/assets/travel/tamilnadu/filter-coffee-brass-tumbler.jpg",
-        image: "/assets/travel/tamilnadu/filter-coffee-brass-tumbler.jpg",
+        mediaUrl: "/media/diary/travel/south-indian-feast.jpg",
+        image: "/media/diary/travel/south-indian-feast.jpg",
         aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["FilterKaapi", "Brassware", "MorningBrew", "Tradition"],
+        frameStyle: "tape",
+        tags: ["FilterKaapi", "MasalaDosa", "BananaLeaf", "RoadTripFood"],
         sortOrder: 6,
-        published: true,
-      },
-      {
-        id: "travel-chauragarh-trail",
-        title: "Chauragarh Pilgrimage Trail & Mountain Mist",
-        caption:
-          "Climbing 1,300+ stone steps wrapped in morning fog surrounded by thousands of sacred trishuls.",
-        description:
-          "Spiritual mountain trail climbing to the peak of Chauragarh with bells echoing in the mist.",
-        location: "Chauragarh Peak, Satpura",
-        date: "Highland Climbs",
-        category: "travel",
-        mediaType: "image",
-        mediaUrl: "/assets/travel/pachmarhi/chauragarh-temple-trail.jpg",
-        image: "/assets/travel/pachmarhi/chauragarh-temple-trail.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["Chauragarh", "FoggySteps", "HighlandTrek", "SacredPeaks"],
-        sortOrder: 7,
-        published: true,
-      },
-      {
-        id: "travel-enchanted-forest",
-        title: "The Enchanted Forest & Wild Deer",
-        caption:
-          "Sunbeams filtering through tall emerald canopies, mossy roots, and a gentle wild deer watching peacefully.",
-        description:
-          "Magical forest sanctuary bathed in dappled morning light and peaceful forest whispers.",
-        location: "Woodland Sanctuary",
-        date: "Enchanted Morning",
-        category: "travel",
-        mediaType: "image",
-        mediaUrl: "/uploads/diary/travel/enchanted-forest-wild-deer.png",
-        image: "/uploads/diary/travel/enchanted-forest-wild-deer.png",
-        aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["EnchantedWoods", "WildDeer", "Sunbeams", "ForestWhispers"],
-        sortOrder: 8,
         published: true,
       },
     ],
   },
+
+  // =========================================================================
+  // CHAPTER 4: MEMORIES (Friends, Campus Life, Art & Creative Moments)
+  // =========================================================================
   {
-    id: "chapter-drawings",
-    slug: "my-drawings",
-    title: "My Drawings & Sketches",
-    subtitle: "Handmade illustrations, pencil sketches & visual daydreams",
-    quote: "Drawing is putting a piece of your imagination into something tangible.",
-    coverAccent: "#fb923c",
+    id: "chapter-memories",
+    slug: "my-memories",
+    title: "Memories",
+    subtitle: "College days at SIRT Bhopal, creative sketches, celebrations & little moments",
+    quote:
+      "Photographs and handwritten notes: tiny time capsules of people and places that made us.",
+    coverAccent: "#c084fc",
     items: [
       {
-        id: "drawing-cottage",
-        title: "Cozy Cottage Garden Architecture Sketch",
+        id: "memory-canteen-chai",
+        title: "Canteen Chai & Architecture Debates",
         caption:
-          "A peaceful cottage tucked behind blooming garden vines, stone steps, and quiet warmth.",
+          "Post-class debates over cutting chai and samosas at the campus canteen. Talking about cloud backends and future blueprints.",
         description:
-          "Detailed handmade architectural sketch featuring floral garden trellises, pitched roofs, and stone pathways.",
-        date: "Pencil & Fine Ink",
-        category: "drawings",
-        mediaType: "drawing",
-        mediaUrl: "/uploads/diary/drawings/cozy-cottage-garden.png",
-        image: "/uploads/diary/drawings/cozy-cottage-garden.png",
-        aspectRatio: "portrait",
-        frameStyle: "sketchbook",
-        tags: ["CottageSketch", "InkArchitecture", "StoneSteps", "Botanical"],
+          "SIRT Bhopal canteen bench. Where some of our most ambitious project roadmaps were sketched on paper napkins.",
+        date: "Canteen Diaries",
+        location: "Campus Canteen, SIRT",
+        category: "memory",
+        mediaType: "image",
+        mediaUrl: "/media/diary/memories/canteen-discussions.jpg",
+        image: "/media/diary/memories/canteen-discussions.jpg",
+        aspectRatio: "landscape",
+        frameStyle: "tape",
+        tags: ["CampusLife", "CuttingChai", "Debates", "CollegeMemories"],
         sortOrder: 1,
         published: true,
         featured: true,
       },
       {
-        id: "drawing-chibi-doodle",
-        title: "Chibi Girl Pencil Doodle & Notebook Study",
-        caption: "Whimsical character doodle captured on a quiet creative afternoon.",
+        id: "drawing-cottage-garden",
+        title: "Cozy Cottage Garden · Handcrafted Ink Sketch",
+        caption:
+          "A quiet cottage surrounded by flowering hedges and stone pathways. Sketched with fine-liner ink on textured paper.",
         description:
-          "Delicate pencil doodle of a chibi girl writing in her notebook with soft floral accents.",
-        date: "Handmade Doodle",
-        category: "drawings",
-        mediaType: "drawing",
-        mediaUrl: "/uploads/diary/drawings/chibi-girl-doodle.png",
-        image: "/uploads/diary/drawings/chibi-girl-doodle.png",
-        aspectRatio: "portrait",
-        frameStyle: "pinned",
-        tags: ["ChibiDoodle", "CharacterArt", "PencilIllustration"],
+          "Drawn on a Sunday afternoon with a cup of masala chai. Visualizing tranquil homes tucked away in misty valleys.",
+        date: "Ink Study · 2024",
+        location: "Creative Sketchbook",
+        category: "drawing",
+        mediaType: "image",
+        mediaUrl: "/media/diary/memories/cottage-drawing.png",
+        image: "/media/diary/memories/cottage-drawing.png",
+        aspectRatio: "landscape",
+        frameStyle: "sketchbook",
+        tags: ["InkSketch", "CottageGarden", "ArtStudy", "FineLiner"],
         sortOrder: 2,
         published: true,
         featured: true,
       },
       {
         id: "drawing-botanical-wildflowers",
-        title: "Botanical Wildflower Studies on Cream Paper",
+        title: "Botanical Wildflowers · Watercolor & Fineliner",
         caption:
-          "Handmade botanical study of pressed lavender, daisies, and sage leaves with soft colored pencil strokes.",
+          "Delicate wildflower stems, leaves, and soft floral petals studied from roadside trails and meadows.",
         description:
-          "Realistic colored pencil illustrations of wildflowers on textured vintage cream paper.",
-        date: "Botanical Colored Pencil",
-        category: "drawings",
-        mediaType: "drawing",
-        mediaUrl: "/uploads/diary/drawings/botanical-wildflowers-sketch.png",
-        image: "/uploads/diary/drawings/botanical-wildflowers-sketch.png",
-        aspectRatio: "portrait",
-        frameStyle: "sketchbook",
-        tags: ["BotanicalArt", "ColoredPencil", "PressedFlowers", "Flora"],
+          "Watercolor washes over delicate pigment ink lines. Preserving seasonal blossoms inside paper spreads.",
+        date: "Botanical Study",
+        location: "Desk Studio",
+        category: "drawing",
+        mediaType: "image",
+        mediaUrl: "/media/diary/memories/wildflowers-sketch.png",
+        image: "/media/diary/memories/wildflowers-sketch.png",
+        aspectRatio: "landscape",
+        frameStyle: "floral",
+        tags: ["BotanicalArt", "Wildflowers", "Watercolor", "NatureStudy"],
         sortOrder: 3,
         published: true,
         featured: true,
+      },
+      {
+        id: "drawing-chibi-girl",
+        title: "Creative Chibi Doodle · Hand-drawn Sticker",
+        caption:
+          "Playful chibi cartoon doodle of an ambitious tech girl holding books and wearing oversized glasses.",
+        description:
+          "Hand-drawn sticker illustration bringing lighthearted warmth to engineering notebook margins.",
+        date: "Fun Sticker",
+        location: "Notebook Marginalia",
+        category: "drawing",
+        mediaType: "image",
+        mediaUrl: "/media/diary/memories/chibi-doodle.png",
+        image: "/media/diary/memories/chibi-doodle.png",
+        aspectRatio: "square",
+        frameStyle: "polaroid",
+        tags: ["ChibiArt", "CuteDoodle", "CharacterDesign", "Stickers"],
+        sortOrder: 4,
+        published: true,
       },
       {
         id: "drawing-charcoal-sketch",
-        title: "Expressive Graphite & Charcoal Study",
+        title: "Charcoal Monochrome Highlights",
         caption:
-          "Exploring shadow gradients, high-contrast textures, and raw expressive pencil lines on textured art paper.",
+          "Soft charcoal shading and bold graphite pencil strokes exploring depth, light, and monochrome shadow.",
         description:
-          "Hand-drawn studio study focusing on light diffusion, tonal transitions, and cross-hatch shading techniques.",
-        date: "Charcoal & 6B Graphite",
-        category: "drawings",
-        mediaType: "drawing",
-        mediaUrl: "/assets/drawing-charcoal-sketch.jpg",
-        image: "/assets/drawing-charcoal-sketch.jpg",
-        aspectRatio: "portrait",
+          "Experimenting with charcoal powder, blending stumps, and kneaded erasers to capture expressive shadows.",
+        date: "Charcoal Sketch",
+        location: "Art Corner",
+        category: "drawing",
+        mediaType: "image",
+        mediaUrl: "/media/diary/memories/charcoal-sketch.jpg",
+        image: "/media/diary/memories/charcoal-sketch.jpg",
+        aspectRatio: "landscape",
         frameStyle: "vintage-gold",
-        tags: ["CharcoalStudy", "GraphiteArt", "FineArt", "CrossHatching"],
-        sortOrder: 4,
-        published: true,
-      },
-      {
-        id: "drawing-watercolor-botanical",
-        title: "Watercolor Palette & Delicate Botanical Brushwork",
-        caption:
-          "Blending earthy sienna and sap green pigments on cotton paper with sable brushes.",
-        description:
-          "Fine art studio study combining wet-on-wet watercolor washes with delicate pen line details.",
-        date: "Winsor & Newton Watercolors",
-        category: "drawings",
-        mediaType: "drawing",
-        mediaUrl: "/assets/drawing-watercolor-botanical.jpg",
-        image: "/assets/drawing-watercolor-botanical.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "floral",
-        tags: ["Watercolor", "BotanicalWash", "ArtistPalette", "FineArt"],
+        tags: ["Charcoal", "Monochrome", "Shading", "ArtGallery"],
         sortOrder: 5,
         published: true,
       },
-    ],
-  },
-  {
-    id: "chapter-memories",
-    slug: "my-memories",
-    title: "My Memories",
-    subtitle: "College friendships, laughter and milestones to remember",
-    quote: "The days are long, but the years are fleeting snapshots.",
-    coverAccent: "#fb7185",
-    items: [
       {
-        id: "memory-campus-life",
-        title: "Campus Lawns & Shared Laughter",
+        id: "memory-vintage-library",
+        title: "Old Bookstore & Hardcover Shelves",
         caption:
-          "Unplanned conversations on sunny university lawns that turned into lifelong college friendships.",
+          "Wandering through narrow wooden aisles surrounded by thousands of pre-loved books and quiet study corners.",
         description:
-          "Cherished memories with close college friends between morning lectures and afternoon labs.",
-        location: "University Campus Lawns",
-        date: "College Days · 2024",
-        category: "memories",
+          "Finding rare programming guides and philosophical essays tucked away on vintage cedar shelves.",
+        date: "Book Hunting",
+        location: "Old City Library",
+        category: "interest",
         mediaType: "image",
-        mediaUrl: "/assets/memory-campus-life.jpg",
-        image: "/assets/memory-campus-life.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "tape",
-        tags: ["CampusLife", "Friendship", "CollegeDays", "Laughter"],
-        sortOrder: 1,
-        published: true,
-        featured: true,
-      },
-      {
-        id: "memory-convocation",
-        title: "Academic Milestones & Future Dreams",
-        caption:
-          "The feeling of accomplishment when long semesters of hard work culminate in shared celebration.",
-        description:
-          "Celebrating triumphs, presentations, and engineering milestones with the entire cohort.",
-        location: "University Convocation Hall",
-        date: "Academic Triumph",
-        category: "memories",
-        mediaType: "image",
-        mediaUrl: "/assets/memory-convocation.jpg",
-        image: "/assets/memory-convocation.jpg",
-        aspectRatio: "portrait",
+        mediaUrl: "/media/diary/memories/vintage-library.jpg",
+        image: "/media/diary/memories/vintage-library.jpg",
+        aspectRatio: "landscape",
         frameStyle: "polaroid",
-        tags: ["Graduation", "Milestones", "Triumph", "Future"],
-        sortOrder: 2,
+        tags: ["Library", "Bookshelves", "BookNook", "QuietHours"],
+        sortOrder: 6,
         published: true,
       },
       {
-        id: "memory-canteen-chai",
-        title: "Canteen Evenings & Project Debates",
+        id: "hobby-chai-brew",
+        title: "Steaming Masala Chai Brew · Daily Ritual",
         caption:
-          "Hot samosas, cutting chai, and passionate debates about tech stacks and design philosophies.",
+          "Crushed green cardamom, fresh ginger, cloves, and whole milk simmered to a rich golden caramel hue.",
         description:
-          "Endless brainstorming sessions in the college canteen, planning hackathons and capstone projects.",
-        location: "Student Canteen",
-        date: "Evening Hangouts",
-        category: "memories",
-        mediaType: "image",
-        mediaUrl: "/assets/memory-canteen-chai.jpg",
-        image: "/assets/memory-canteen-chai.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "pinned",
-        tags: ["CanteenChai", "HackathonPrep", "Discussions"],
-        sortOrder: 3,
-        published: true,
-      },
-    ],
-  },
-  {
-    id: "chapter-interests",
-    slug: "my-interests",
-    title: "My Interests",
-    subtitle: "Books, technology, aesthetics & lifelong curiosities",
-    quote: "Curiosity is the compass that guides both code and creative pursuits.",
-    coverAccent: "#c084fc",
-    items: [
-      {
-        id: "interest-vintage-library",
-        title: "Cozy Wooden Library & Bound Volumes",
-        caption:
-          "Surrounded by centuries of ideas. A sanctuary for deep thinking and timeless curiosity.",
-        description:
-          "Exploring engineering literature, architectural theory, and philosophy in quiet study corners.",
-        date: "Deep Reading",
-        location: "Heritage Library Nook",
-        category: "interests",
-        mediaType: "image",
-        mediaUrl: "/assets/interest-vintage-library.jpg",
-        image: "/assets/interest-vintage-library.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "vintage-gold",
-        tags: ["VintageLibrary", "QuietStudy", "Literature", "Curiosity"],
-        sortOrder: 1,
-        published: true,
-        featured: true,
-      },
-      {
-        id: "interest-reading-coffee",
-        title: "Morning Chapters & Fresh Roast",
-        caption:
-          "Starting the day with fifty pages of software craft before the first line of code is written.",
-        description:
-          "Daily reading habits covering Clean Code, system design, and personal development.",
+          "The ritual that starts every productive coding session. A steaming earthen kulhad on the balcony.",
         date: "Daily Ritual",
-        location: "Morning Desk",
-        category: "interests",
+        location: "Kitchen Nook",
+        category: "hobby",
         mediaType: "image",
-        mediaUrl: "/assets/interest-reading-coffee.jpg",
-        image: "/assets/interest-reading-coffee.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "polaroid",
-        tags: ["CleanCode", "CoffeeAndBooks", "MorningHabits"],
-        sortOrder: 2,
-        published: true,
-      },
-      {
-        id: "interest-design-journal",
-        title: "Design Systems & Visual Typography",
-        caption:
-          "Exploring grid harmonies, font pairings, and UI tactile psychology in a personal sketchbook.",
-        description:
-          "Documenting aesthetic inspirations, typography specimens, and user experience patterns.",
-        date: "Design Studies",
-        location: "Creative Workshop",
-        category: "interests",
-        mediaType: "image",
-        mediaUrl: "/assets/interest-design-journal.jpg",
-        image: "/assets/interest-design-journal.jpg",
-        aspectRatio: "portrait",
-        frameStyle: "floral",
-        tags: ["DesignSystems", "Typography", "TactileUI", "Sketches"],
-        sortOrder: 3,
-        published: true,
-      },
-    ],
-  },
-  {
-    id: "chapter-little-world",
-    slug: "my-little-world",
-    title: "My Little World",
-    subtitle: "Unscripted moments, candid thoughts & everyday wonders",
-    quote: "A quiet corner of the universe that is entirely, authentically mine.",
-    coverAccent: "#fde047",
-    items: [
-      {
-        id: "wonder-starlit-skylines",
-        title: "Twilight Crescent & Midnight Thoughts",
-        caption:
-          "When the city sleeps and the moon hangs low, the mind wanders into boundless dreams and new lines of code.",
-        description: "Quiet twilight hours looking up at celestial clouds and starlit horizons.",
-        date: "Midnight Thoughts",
-        location: "Rooftop Under the Stars",
-        category: "little-world",
-        mediaType: "image",
-        mediaUrl: "/assets/travel/moon-sky/crescent-moon-twilight.jpg",
-        image: "/assets/travel/moon-sky/crescent-moon-twilight.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "floral",
-        tags: ["CrescentMoon", "MidnightIdeas", "TwilightSky"],
-        sortOrder: 1,
-        published: true,
-        featured: true,
-      },
-      {
-        id: "wonder-rain-ripples",
-        title: "Rain on Window Panes & Water Ripples",
-        caption:
-          "The comforting rhythm of monsoon raindrops tapping against glass. Everything feels still, grounded, and safe.",
-        description: "Monsoon serenity and peaceful reflective pauses during rainy afternoons.",
-        date: "Monsoon Echoes",
-        location: "Rainy Window Nook",
-        category: "little-world",
-        mediaType: "image",
-        mediaUrl: "/assets/travel/water/rain-ripples-pond.jpg",
-        image: "/assets/travel/water/rain-ripples-pond.jpg",
+        mediaUrl: "/media/diary/memories/masala-chai.jpg",
+        image: "/media/diary/memories/masala-chai.jpg",
         aspectRatio: "landscape",
         frameStyle: "polaroid",
-        tags: ["MonsoonRain", "WaterRipples", "Serenity", "Stillness"],
-        sortOrder: 2,
-        published: true,
-      },
-      {
-        id: "wonder-ancient-woods",
-        title: "Ancient Mossy Trees & Earth Whispers",
-        caption:
-          "Deep woodland trails where time slows down to the pace of swaying leaves and birdsong.",
-        description: "Quiet morning walking trails in Satpura ancient pine forests.",
-        date: "Woodland Walk",
-        location: "Deep Forest Trail",
-        category: "little-world",
-        mediaType: "image",
-        mediaUrl: "/assets/travel/forest/ancient-mossy-trees.jpg",
-        image: "/assets/travel/forest/ancient-mossy-trees.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "pinned",
-        tags: ["AncientWoods", "MossyRoots", "ForestPines", "Earth"],
-        sortOrder: 3,
-        published: true,
-      },
-      {
-        id: "wonder-serene-lake",
-        title: "Glass Waters & Mirror Horizons",
-        caption:
-          "Still morning water holding the reflection of sky, clouds, and quiet morning hopes.",
-        description: "Tranquil lake mirrors reflecting soft morning light and clear skies.",
-        date: "Morning Solitude",
-        location: "Quiet Lakeside",
-        category: "little-world",
-        mediaType: "image",
-        mediaUrl: "/assets/travel/water/serene-lake-reflection.jpg",
-        image: "/assets/travel/water/serene-lake-reflection.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "tape",
-        tags: ["GlassWaters", "LakeMirror", "Calmness", "Peace"],
-        sortOrder: 4,
+        tags: ["MasalaChai", "GingerCardamom", "DailyComfort", "ChaiBreak"],
+        sortOrder: 7,
         published: true,
       },
     ],
   },
 ];
 
-// Incremented cache key to force browsers to load fresh non-repeating data
-const LOCAL_KEY = "palak_magical_diary_v8";
-const DB_NAME = "PalakMagicalDiaryDB";
-const STORE_NAME = "chaptersStore";
+const LOCAL_KEY = "palak_diary_chapters_v4";
+const IDB_NAME = "PalakDiaryDB";
+const IDB_STORE = "diary_chapters";
 
-function openIDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+function openDB(): Promise<IDBDatabase | null> {
+  return new Promise((resolve) => {
     if (typeof window === "undefined" || !("indexedDB" in window)) {
-      return reject(new Error("IndexedDB not supported"));
+      resolve(null);
+      return;
     }
-    const request = indexedDB.open(DB_NAME, 1);
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
+    const req = indexedDB.open(IDB_NAME, 2);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) {
+        db.createObjectStore(IDB_STORE);
       }
     };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => resolve(null);
   });
 }
 
-export async function saveToIndexedDB(chapters: DiaryChapter[]): Promise<void> {
+async function saveToIndexedDB(chapters: DiaryChapter[]): Promise<void> {
   try {
-    const db = await openIDB();
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    store.put(chapters, "current_chapters");
-    await new Promise<void>((resolve, reject) => {
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-  } catch (err) {
-    console.warn("[Diary] IndexedDB save fallback:", err);
+    const db = await openDB();
+    if (!db) return;
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    tx.objectStore(IDB_STORE).put(chapters, "chapters");
+  } catch (e) {
+    console.warn("Failed saving chapters to IndexedDB:", e);
   }
 }
 
-export async function loadFromIndexedDB(): Promise<DiaryChapter[] | null> {
+async function loadFromIndexedDB(): Promise<DiaryChapter[] | null> {
   try {
-    const db = await openIDB();
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    const req = store.get("current_chapters");
+    const db = await openDB();
+    if (!db) return null;
     return new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, "readonly");
+      const req = tx.objectStore(IDB_STORE).get("chapters");
       req.onsuccess = () => {
-        if (Array.isArray(req.result) && req.result.length > 0) {
-          resolve(req.result);
+        const data = req.result;
+        if (Array.isArray(data) && data.length === 4) {
+          resolve(data);
         } else {
           resolve(null);
         }
@@ -779,27 +558,41 @@ export async function loadFromIndexedDB(): Promise<DiaryChapter[] | null> {
   }
 }
 
+/**
+ * Ensures exactly 4 chapters are returned and sanitized.
+ */
+function sanitizeToFourChapters(chapters: DiaryChapter[]): DiaryChapter[] {
+  if (!Array.isArray(chapters) || chapters.length !== 4) {
+    return INITIAL_CHAPTERS;
+  }
+  return chapters;
+}
+
 export function loadDiaryChapters(): DiaryChapter[] {
   if (typeof window === "undefined") return INITIAL_CHAPTERS;
+
   try {
     const raw = localStorage.getItem(LOCAL_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed) && parsed.length === 4) {
         return parsed;
       }
     }
   } catch (e) {
-    console.warn("Could not load stored diary chapters, falling back to defaults", e);
+    console.error("Failed to load diary chapters from local storage", e);
   }
+
   return INITIAL_CHAPTERS;
 }
 
 export function saveDiaryChapters(chapters: DiaryChapter[]) {
   if (typeof window === "undefined") return;
+
+  const sanitized = sanitizeToFourChapters(chapters);
   try {
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(chapters));
-    void saveToIndexedDB(chapters);
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(sanitized));
+    void saveToIndexedDB(sanitized);
   } catch (e) {
     console.error("Failed to save diary chapters to local storage", e);
   }
@@ -812,7 +605,7 @@ export async function fetchPersistentChapters(): Promise<DiaryChapter[]> {
     const res = await fetch("/api/public/diary-store");
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data.chapters) && data.chapters.length > 0) {
+      if (Array.isArray(data.chapters) && data.chapters.length === 4) {
         saveDiaryChapters(data.chapters);
         return data.chapters;
       }
@@ -822,7 +615,7 @@ export async function fetchPersistentChapters(): Promise<DiaryChapter[]> {
   }
 
   const idbData = await loadFromIndexedDB();
-  if (idbData && idbData.length > 0) {
+  if (idbData && idbData.length === 4) {
     return idbData;
   }
 
@@ -833,8 +626,9 @@ export async function persistDiaryChapters(
   chapters: DiaryChapter[],
   adminPasskey?: string,
 ): Promise<boolean> {
-  saveDiaryChapters(chapters);
-  await saveToIndexedDB(chapters);
+  const sanitized = sanitizeToFourChapters(chapters);
+  saveDiaryChapters(sanitized);
+  await saveToIndexedDB(sanitized);
 
   try {
     const res = await fetch("/api/public/diary-store", {
@@ -843,7 +637,7 @@ export async function persistDiaryChapters(
         "Content-Type": "application/json",
         ...(adminPasskey ? { "X-Admin-Passkey": adminPasskey } : {}),
       },
-      body: JSON.stringify({ chapters }),
+      body: JSON.stringify({ chapters: sanitized }),
     });
     return res.ok;
   } catch {
