@@ -9,8 +9,10 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize2,
-  Calendar,
+  Play,
+  Pause,
   Layers,
+  Heart,
 } from "lucide-react";
 import type { DiaryItem } from "@/data/diary-content";
 
@@ -34,13 +36,14 @@ export interface RealDestination {
   notes: string;
   itemMatchId: string;
   directionsUrl: string;
+  famousStateElements: { name: string; emoji: string }[];
 }
 
 export const REAL_DESTINATIONS: RealDestination[] = [
   {
     id: "bhopal",
     name: "Bhopal · Upper Lake (Bada Talab)",
-    region: "Madhya Pradesh, India",
+    region: "Madhya Pradesh, Central India",
     lat: 23.2599,
     lng: 77.4126,
     tagline: "Golden hour sunset & lake breezes",
@@ -48,9 +51,15 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     ticketStub: "BHOPAL SHATABDI • COACH B2",
     photoUrl: "/media/diary/travel/bhopal-lake.png",
     attractions: ["Bada Talab / VIP Road", "Van Vihar National Park", "Boat Club Promenade"],
-    notes: "Golden light ripples across calm waters as the evening bells ring across VIP Road.",
+    notes: "Golden light ripples across calm waters as evening breezes cool the lakeside.",
     itemMatchId: "travel-bhopal-sunset",
     directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=23.2599,77.4126",
+    famousStateElements: [
+      { name: "Upper Lake (Bada Talab)", emoji: "🌊" },
+      { name: "Van Vihar Wildlife Safari", emoji: "🐅" },
+      { name: "Taj-ul-Masajid Grand Minarets", emoji: "🕌" },
+      { name: "Evening Chai at VIP Road", emoji: "☕" },
+    ],
   },
   {
     id: "pachmarhi",
@@ -64,9 +73,15 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     photoUrl: "/media/diary/travel/pachmarhi-hills.jpg",
     attractions: ["Dhoopgarh Highest Peak (1,352m)", "Bee Falls & Fairy Pool", "Chauragarh Shrine"],
     notes:
-      "1,300+ steps to Chauragarh peak and freezing mountain streams under tall pine canopies.",
+      "1,300+ steps to Chauragarh peak and crystal-clear mountain streams under tall pine canopies.",
     itemMatchId: "travel-misty-mountains",
     directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=22.4674,78.4346",
+    famousStateElements: [
+      { name: "Bee Falls & Waterfall Pool", emoji: "💧" },
+      { name: "Dhoopgarh Highest Satpura Peak", emoji: "🌄" },
+      { name: "Queen of Satpura Hill Trails", emoji: "🌲" },
+      { name: "Chauragarh Mountain Shrine", emoji: "🛕" },
+    ],
   },
   {
     id: "tamilnadu",
@@ -87,6 +102,12 @@ export const REAL_DESTINATIONS: RealDestination[] = [
       "Intricate multi-tier gopuram stone carvings rising majestically against mist-covered green hills.",
     itemMatchId: "travel-tamil-nadu",
     directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=9.9195,78.1193",
+    famousStateElements: [
+      { name: "Meenakshi Amman Golden Gopuram", emoji: "🛕" },
+      { name: "Nilgiri Mountain Toy Train", emoji: "🚂" },
+      { name: "Steaming Hot Filter Kaapi", emoji: "☕" },
+      { name: "Dravidian Stone Architecture", emoji: "🏛️" },
+    ],
   },
 ];
 
@@ -98,17 +119,33 @@ export function TravelRouteMap({
   const [activeDestId, setActiveDestId] = useState<string>("pachmarhi");
   const [mapZoom, setMapZoom] = useState<number>(6);
   const [leafletLoaded, setLeafletLoaded] = useState<boolean>(false);
+  const [isAutoDriving, setIsAutoDriving] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapInstanceRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const carMarkerRef = useRef<any>(null);
 
   const activeDest = REAL_DESTINATIONS.find((d) => d.id === activeDestId) || REAL_DESTINATIONS[1];
+
+  // Auto-drive simulation across Bhopal -> Pachmarhi -> Tamil Nadu
+  useEffect(() => {
+    if (!isAutoDriving) return;
+    const destIds = ["bhopal", "pachmarhi", "tamilnadu"];
+    let idx = destIds.indexOf(activeDestId);
+
+    const timer = setInterval(() => {
+      idx = (idx + 1) % destIds.length;
+      setActiveDestId(destIds[idx]);
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, [isAutoDriving, activeDestId]);
 
   // Dynamic client-side Leaflet loader
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Check if Leaflet CSS is loaded
     if (!document.getElementById("leaflet-css")) {
       const link = document.createElement("link");
       link.id = "leaflet-css";
@@ -117,7 +154,6 @@ export function TravelRouteMap({
       document.head.appendChild(link);
     }
 
-    // Check if Leaflet JS is loaded
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((window as any).L) {
       setLeafletLoaded(true);
@@ -162,7 +198,6 @@ export function TravelRouteMap({
           scrollWheelZoom: false,
         });
 
-        // OpenStreetMap Tile Layer
         const tileUrl = isNightMode
           ? "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -176,7 +211,7 @@ export function TravelRouteMap({
         REAL_DESTINATIONS.forEach((dest) => {
           const markerHtml = `
             <div style="cursor: pointer; text-align: center; transform: translate(-50%, -50%);">
-              <div style="background: ${isNightMode ? "#06b6d4" : "#0d9488"}; color: white; padding: 6px 10px; border-radius: 9999px; font-weight: bold; font-size: 11px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 2px solid white; display: inline-flex; align-items: center; gap: 4px;">
+              <div style="background: ${isNightMode ? "#06b6d4" : "#0d9488"}; color: white; padding: 6px 12px; border-radius: 9999px; font-weight: bold; font-size: 11px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); border: 2px solid white; display: inline-flex; align-items: center; gap: 4px;">
                 <span>${dest.icon}</span>
                 <span>${dest.name.split("·")[0].trim()}</span>
               </div>
@@ -186,16 +221,35 @@ export function TravelRouteMap({
           const customIcon = L.divIcon({
             html: markerHtml,
             className: "leaflet-custom-marker",
-            iconSize: [120, 36],
-            iconAnchor: [60, 18],
+            iconSize: [130, 36],
+            iconAnchor: [65, 18],
           });
 
           const marker = L.marker([dest.lat, dest.lng], { icon: customIcon }).addTo(map);
           marker.on("click", () => {
             setActiveDestId(dest.id);
-            map.flyTo([dest.lat, dest.lng], 8, { duration: 1 });
+            map.flyTo([dest.lat, dest.lng], 8, { duration: 1.2 });
           });
         });
+
+        // Add the cute road-trip car marker with girl driver
+        const carIconHtml = `
+          <div style="cursor: pointer; transform: translate(-50%, -50%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.45));">
+            <div style="background: #f43f5e; color: white; border-radius: 9999px; padding: 4px 8px; border: 2px solid #fff; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 10px rgba(244,63,94,0.6);">
+              <span>🚗 Palak On Road</span>
+              <span style="font-size: 12px;">💨</span>
+            </div>
+          </div>
+        `;
+        const carIcon = L.divIcon({
+          html: carIconHtml,
+          className: "leaflet-car-marker",
+          iconSize: [120, 32],
+          iconAnchor: [60, 16],
+        });
+
+        const carMarker = L.marker([activeDest.lat, activeDest.lng], { icon: carIcon }).addTo(map);
+        carMarkerRef.current = carMarker;
 
         mapInstanceRef.current = map;
       } catch (err) {
@@ -204,8 +258,11 @@ export function TravelRouteMap({
     } else {
       try {
         mapInstanceRef.current.flyTo([activeDest.lat, activeDest.lng], 7, {
-          duration: 1.2,
+          duration: 1.4,
         });
+        if (carMarkerRef.current) {
+          carMarkerRef.current.setLatLng([activeDest.lat, activeDest.lng]);
+        }
       } catch {
         // ignore pan error
       }
@@ -256,7 +313,7 @@ export function TravelRouteMap({
   return (
     <div className="relative my-6 select-none">
       {/* ===================================================================== */}
-      {/* TOP BAR: Real Destination Tabs & Interactive Map Controls            */}
+      {/* TOP BAR: Destination Selector & Road Trip Auto-Drive Controls         */}
       {/* ===================================================================== */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -289,8 +346,32 @@ export function TravelRouteMap({
           })}
         </div>
 
-        {/* Map Zoom Controls */}
-        <div className="flex items-center gap-1.5">
+        {/* Road Trip Auto-Drive Toggle & Zoom Controls */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsAutoDriving((prev) => !prev)}
+            className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-mono font-bold transition shadow-md border ${
+              isAutoDriving
+                ? "bg-rose-500 text-white border-rose-300 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.6)]"
+                : isNightMode
+                  ? "bg-indigo-950/80 text-cyan-200 border-cyan-500/40 hover:bg-indigo-900"
+                  : "bg-amber-100 text-stone-900 border-amber-300 hover:bg-amber-200"
+            }`}
+          >
+            {isAutoDriving ? (
+              <>
+                <Pause className="h-3 w-3 fill-current" />
+                <span>Driving... 🚗💨</span>
+              </>
+            ) : (
+              <>
+                <Play className="h-3 w-3 fill-current" />
+                <span>🚗 Start Road Trip</span>
+              </>
+            )}
+          </button>
+
           <button
             type="button"
             onClick={() => handleZoom(1)}
@@ -319,18 +400,28 @@ export function TravelRouteMap({
       </div>
 
       {/* ===================================================================== */}
-      {/* 2-COLUMN SPREAD: Real Interactive Map (Left) + 3D Destination Card (Right) */}
+      {/* 2-COLUMN SPREAD: Aesthetic Map (Left) + 3D Card with Famous Highlights */}
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* LEFT COLUMN (7 Cols): Real Leaflet OpenStreetMap Container */}
-        <div className="lg:col-span-7 flex flex-col">
+        {/* LEFT COLUMN: Aesthetic Map Container with Brass Filigree Corners */}
+        <div className="lg:col-span-7 flex flex-col relative">
           <div
-            className={`relative min-h-[360px] sm:min-h-[420px] w-full flex-1 rounded-2xl overflow-hidden border-2 shadow-inner transition duration-500 ${
+            className={`relative min-h-[380px] sm:min-h-[440px] w-full flex-1 rounded-3xl overflow-hidden border-4 shadow-2xl transition duration-500 ${
               isNightMode
-                ? "border-cyan-500/40 shadow-black/50"
-                : "border-teal-300/80 shadow-teal-900/10"
+                ? "border-cyan-500/50 shadow-[0_15px_40px_rgba(6,182,212,0.25)]"
+                : "border-amber-300/90 shadow-[0_15px_40px_rgba(20,184,166,0.2)]"
             }`}
           >
+            {/* Washi Tape Corner Accents */}
+            <div className="diary-washi-tape absolute -top-3 left-10 w-24 h-5 z-30 rotate-1 shadow-sm pointer-events-none" />
+            <div className="diary-washi-tape absolute -top-3 right-10 w-24 h-5 z-30 -rotate-2 shadow-sm pointer-events-none" />
+
+            {/* Brass Filigree Aesthetic Corner Brackets */}
+            <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-amber-400 rounded-tl-2xl z-30 pointer-events-none shadow-xs" />
+            <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-amber-400 rounded-tr-2xl z-30 pointer-events-none shadow-xs" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-2xl z-30 pointer-events-none shadow-xs" />
+            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-2xl z-30 pointer-events-none shadow-xs" />
+
             {/* The Actual Leaflet Map Canvas */}
             <div ref={mapContainerRef} className="absolute inset-0 h-full w-full z-10" />
 
@@ -344,6 +435,31 @@ export function TravelRouteMap({
                 </p>
               </div>
             )}
+
+            {/* MINI POPUP BUBBLE: Shows famous state/city highlights over active destination */}
+            <div className="absolute top-4 left-4 z-20 max-w-[280px] sm:max-w-xs rounded-2xl bg-black/85 p-3 text-white backdrop-blur-md border border-white/20 shadow-2xl animate-in fade-in slide-in-from-top duration-300">
+              <div className="flex items-center gap-1.5 mb-1.5 border-b border-white/15 pb-1">
+                <span className="text-base">{activeDest.icon}</span>
+                <span className="font-serif text-xs font-bold text-amber-300 truncate">
+                  {activeDest.name.split("·")[0].trim()}
+                </span>
+                <span className="ml-auto rounded-full bg-emerald-500/80 px-2 py-0.2 text-[9px] font-mono text-white">
+                  Active Stop
+                </span>
+              </div>
+
+              <div className="text-[10px] font-serif uppercase tracking-wider text-cyan-300 font-bold mb-1">
+                ✨ Iconic Landmarks:
+              </div>
+              <div className="grid grid-cols-1 gap-1 text-[11px] font-mono leading-tight">
+                {activeDest.famousStateElements.map((el, i) => (
+                  <div key={i} className="flex items-center gap-1.5 text-slate-200">
+                    <span>{el.emoji}</span>
+                    <span className="truncate">{el.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Real Coordinates Overlay Pill */}
             <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 font-mono text-[10px] text-cyan-300 backdrop-blur border border-white/20">
@@ -361,16 +477,16 @@ export function TravelRouteMap({
           </div>
         </div>
 
-        {/* RIGHT COLUMN (5 Cols): 3D Destination Card & Animated Girl Scooter */}
+        {/* RIGHT COLUMN: 3D Destination Card + Cute Girl in Vintage Car */}
         <div className="lg:col-span-5 flex flex-col justify-between">
           <div
-            className={`popup-3d-element relative rounded-2xl border-2 p-5 shadow-xl transition-all duration-300 ${
+            className={`popup-3d-element relative rounded-3xl border-2 p-5 shadow-2xl transition-all duration-300 ${
               isNightMode
                 ? "border-cyan-400/50 bg-[#091124]/95 text-slate-100"
                 : "border-teal-300/80 bg-[#fffdf9] text-stone-900"
             }`}
           >
-            {/* Animated Floating "TRAVEL" Lettering */}
+            {/* Top Bar with Animated Girl Driving Car Graphic */}
             <div className="flex items-center justify-between border-b pb-2.5 mb-3 border-teal-500/20">
               <div className="flex items-center gap-2">
                 <span className="font-cinzel text-xs font-extrabold tracking-[0.28em] uppercase text-teal-600 dark:text-cyan-300 animate-pulse">
@@ -378,10 +494,48 @@ export function TravelRouteMap({
                 </span>
               </div>
 
-              {/* Cute Animated Scooty Girl */}
-              <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 animate-bounce">
-                <span className="text-base">🛵💨</span>
-                <span className="text-[10px] font-mono">Exploring…</span>
+              {/* Cute Animated Car with Girl Inside SVG */}
+              <div className="flex items-center gap-1 text-xs font-bold text-rose-500 dark:text-pink-300">
+                <div className="relative inline-flex items-center justify-center">
+                  <svg width="48" height="28" viewBox="0 0 68 42" fill="none">
+                    <path
+                      d="M14 20 L22 8 L46 8 L54 20 Z"
+                      fill="#bae6fd"
+                      stroke="#0284c7"
+                      strokeWidth="2"
+                    />
+                    {/* Girl inside */}
+                    <circle cx="32" cy="13" r="5" fill="#451a03" />
+                    <circle cx="33" cy="13" r="3.5" fill="#fde68a" />
+                    <circle cx="32.5" cy="12.5" r="0.6" fill="#1e293b" />
+                    <circle cx="34.5" cy="12.5" r="0.6" fill="#1e293b" />
+                    <path d="M32.5 14.5 Q33.5 15.5 34.5 14.5" stroke="#e11d48" strokeWidth="0.6" />
+                    {/* Car Body */}
+                    <path
+                      d="M4 20 C4 18 6 17 9 17 L59 17 C62 17 64 19 64 22 L64 30 C64 32 62 33 60 33 L8 33 C6 33 4 31 4 29 Z"
+                      fill="#f472b6"
+                      stroke="#db2777"
+                      strokeWidth="2"
+                    />
+                    <circle
+                      cx="17"
+                      cy="32"
+                      r="5"
+                      fill="#1e293b"
+                      stroke="#cbd5e1"
+                      strokeWidth="1.5"
+                    />
+                    <circle
+                      cx="51"
+                      cy="32"
+                      r="5"
+                      fill="#1e293b"
+                      stroke="#cbd5e1"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
+                </div>
+                <span className="text-[10px] font-mono font-bold">Palak's Journey 🌸</span>
               </div>
             </div>
 
@@ -397,7 +551,7 @@ export function TravelRouteMap({
             {/* Destination Real Photo in Polaroid Style Frame */}
             <div
               onClick={handleOpenPhoto}
-              className="group relative mt-3 aspect-[16/10] overflow-hidden rounded-xl border-4 border-white dark:border-stone-800 shadow-md cursor-pointer transition hover:scale-[1.02]"
+              className="group relative mt-3 aspect-[16/10] overflow-hidden rounded-2xl border-4 border-white dark:border-stone-800 shadow-md cursor-pointer transition hover:scale-[1.02]"
             >
               <img
                 src={activeDest.photoUrl}
@@ -416,19 +570,22 @@ export function TravelRouteMap({
               "{activeDest.notes}"
             </p>
 
-            {/* Famous Attractions */}
-            <div className="mt-3">
-              <span className="text-[11px] font-serif font-bold uppercase tracking-wider text-teal-700 dark:text-teal-300">
-                ⭐ Famous Highlights:
+            {/* State's Iconic Highlights Grid */}
+            <div className="mt-3 rounded-xl bg-teal-500/10 p-2.5 border border-teal-500/20">
+              <span className="text-[10px] font-serif font-bold uppercase tracking-wider text-teal-700 dark:text-cyan-300">
+                ⭐ Famous State Highlights:
               </span>
-              <ul className="mt-1 space-y-0.5 text-xs font-serif text-stone-600 dark:text-stone-300">
-                {activeDest.attractions.map((attr, idx) => (
-                  <li key={idx} className="flex items-center gap-1.5">
-                    <span className="text-teal-500">•</span>
-                    <span>{attr}</span>
-                  </li>
+              <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+                {activeDest.famousStateElements.map((el, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-1.5 text-xs font-serif text-stone-700 dark:text-stone-300 bg-white/60 dark:bg-stone-900/60 px-2 py-1 rounded-md border border-black/5"
+                  >
+                    <span>{el.emoji}</span>
+                    <span className="truncate">{el.name}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* External Navigation Link & Ticket Stub */}
@@ -459,3 +616,5 @@ export function TravelRouteMap({
     </div>
   );
 }
+
+export default TravelRouteMap;

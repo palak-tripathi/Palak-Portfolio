@@ -35,7 +35,7 @@ export function MemoriesChapter({
         }`}
       >
         <div className="inline-flex items-center gap-2 rounded-full bg-rose-100/90 dark:bg-rose-950/70 px-4 py-1 text-xs font-serif font-bold uppercase tracking-[0.25em] text-rose-950 dark:text-rose-200 shadow-xs border border-rose-300/60">
-          <Camera className="h-3.5 w-3.5 text-rose-700 dark:text-rose-400" /> Chapter VI • Memory
+          <Camera className="h-3.5 w-3.5 text-rose-700 dark:text-rose-400" /> Chapter IV • Memory
           Scrapbook
         </div>
         <h2

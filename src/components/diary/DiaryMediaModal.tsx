@@ -314,6 +314,10 @@ export function DiaryMediaModal({ item, items, onClose, onSelect }: DiaryMediaMo
                 controls
                 autoPlay
                 playsInline
+                onLoadedMetadata={(e) => {
+                  e.currentTarget.muted = false;
+                  e.currentTarget.volume = 1.0;
+                }}
                 className="max-h-[56vh] max-w-full rounded-md object-contain shadow-2xl"
               />
             ) : (

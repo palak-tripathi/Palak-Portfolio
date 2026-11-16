@@ -165,6 +165,45 @@ export function TalentsChapter({
               could never reach."
             </p>
           </div>
+
+          {/* 3D Music Studio Badges Strip (Zero Empty Space) */}
+          <div className="mt-3.5 grid grid-cols-2 gap-2">
+            <div
+              className={`rounded-xl border p-2 shadow-xs flex items-center gap-2 transform -rotate-1 hover:rotate-0 transition ${
+                isNightMode
+                  ? "border-cyan-400/30 bg-cyan-950/40 text-cyan-200"
+                  : "border-sky-200 bg-[#f0f9ff] text-stone-800"
+              }`}
+            >
+              <span className="text-xl">🎙️</span>
+              <div className="min-w-0">
+                <span className="font-mono text-[9px] font-bold block uppercase text-sky-700 dark:text-cyan-300">
+                  STUDIO MIC
+                </span>
+                <p className="font-handwriting text-xs font-bold truncate">
+                  "Warm vocals & deep bass"
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={`rounded-xl border p-2 shadow-xs flex items-center gap-2 transform rotate-1 hover:rotate-0 transition ${
+                isNightMode
+                  ? "border-pink-400/30 bg-pink-950/40 text-pink-200"
+                  : "border-pink-200 bg-[#fff1f2] text-stone-800"
+              }`}
+            >
+              <span className="text-xl">🎸</span>
+              <div className="min-w-0">
+                <span className="font-mono text-[9px] font-bold block uppercase text-pink-700 dark:text-pink-300">
+                  ACOUSTIC SET
+                </span>
+                <p className="font-handwriting text-xs font-bold truncate">
+                  "Natural unplugged chords"
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}

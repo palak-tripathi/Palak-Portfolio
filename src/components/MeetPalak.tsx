@@ -119,8 +119,8 @@ export function MeetPalak() {
           poster={poster.url}
           playsInline
           muted
-          preload="metadata"
-          className="aspect-video w-full object-cover"
+          preload="auto"
+          className="aspect-video w-full object-cover filter contrast-[1.04] saturate-[1.06] brightness-[1.02] rounded-[2rem] shadow-inner"
           aria-label="Palak Tripathi introduction video"
           onTimeUpdate={(event) => {
             if (aRef.current?.paused) setTime(event.currentTarget.currentTime);
