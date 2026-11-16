@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   MapPin,
   Navigation,
@@ -13,6 +13,9 @@ import {
   Pause,
   Layers,
   Heart,
+  Calendar,
+  Eye,
+  Camera,
 } from "lucide-react";
 import type { DiaryItem } from "@/data/diary-content";
 
@@ -36,6 +39,7 @@ export interface RealDestination {
   notes: string;
   itemMatchId: string;
   directionsUrl: string;
+  stopNumber: number;
   famousStateElements: { name: string; emoji: string }[];
 }
 
@@ -46,12 +50,14 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     region: "Madhya Pradesh, Central India",
     lat: 23.2599,
     lng: 77.4126,
-    tagline: "Golden hour sunset & lake breezes",
+    tagline: "Golden hour sunset & lakeside breeze",
     icon: "🌅",
     ticketStub: "BHOPAL SHATABDI • COACH B2",
     photoUrl: "/media/diary/travel/bhopal-lake.png",
+    stopNumber: 1,
     attractions: ["Bada Talab / VIP Road", "Van Vihar National Park", "Boat Club Promenade"],
-    notes: "Golden light ripples across calm waters as evening breezes cool the lakeside.",
+    notes:
+      "Golden light ripples across calm waters as evening breezes cool the lakeside promenade.",
     itemMatchId: "travel-bhopal-sunset",
     directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=23.2599,77.4126",
     famousStateElements: [
@@ -71,9 +77,14 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     icon: "⛰️",
     ticketStub: "SATPURA RESERVE ENTRY • PERMIT 412",
     photoUrl: "/media/diary/travel/pachmarhi-hills.jpg",
-    attractions: ["Dhoopgarh Highest Peak (1,352m)", "Bee Falls & Fairy Pool", "Chauragarh Shrine"],
+    stopNumber: 2,
+    attractions: [
+      "Dhoopgarh Highest Peak (1,352m)",
+      "Bee Falls & Fairy Pool",
+      "Chauragarh Mountain Shrine",
+    ],
     notes:
-      "1,300+ steps to Chauragarh peak and crystal-clear mountain streams under tall pine canopies.",
+      "1,300+ stone steps up to Chauragarh peak, crystal waterfalls, and cool pine-scented breezes.",
     itemMatchId: "travel-misty-mountains",
     directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=22.4674,78.4346",
     famousStateElements: [
@@ -93,6 +104,7 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     icon: "🛕",
     ticketStub: "MADURAI HERITAGE EXPRESS • BERTH 28",
     photoUrl: "/media/diary/travel/tamil-nadu-temple.png",
+    stopNumber: 3,
     attractions: [
       "Meenakshi Amman Gopurams",
       "Nilgiri Mountain Railway",
@@ -111,36 +123,78 @@ export const REAL_DESTINATIONS: RealDestination[] = [
   },
 ];
 
+// Scenic curved road waypoints connecting the travel expedition
+export const SCENIC_ROUTE_WAYPOINTS: [number, number][] = [
+  // Leg 1: Bhopal to Pachmarhi
+  [23.2599, 77.4126], // Bhopal
+  [23.05, 77.62], // Bhojpur
+  [22.75, 77.72], // Hoshangabad / Narmada
+  [22.61, 78.35], // Pipariya
+  [22.4674, 78.4346], // Pachmarhi
+
+  // Leg 2: Pachmarhi to Tamil Nadu
+  [22.05, 78.93], // Chhindwara
+  [21.1458, 79.0882], // Nagpur
+  [19.66, 78.53], // Adilabad
+  [18.67, 78.1], // Nizamabad
+  [17.385, 78.4867], // Hyderabad
+  [15.82, 78.03], // Kurnool
+  [14.68, 77.6], // Anantapur
+  [12.9716, 77.5946], // Bengaluru
+  [11.6643, 78.146], // Salem
+  [10.36, 77.98], // Dindigul
+  [9.9195, 78.1193], // Tamil Nadu (Madurai)
+
+  // Leg 3: Return loop to Bhopal
+  [10.79, 78.7], // Tiruchirappalli
+  [13.08, 80.27], // Coastal Route
+  [16.5, 80.64], // Vijayawada
+  [17.97, 79.59], // Warangal
+  [21.8, 79.5], // Seoni / Pench
+  [23.2599, 77.4126], // Return to Bhopal
+];
+
 export function TravelRouteMap({
   isNightMode = false,
   onSelectItem,
   travelItems = [],
 }: TravelRouteMapProps) {
-  const [activeDestId, setActiveDestId] = useState<string>("pachmarhi");
+  const [activeDestId, setActiveDestId] = useState<string>("bhopal");
   const [mapZoom, setMapZoom] = useState<number>(6);
   const [leafletLoaded, setLeafletLoaded] = useState<boolean>(false);
   const [isAutoDriving, setIsAutoDriving] = useState<boolean>(false);
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapInstanceRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const carMarkerRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const routePolylineRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const routeGlowPolylineRef = useRef<any>(null);
+  const animFrameRef = useRef<number | null>(null);
 
-  const activeDest = REAL_DESTINATIONS.find((d) => d.id === activeDestId) || REAL_DESTINATIONS[1];
+  const activeDest = useMemo(
+    () => REAL_DESTINATIONS.find((d) => d.id === activeDestId) || REAL_DESTINATIONS[0],
+    [activeDestId],
+  );
 
   // Auto-drive simulation across Bhopal -> Pachmarhi -> Tamil Nadu
   useEffect(() => {
     if (!isAutoDriving) return;
     const destIds = ["bhopal", "pachmarhi", "tamilnadu"];
-    let idx = destIds.indexOf(activeDestId);
 
     const timer = setInterval(() => {
-      idx = (idx + 1) % destIds.length;
-      setActiveDestId(destIds[idx]);
-    }, 4500);
+      setActiveDestId((curr) => {
+        const nextIdx = (destIds.indexOf(curr) + 1) % destIds.length;
+        return destIds[nextIdx];
+      });
+    }, 4800);
 
     return () => clearInterval(timer);
-  }, [isAutoDriving, activeDestId]);
+  }, [isAutoDriving]);
 
   // Dynamic client-side Leaflet loader
   useEffect(() => {
@@ -172,6 +226,9 @@ export function TravelRouteMap({
     document.body.appendChild(script);
 
     return () => {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
       if (mapInstanceRef.current) {
         try {
           mapInstanceRef.current.remove();
@@ -207,45 +264,66 @@ export function TravelRouteMap({
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map);
 
-        // Add markers for all real destinations
+        // Add Outer Glow Polyline for curved route
+        const glowLine = L.polyline(SCENIC_ROUTE_WAYPOINTS, {
+          color: isNightMode ? "#38bdf8" : "#fb7185",
+          weight: 8,
+          opacity: 0.35,
+          smoothFactor: 1.5,
+        }).addTo(map);
+        routeGlowPolylineRef.current = glowLine;
+
+        // Add Styled Dashed Road Polyline
+        const roadLine = L.polyline(SCENIC_ROUTE_WAYPOINTS, {
+          color: isNightMode ? "#06b6d4" : "#e11d48",
+          weight: 4,
+          dashArray: "8, 12",
+          opacity: 0.85,
+          smoothFactor: 1.5,
+        }).addTo(map);
+        routePolylineRef.current = roadLine;
+
+        // Add markers for all real destinations with mini Polaroid thumbnails
         REAL_DESTINATIONS.forEach((dest) => {
           const markerHtml = `
-            <div style="cursor: pointer; text-align: center; transform: translate(-50%, -50%);">
-              <div style="background: ${isNightMode ? "#06b6d4" : "#0d9488"}; color: white; padding: 6px 12px; border-radius: 9999px; font-weight: bold; font-size: 11px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); border: 2px solid white; display: inline-flex; align-items: center; gap: 4px;">
-                <span>${dest.icon}</span>
-                <span>${dest.name.split("·")[0].trim()}</span>
+            <div style="cursor: pointer; text-align: center; transform: translate(-50%, -50%); transition: all 0.3s ease;">
+              <div style="background: ${isNightMode ? "#0f172a" : "#ffffff"}; color: ${isNightMode ? "#38bdf8" : "#0f172a"}; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3); border: 2px solid ${isNightMode ? "#38bdf8" : "#f43f5e"}; display: inline-flex; align-items: center; gap: 4px;">
+                <span style="font-size: 13px;">${dest.icon}</span>
+                <span style="font-family: serif;">${dest.name.split("·")[0].trim()}</span>
               </div>
+              <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid ${isNightMode ? "#38bdf8" : "#f43f5e"}; margin: 0 auto;"></div>
             </div>
           `;
 
           const customIcon = L.divIcon({
             html: markerHtml,
             className: "leaflet-custom-marker",
-            iconSize: [130, 36],
-            iconAnchor: [65, 18],
+            iconSize: [120, 36],
+            iconAnchor: [60, 32],
           });
 
           const marker = L.marker([dest.lat, dest.lng], { icon: customIcon }).addTo(map);
           marker.on("click", () => {
             setActiveDestId(dest.id);
-            map.flyTo([dest.lat, dest.lng], 8, { duration: 1.2 });
+            map.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
           });
         });
 
-        // Add the cute road-trip car marker with girl driver
+        // Add the Cute Road-Trip Car Marker with Girl Driver
         const carIconHtml = `
-          <div style="cursor: pointer; transform: translate(-50%, -50%); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.45));">
-            <div style="background: #f43f5e; color: white; border-radius: 9999px; padding: 4px 8px; border: 2px solid #fff; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 10px rgba(244,63,94,0.6);">
-              <span>🚗 Palak On Road</span>
-              <span style="font-size: 12px;">💨</span>
+          <div style="cursor: pointer; transform: translate(-50%, -50%); filter: drop-shadow(0 8px 16px rgba(244,63,94,0.45));">
+            <div style="background: linear-gradient(135deg, #f43f5e, #db2777); color: white; border-radius: 9999px; padding: 4px 10px; border: 2px solid #fff; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 14px rgba(244,63,94,0.6);">
+              <span style="font-size: 14px;">🚗</span>
+              <span style="font-family: sans-serif; letter-spacing: 0.5px;">Palak 🌸</span>
+              <span style="font-size: 11px;">💨</span>
             </div>
           </div>
         `;
         const carIcon = L.divIcon({
           html: carIconHtml,
           className: "leaflet-car-marker",
-          iconSize: [120, 32],
-          iconAnchor: [60, 16],
+          iconSize: [110, 32],
+          iconAnchor: [55, 16],
         });
 
         const carMarker = L.marker([activeDest.lat, activeDest.lng], { icon: carIcon }).addTo(map);
@@ -256,12 +334,43 @@ export function TravelRouteMap({
         console.warn("Leaflet initialization warning:", err);
       }
     } else {
+      // Smooth movement along route
       try {
         mapInstanceRef.current.flyTo([activeDest.lat, activeDest.lng], 7, {
           duration: 1.4,
         });
+
         if (carMarkerRef.current) {
-          carMarkerRef.current.setLatLng([activeDest.lat, activeDest.lng]);
+          const startLatLng = carMarkerRef.current.getLatLng();
+          const targetLat = activeDest.lat;
+          const targetLng = activeDest.lng;
+
+          let progress = 0;
+          const duration = 1200; // 1.2s smooth drive
+          const startTime = performance.now();
+
+          const animateStep = (now: number) => {
+            progress = Math.min((now - startTime) / duration, 1);
+            // Ease in out quad
+            const ease =
+              progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+            const currLat = startLatLng.lat + (targetLat - startLatLng.lat) * ease;
+            const currLng = startLatLng.lng + (targetLng - startLatLng.lng) * ease;
+
+            if (carMarkerRef.current) {
+              carMarkerRef.current.setLatLng([currLat, currLng]);
+            }
+
+            if (progress < 1) {
+              animFrameRef.current = requestAnimationFrame(animateStep);
+            }
+          };
+
+          if (animFrameRef.current) {
+            cancelAnimationFrame(animFrameRef.current);
+          }
+          animFrameRef.current = requestAnimationFrame(animateStep);
         }
       } catch {
         // ignore pan error
@@ -277,30 +386,31 @@ export function TravelRouteMap({
     }
   };
 
-  const handleOpenPhoto = () => {
+  const handleOpenPhoto = (dest?: RealDestination) => {
+    const targetDest = dest || activeDest;
     let matchedItem = travelItems.find(
       (i) =>
-        i.id === activeDest.itemMatchId ||
-        i.title.toLowerCase().includes(activeDest.id) ||
-        i.location?.toLowerCase().includes(activeDest.id),
+        i.id === targetDest.itemMatchId ||
+        i.title.toLowerCase().includes(targetDest.id) ||
+        i.location?.toLowerCase().includes(targetDest.id),
     );
 
     if (!matchedItem) {
       matchedItem = {
-        id: activeDest.itemMatchId,
-        title: activeDest.name,
-        caption: activeDest.tagline,
-        description: activeDest.notes,
-        location: activeDest.region,
+        id: targetDest.itemMatchId,
+        title: targetDest.name,
+        caption: targetDest.tagline,
+        description: targetDest.notes,
+        location: targetDest.region,
         date: "Travel Postcard",
         category: "travel",
         mediaType: "image",
-        mediaUrl: activeDest.photoUrl,
-        image: activeDest.photoUrl,
+        mediaUrl: targetDest.photoUrl,
+        image: targetDest.photoUrl,
         aspectRatio: "landscape",
         frameStyle: "polaroid",
-        tags: [activeDest.id, "RealDestination", "Scrapbook"],
-        sortOrder: 1,
+        tags: [targetDest.id, "RealDestination", "Scrapbook"],
+        sortOrder: targetDest.stopNumber,
         published: true,
       };
     }
@@ -313,7 +423,7 @@ export function TravelRouteMap({
   return (
     <div className="relative my-6 select-none">
       {/* ===================================================================== */}
-      {/* TOP BAR: Destination Selector & Road Trip Auto-Drive Controls         */}
+      {/* TOP CONTROLS BAR: Destination Buttons & Road Trip Auto-Drive          */}
       {/* ===================================================================== */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -346,7 +456,7 @@ export function TravelRouteMap({
           })}
         </div>
 
-        {/* Road Trip Auto-Drive Toggle & Zoom Controls */}
+        {/* Road Trip Auto-Drive & Zoom Controls */}
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -400,10 +510,10 @@ export function TravelRouteMap({
       </div>
 
       {/* ===================================================================== */}
-      {/* 2-COLUMN SPREAD: Aesthetic Map (Left) + 3D Card with Famous Highlights */}
+      {/* 2-COLUMN SPREAD: Interactive Map (Left) + Destination Spotlight (Right) */}
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* LEFT COLUMN: Aesthetic Map Container with Brass Filigree Corners */}
+        {/* LEFT COLUMN: 3D Aesthetic Map Container */}
         <div className="lg:col-span-7 flex flex-col relative">
           <div
             className={`relative min-h-[380px] sm:min-h-[440px] w-full flex-1 rounded-3xl overflow-hidden border-4 shadow-2xl transition duration-500 ${
@@ -416,27 +526,27 @@ export function TravelRouteMap({
             <div className="diary-washi-tape absolute -top-3 left-10 w-24 h-5 z-30 rotate-1 shadow-sm pointer-events-none" />
             <div className="diary-washi-tape absolute -top-3 right-10 w-24 h-5 z-30 -rotate-2 shadow-sm pointer-events-none" />
 
-            {/* Brass Filigree Aesthetic Corner Brackets */}
+            {/* Brass Filigree Corner Brackets */}
             <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-amber-400 rounded-tl-2xl z-30 pointer-events-none shadow-xs" />
             <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-amber-400 rounded-tr-2xl z-30 pointer-events-none shadow-xs" />
             <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-2xl z-30 pointer-events-none shadow-xs" />
             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-2xl z-30 pointer-events-none shadow-xs" />
 
-            {/* The Actual Leaflet Map Canvas */}
+            {/* Leaflet Map Canvas */}
             <div ref={mapContainerRef} className="absolute inset-0 h-full w-full z-10" />
 
-            {/* Fallback Vector Graphic if Offline */}
+            {/* Offline Fallback Vector Map Canvas */}
             {!leafletLoaded && (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-teal-900/10 backdrop-blur z-0">
                 <Compass className="h-10 w-10 text-teal-500 animate-spin-slow mb-2" />
-                <p className="font-serif font-bold text-sm">Loading OpenStreetMap Canvas…</p>
+                <p className="font-serif font-bold text-sm">Loading Scenic Route Canvas…</p>
                 <p className="text-xs font-mono opacity-70">
                   {activeDest.name} · [{activeDest.lat}°N, {activeDest.lng}°E]
                 </p>
               </div>
             )}
 
-            {/* MINI POPUP BUBBLE: Shows famous state/city highlights over active destination */}
+            {/* POPUP BUBBLE: Shows iconic highlights of the active stop */}
             <div className="absolute top-4 left-4 z-20 max-w-[280px] sm:max-w-xs rounded-2xl bg-black/85 p-3 text-white backdrop-blur-md border border-white/20 shadow-2xl animate-in fade-in slide-in-from-top duration-300">
               <div className="flex items-center gap-1.5 mb-1.5 border-b border-white/15 pb-1">
                 <span className="text-base">{activeDest.icon}</span>
@@ -444,7 +554,7 @@ export function TravelRouteMap({
                   {activeDest.name.split("·")[0].trim()}
                 </span>
                 <span className="ml-auto rounded-full bg-emerald-500/80 px-2 py-0.2 text-[9px] font-mono text-white">
-                  Active Stop
+                  Stop #{activeDest.stopNumber}
                 </span>
               </div>
 
@@ -461,7 +571,7 @@ export function TravelRouteMap({
               </div>
             </div>
 
-            {/* Real Coordinates Overlay Pill */}
+            {/* Coordinates Overlay Pill */}
             <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 font-mono text-[10px] text-cyan-300 backdrop-blur border border-white/20">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
               <span>
@@ -469,10 +579,10 @@ export function TravelRouteMap({
               </span>
             </div>
 
-            {/* Live OpenStreetMap Attribution Pill */}
+            {/* Live Route Verification Badge */}
             <div className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-md bg-black/60 px-2 py-0.5 text-[9px] font-mono text-white/80 backdrop-blur">
               <Layers className="h-2.5 w-2.5" />
-              <span>OpenStreetMap Verified</span>
+              <span>Scenic Route · Madhya Pradesh ➔ Tamil Nadu</span>
             </div>
           </div>
         </div>
@@ -486,7 +596,7 @@ export function TravelRouteMap({
                 : "border-teal-300/80 bg-[#fffdf9] text-stone-900"
             }`}
           >
-            {/* Top Bar with Animated Girl Driving Car Graphic */}
+            {/* Top Bar with Cute Animated Girl Driving Vintage Car SVG */}
             <div className="flex items-center justify-between border-b pb-2.5 mb-3 border-teal-500/20">
               <div className="flex items-center gap-2">
                 <span className="font-cinzel text-xs font-extrabold tracking-[0.28em] uppercase text-teal-600 dark:text-cyan-300 animate-pulse">
@@ -495,47 +605,102 @@ export function TravelRouteMap({
               </div>
 
               {/* Cute Animated Car with Girl Inside SVG */}
-              <div className="flex items-center gap-1 text-xs font-bold text-rose-500 dark:text-pink-300">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-500 dark:text-pink-300">
                 <div className="relative inline-flex items-center justify-center">
-                  <svg width="48" height="28" viewBox="0 0 68 42" fill="none">
+                  <svg
+                    viewBox="0 0 110 56"
+                    className="w-20 h-10 filter drop-shadow-md overflow-visible"
+                  >
+                    {/* Wind lines & exhaust puffs */}
+                    <circle cx="6" cy="42" r="2" fill="#fb7185" className="animate-ping" />
+                    <text x="2" y="32" fontSize="9" className="animate-bounce">
+                      💨
+                    </text>
+                    <text x="12" y="18" fontSize="8" className="animate-pulse">
+                      💖
+                    </text>
+
+                    {/* Windshield */}
                     <path
-                      d="M14 20 L22 8 L46 8 L54 20 Z"
-                      fill="#bae6fd"
-                      stroke="#0284c7"
-                      strokeWidth="2"
+                      d="M38 30 L48 14 L72 14 L82 30 Z"
+                      fill="#e0f2fe"
+                      stroke="#38bdf8"
+                      strokeWidth="1.5"
+                      opacity="0.95"
                     />
+
                     {/* Girl inside */}
-                    <circle cx="32" cy="13" r="5" fill="#451a03" />
-                    <circle cx="33" cy="13" r="3.5" fill="#fde68a" />
-                    <circle cx="32.5" cy="12.5" r="0.6" fill="#1e293b" />
-                    <circle cx="34.5" cy="12.5" r="0.6" fill="#1e293b" />
-                    <path d="M32.5 14.5 Q33.5 15.5 34.5 14.5" stroke="#e11d48" strokeWidth="0.6" />
-                    {/* Car Body */}
+                    <path d="M52 18 C46 16 40 20 38 25 C44 24 50 27 54 27 Z" fill="#451a03" />
+                    <circle cx="58" cy="20" r="7" fill="#fed7aa" />
+                    <path d="M53 14 C56 11 63 12 65 16 C63 15 59 15 55 17 Z" fill="#451a03" />
+                    {/* Cute sunglasses */}
+                    <rect x="58" y="18" width="4" height="3" rx="0.8" fill="#0f172a" />
+                    <rect x="63" y="18" width="3.5" height="3" rx="0.8" fill="#0f172a" />
+                    <path d="M62 19 L63 19" stroke="#0f172a" strokeWidth="0.8" />
+                    {/* Smile & Cheek */}
+                    <path d="M59 23 Q61 25 63 23" fill="none" stroke="#e11d48" strokeWidth="0.8" />
+                    <circle cx="58" cy="22" r="1.2" fill="#fda4af" />
+                    {/* Waving Arm */}
                     <path
-                      d="M4 20 C4 18 6 17 9 17 L59 17 C62 17 64 19 64 22 L64 30 C64 32 62 33 60 33 L8 33 C6 33 4 31 4 29 Z"
-                      fill="#f472b6"
-                      stroke="#db2777"
+                      d="M52 28 Q48 24 45 22"
+                      stroke="#fed7aa"
                       strokeWidth="2"
+                      strokeLinecap="round"
                     />
-                    <circle
-                      cx="17"
-                      cy="32"
-                      r="5"
-                      fill="#1e293b"
-                      stroke="#cbd5e1"
+                    <circle cx="44" cy="21" r="1.8" fill="#fed7aa" />
+
+                    {/* Vintage Roadster Pink Body */}
+                    <path
+                      d="M16 34 C16 30 20 28 26 28 L88 28 C94 28 98 32 98 36 L98 44 C98 46 96 48 94 48 L18 48 C16 48 16 46 16 44 Z"
+                      fill="#fb7185"
+                      stroke="#e11d48"
+                      strokeWidth="1.8"
+                    />
+                    {/* Chrome side trim */}
+                    <path
+                      d="M20 38 L94 38"
+                      stroke="#ffffff"
                       strokeWidth="1.5"
+                      strokeLinecap="round"
                     />
-                    <circle
-                      cx="51"
-                      cy="32"
-                      r="5"
-                      fill="#1e293b"
-                      stroke="#cbd5e1"
-                      strokeWidth="1.5"
+                    {/* Headlight with warm glow */}
+                    <ellipse
+                      cx="96"
+                      cy="35"
+                      rx="2.5"
+                      ry="3.5"
+                      fill="#fef08a"
+                      stroke="#ca8a04"
+                      strokeWidth="1.2"
                     />
+                    <path d="M99 33 L107 30 L107 40 L99 37 Z" fill="#fef08a" opacity="0.4" />
+
+                    {/* Wheels */}
+                    <g className="animate-spin-slow origin-[32px_46px]">
+                      <circle
+                        cx="32"
+                        cy="46"
+                        r="8"
+                        fill="#1e293b"
+                        stroke="#cbd5e1"
+                        strokeWidth="2"
+                      />
+                      <circle cx="32" cy="46" r="3" fill="#f8fafc" />
+                    </g>
+                    <g className="animate-spin-slow origin-[82px_46px]">
+                      <circle
+                        cx="82"
+                        cy="46"
+                        r="8"
+                        fill="#1e293b"
+                        stroke="#cbd5e1"
+                        strokeWidth="2"
+                      />
+                      <circle cx="82" cy="46" r="3" fill="#f8fafc" />
+                    </g>
                   </svg>
                 </div>
-                <span className="text-[10px] font-mono font-bold">Palak's Journey 🌸</span>
+                <span className="text-[10px] font-mono font-bold">Palak Driving 🌸</span>
               </div>
             </div>
 
@@ -550,7 +715,7 @@ export function TravelRouteMap({
 
             {/* Destination Real Photo in Polaroid Style Frame */}
             <div
-              onClick={handleOpenPhoto}
+              onClick={() => handleOpenPhoto(activeDest)}
               className="group relative mt-3 aspect-[16/10] overflow-hidden rounded-2xl border-4 border-white dark:border-stone-800 shadow-md cursor-pointer transition hover:scale-[1.02]"
             >
               <img
@@ -611,6 +776,164 @@ export function TravelRouteMap({
               </a>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ===================================================================== */}
+      {/* 3. PINNED POLAROID MEMORY CARDS ALONG THE ROUTE (Tilting & Interactive) */}
+      {/* ===================================================================== */}
+      <div className="mt-8 border-t-2 border-dashed border-teal-500/30 pt-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">📌</span>
+            <div>
+              <h3 className="font-serif text-base sm:text-lg font-bold tracking-wide">
+                Pinned Route Memories & Stops
+              </h3>
+              <p className="font-handwriting text-xs text-muted-foreground">
+                Hover or click any Polaroid to drive Palak's car there & inspect photo
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs font-mono text-teal-700 dark:text-cyan-300 bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full border border-teal-200 dark:border-teal-800">
+            <Sparkles className="h-3 w-3 text-amber-500 animate-spin-slow" />
+            <span>Interactive Road Stops (3D Pinned)</span>
+          </div>
+        </div>
+
+        {/* 3 Pinned Polaroid Cards: Bhopal, Pachmarhi, Tamil Nadu */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {REAL_DESTINATIONS.map((dest, idx) => {
+            const isCarAtThisStop = activeDest.id === dest.id;
+            const isHovered = hoveredCardId === dest.id;
+
+            // Tilts: Stop 1 = -2deg, Stop 2 = 2deg, Stop 3 = -2.5deg
+            const defaultRotations = ["-2deg", "2deg", "-2.5deg"];
+            const baseRotation = defaultRotations[idx % defaultRotations.length];
+
+            return (
+              <div
+                key={dest.id}
+                onMouseEnter={() => setHoveredCardId(dest.id)}
+                onMouseLeave={() => setHoveredCardId(null)}
+                onClick={() => {
+                  setActiveDestId(dest.id);
+                  if (mapInstanceRef.current) {
+                    mapInstanceRef.current.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
+                  }
+                }}
+                style={{
+                  transform: isCarAtThisStop
+                    ? `translateY(-10px) scale(1.03) rotate(${isHovered ? "0deg" : baseRotation})`
+                    : isHovered
+                      ? `translateY(-6px) scale(1.02) rotate(0deg)`
+                      : `rotate(${baseRotation})`,
+                }}
+                className={`group relative cursor-pointer rounded-2xl p-3 pb-4 transition-all duration-300 border-2 ${
+                  isCarAtThisStop
+                    ? isNightMode
+                      ? "bg-[#0b172e] border-cyan-400 shadow-[0_20px_40px_rgba(6,182,212,0.35)] ring-2 ring-cyan-400/60"
+                      : "bg-[#fffdf9] border-amber-400 shadow-[0_20px_40px_rgba(245,158,11,0.3)] ring-2 ring-amber-400/70"
+                    : isNightMode
+                      ? "bg-[#091124] border-cyan-800/40 text-slate-200 hover:border-cyan-500 hover:shadow-xl"
+                      : "bg-white border-stone-200 text-stone-800 hover:border-teal-400 hover:shadow-xl"
+                }`}
+              >
+                {/* Washi Tape Accent at Top Center */}
+                <div
+                  className={`absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4.5 rounded-xs border-x shadow-xs z-20 pointer-events-none ${
+                    idx === 0
+                      ? "bg-amber-200/90 border-amber-400 rotate-1"
+                      : idx === 1
+                        ? "bg-rose-200/90 border-rose-400 -rotate-2"
+                        : "bg-teal-200/90 border-teal-400 rotate-2"
+                  }`}
+                />
+
+                {/* Corner Pushpin Element */}
+                <div className="absolute top-2 right-2 text-xs opacity-75 z-20">📌</div>
+
+                {/* Polaroid Photo Frame */}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenPhoto(dest);
+                  }}
+                  className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-black/10 bg-black/5 shadow-inner group/photo"
+                >
+                  <img
+                    src={dest.photoUrl}
+                    alt={dest.name}
+                    className="h-full w-full object-cover transition duration-300 group-hover/photo:scale-108"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/photo:opacity-100 transition flex items-center justify-center text-white">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-black/60 px-3 py-1 text-xs font-serif backdrop-blur">
+                      <ZoomIn className="h-3.5 w-3.5" /> Inspect
+                    </span>
+                  </div>
+
+                  {/* Active Car Arrived Badge */}
+                  {isCarAtThisStop && (
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-rose-500/95 text-white px-2.5 py-0.5 text-[10px] font-mono font-bold shadow-md animate-pulse">
+                      <span>🚗 Palak Here! 🌸</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Polaroid Caption & Details */}
+                <div className="mt-3">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-teal-600 dark:text-cyan-400">
+                      Stop #{dest.stopNumber} · {dest.icon}
+                    </span>
+                    <span className="text-[10px] font-mono opacity-70">
+                      {dest.lat.toFixed(2)}°N
+                    </span>
+                  </div>
+
+                  <h4 className="font-serif text-sm sm:text-base font-bold mt-0.5 truncate group-hover:text-teal-600 transition">
+                    {dest.name.split("·")[0].trim()}
+                  </h4>
+
+                  <p className="font-handwriting text-xs text-stone-600 dark:text-stone-300 font-semibold line-clamp-2 mt-1">
+                    "{dest.notes}"
+                  </p>
+
+                  {/* Iconic Highlights Chips */}
+                  <div className="mt-2.5 flex flex-wrap gap-1">
+                    {dest.famousStateElements.slice(0, 2).map((el, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1 rounded-md bg-stone-100 dark:bg-stone-800/80 px-1.5 py-0.5 text-[10px] font-mono text-stone-700 dark:text-stone-300 border border-stone-200/50 dark:border-stone-700/50"
+                      >
+                        <span>{el.emoji}</span>
+                        <span className="truncate max-w-[90px]">{el.name}</span>
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Link */}
+                  <div className="mt-3 pt-2 border-t border-dashed border-stone-200 dark:border-stone-800 flex items-center justify-between text-xs">
+                    <span className="font-mono text-[10px] text-muted-foreground truncate">
+                      {dest.region.split(",")[0]}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenPhoto(dest);
+                      }}
+                      className="inline-flex items-center gap-1 text-[11px] font-serif font-bold text-teal-700 dark:text-cyan-300 hover:underline"
+                    >
+                      <Eye className="h-3 w-3" /> View Memory
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

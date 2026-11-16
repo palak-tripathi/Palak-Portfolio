@@ -9,6 +9,7 @@ import {
   Linkedin,
   Sparkles,
   CheckCircle2,
+  Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -31,6 +32,10 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
   const handleOpenNewTab = () => {
     window.open("/Palak_Tripathi_Resume.pdf", "_blank", "noopener,noreferrer");
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -79,6 +84,16 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               className="h-8 rounded-full bg-brand px-3 text-xs font-semibold text-primary-foreground shadow-xs transition hover:scale-105"
             >
               <Download className="mr-1 h-3.5 w-3.5" /> Download
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrint}
+              className="h-8 rounded-full text-xs font-semibold gap-1 hidden sm:inline-flex"
+              title="Print Resume"
+            >
+              <Printer className="h-3.5 w-3.5" /> Print
             </Button>
 
             <Button
@@ -318,6 +333,14 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
             <Button
               variant="outline"
               size="sm"
+              onClick={handlePrint}
+              className="h-8 rounded-full text-xs font-semibold gap-1 hidden sm:inline-flex"
+            >
+              <Printer className="h-3 w-3" /> Print
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleOpenNewTab}
               className="h-8 rounded-full text-xs font-semibold gap-1"
             >
@@ -328,7 +351,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               onClick={handleDownload}
               className="h-8 rounded-full bg-brand text-xs font-semibold text-primary-foreground shadow-xs gap-1"
             >
-              <Download className="h-3 w-3" /> Download PDF
+              <Download className="h-3 w-3" /> Download CV
             </Button>
           </div>
         </div>

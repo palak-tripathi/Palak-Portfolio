@@ -156,25 +156,6 @@ function Index() {
                 Explore Portfolio <ArrowRight className="h-4 w-4" />
               </a>
 
-              {/* View / See Resume Button */}
-              <button
-                type="button"
-                onClick={() => setIsResumeOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full border-2 border-primary/40 bg-card px-5 py-3.5 font-semibold text-primary transition hover:bg-primary/10 hover:-translate-y-0.5 shadow-sm"
-              >
-                <Eye className="h-4 w-4" /> View Resume
-              </button>
-
-              {/* Direct Download CV Button */}
-              <a
-                href="/Palak_Tripathi_Resume.pdf"
-                download="Palak_Tripathi_Resume.pdf"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3.5 font-semibold transition hover:bg-accent hover:-translate-y-0.5"
-                title="Download Palak's Resume PDF"
-              >
-                <Download className="h-4 w-4 text-primary" /> Download CV
-              </a>
-
               <a
                 href="#projects"
                 className="rounded-full border border-border bg-card px-5 py-3.5 font-semibold transition hover:bg-accent"
@@ -276,7 +257,7 @@ function Index() {
                   className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:scale-105"
                   title="Download Palak's Resume PDF"
                 >
-                  <Download className="h-3.5 w-3.5" /> Download PDF
+                  <Download className="h-3.5 w-3.5" /> Download CV
                 </a>
               </div>
             </div>
