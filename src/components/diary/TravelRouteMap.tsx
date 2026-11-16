@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import {
   MapPin,
   Navigation,
@@ -16,6 +16,7 @@ import {
   Calendar,
   Eye,
   Camera,
+  RotateCcw,
 } from "lucide-react";
 import type { DiaryItem } from "@/data/diary-content";
 
@@ -40,6 +41,10 @@ export interface RealDestination {
   itemMatchId: string;
   directionsUrl: string;
   stopNumber: number;
+  // Position percentage on the 3D isometric diorama canvas (x: 0-100, y: 0-100)
+  canvasCoords: { x: number; y: number };
+  // Target distance progress along curved path (0 to 1)
+  pathProgress: number;
   famousStateElements: { name: string; emoji: string }[];
 }
 
@@ -55,6 +60,8 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     ticketStub: "BHOPAL SHATABDI • COACH B2",
     photoUrl: "/media/diary/travel/bhopal-lake.png",
     stopNumber: 1,
+    canvasCoords: { x: 23, y: 24 },
+    pathProgress: 0.04,
     attractions: ["Bada Talab / VIP Road", "Van Vihar National Park", "Boat Club Promenade"],
     notes:
       "Golden light ripples across calm waters as evening breezes cool the lakeside promenade.",
@@ -78,6 +85,8 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     ticketStub: "SATPURA RESERVE ENTRY • PERMIT 412",
     photoUrl: "/media/diary/travel/pachmarhi-hills.jpg",
     stopNumber: 2,
+    canvasCoords: { x: 50, y: 48 },
+    pathProgress: 0.38,
     attractions: [
       "Dhoopgarh Highest Peak (1,352m)",
       "Bee Falls & Fairy Pool",
@@ -105,6 +114,8 @@ export const REAL_DESTINATIONS: RealDestination[] = [
     ticketStub: "MADURAI HERITAGE EXPRESS • BERTH 28",
     photoUrl: "/media/diary/travel/tamil-nadu-temple.png",
     stopNumber: 3,
+    canvasCoords: { x: 77, y: 76 },
+    pathProgress: 0.72,
     attractions: [
       "Meenakshi Amman Gopurams",
       "Nilgiri Mountain Railway",
@@ -123,16 +134,13 @@ export const REAL_DESTINATIONS: RealDestination[] = [
   },
 ];
 
-// Scenic curved road waypoints connecting the travel expedition
+// OpenStreetMap GPS scenic route waypoints for Leaflet view
 export const SCENIC_ROUTE_WAYPOINTS: [number, number][] = [
-  // Leg 1: Bhopal to Pachmarhi
   [23.2599, 77.4126], // Bhopal
   [23.05, 77.62], // Bhojpur
   [22.75, 77.72], // Hoshangabad / Narmada
   [22.61, 78.35], // Pipariya
   [22.4674, 78.4346], // Pachmarhi
-
-  // Leg 2: Pachmarhi to Tamil Nadu
   [22.05, 78.93], // Chhindwara
   [21.1458, 79.0882], // Nagpur
   [19.66, 78.53], // Adilabad
@@ -144,15 +152,20 @@ export const SCENIC_ROUTE_WAYPOINTS: [number, number][] = [
   [11.6643, 78.146], // Salem
   [10.36, 77.98], // Dindigul
   [9.9195, 78.1193], // Tamil Nadu (Madurai)
-
-  // Leg 3: Return loop to Bhopal
-  [10.79, 78.7], // Tiruchirappalli
-  [13.08, 80.27], // Coastal Route
-  [16.5, 80.64], // Vijayawada
-  [17.97, 79.59], // Warangal
-  [21.8, 79.5], // Seoni / Pench
-  [23.2599, 77.4126], // Return to Bhopal
 ];
+
+// Beautiful curved highway SVG path traversing the 3D diorama canvas (viewBox 800 x 480)
+const SVG_ROUTE_PATH_D = `
+  M 184 115
+  C 260 115, 300 170, 350 200
+  S 380 230, 400 230
+  C 440 230, 470 270, 520 300
+  S 580 340, 616 365
+  C 640 380, 660 380, 670 350
+  C 685 300, 610 220, 530 160
+  C 450 100, 300 70, 184 115
+  Z
+`;
 
 export function TravelRouteMap({
   isNightMode = false,
@@ -160,45 +173,137 @@ export function TravelRouteMap({
   travelItems = [],
 }: TravelRouteMapProps) {
   const [activeDestId, setActiveDestId] = useState<string>("bhopal");
+  const [mapMode, setMapMode] = useState<"3d" | "gps">("3d");
   const [mapZoom, setMapZoom] = useState<number>(6);
   const [leafletLoaded, setLeafletLoaded] = useState<boolean>(false);
-  const [isAutoDriving, setIsAutoDriving] = useState<boolean>(false);
+  const [isAutoDriving, setIsAutoDriving] = useState<boolean>(true);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+
+  // Car animation state on 3D Diorama path
+  const [carProgress, setCarProgress] = useState<number>(0.04);
+  const [carCoords, setCarCoords] = useState<{ x: number; y: number; angle: number }>({
+    x: 184,
+    y: 115,
+    angle: 25,
+  });
+
+  const svgPathRef = useRef<SVGPathElement>(null);
+  const animFrameIdRef = useRef<number | null>(null);
+  const targetProgressRef = useRef<number | null>(null);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapInstanceRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const carMarkerRef = useRef<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const routePolylineRef = useRef<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const routeGlowPolylineRef = useRef<any>(null);
-  const animFrameRef = useRef<number | null>(null);
 
   const activeDest = useMemo(
     () => REAL_DESTINATIONS.find((d) => d.id === activeDestId) || REAL_DESTINATIONS[0],
     [activeDestId],
   );
 
-  // Auto-drive simulation across Bhopal -> Pachmarhi -> Tamil Nadu
-  useEffect(() => {
-    if (!isAutoDriving) return;
-    const destIds = ["bhopal", "pachmarhi", "tamilnadu"];
+  // Compute position and angle along SVG road path
+  const updateCarOnPath = useCallback((progress: number) => {
+    const path = svgPathRef.current;
+    if (!path) return;
+    try {
+      const pathLength = path.getTotalLength();
+      if (pathLength <= 0) return;
 
-    const timer = setInterval(() => {
-      setActiveDestId((curr) => {
-        const nextIdx = (destIds.indexOf(curr) + 1) % destIds.length;
-        return destIds[nextIdx];
+      const normProgress = ((progress % 1) + 1) % 1;
+      const currentDistance = normProgress * pathLength;
+      const point = path.getPointAtLength(currentDistance);
+
+      // Look slightly ahead to calculate tangent angle
+      const forwardDistance = (((currentDistance + 3) % pathLength) + pathLength) % pathLength;
+      const nextPoint = path.getPointAtLength(forwardDistance);
+
+      const dx = nextPoint.x - point.x;
+      const dy = nextPoint.y - point.y;
+      const angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+      setCarCoords({
+        x: point.x,
+        y: point.y,
+        angle: angleDeg,
       });
-    }, 4800);
+      setCarProgress(normProgress);
+    } catch {
+      // ignore path calculation error during render
+    }
+  }, []);
 
-    return () => clearInterval(timer);
-  }, [isAutoDriving]);
-
-  // Dynamic client-side Leaflet loader
+  // 60fps Smooth animation loop for car ride
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    let lastTime = performance.now();
+
+    const animateLoop = (time: number) => {
+      const dt = (time - lastTime) / 1000;
+      lastTime = time;
+
+      if (targetProgressRef.current !== null) {
+        // Driving towards specific destination stop
+        const target = targetProgressRef.current;
+        setCarProgress((prev) => {
+          let diff = target - prev;
+          if (diff > 0.5) diff -= 1;
+          if (diff < -0.5) diff += 1;
+
+          if (Math.abs(diff) < 0.003) {
+            targetProgressRef.current = null;
+            updateCarOnPath(target);
+            return target;
+          }
+
+          const step = Math.sign(diff) * Math.min(Math.abs(diff), dt * 0.35);
+          const next = prev + step;
+          updateCarOnPath(next);
+          return next;
+        });
+      } else if (isAutoDriving) {
+        // Continuous scenic cruise along the loop
+        setCarProgress((prev) => {
+          const next = (prev + dt * 0.045) % 1;
+          updateCarOnPath(next);
+
+          // Check if car reached any destination stop to trigger popup highlight
+          REAL_DESTINATIONS.forEach((d) => {
+            if (Math.abs(next - d.pathProgress) < 0.035) {
+              if (activeDestId !== d.id) {
+                setActiveDestId(d.id);
+              }
+            }
+          });
+
+          return next;
+        });
+      }
+
+      animFrameIdRef.current = requestAnimationFrame(animateLoop);
+    };
+
+    animFrameIdRef.current = requestAnimationFrame(animateLoop);
+
+    return () => {
+      if (animFrameIdRef.current) {
+        cancelAnimationFrame(animFrameIdRef.current);
+      }
+    };
+  }, [isAutoDriving, updateCarOnPath, activeDestId]);
+
+  // Steer car directly to a destination when selected
+  const handleDriveTo = (dest: RealDestination) => {
+    setActiveDestId(dest.id);
+    targetProgressRef.current = dest.pathProgress;
+
+    if (mapMode === "gps" && mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
+    }
+  };
+
+  // Dynamic client-side Leaflet loader for GPS mode
+  useEffect(() => {
+    if (typeof window === "undefined" || mapMode !== "gps") return;
 
     if (!document.getElementById("leaflet-css")) {
       const link = document.createElement("link");
@@ -220,31 +325,14 @@ export function TravelRouteMap({
     script.onload = () => {
       setLeafletLoaded(true);
     };
-    script.onerror = () => {
-      console.warn("Leaflet script failed to load; using vector fallback");
-    };
     document.body.appendChild(script);
+  }, [mapMode]);
 
-    return () => {
-      if (animFrameRef.current) {
-        cancelAnimationFrame(animFrameRef.current);
-      }
-      if (mapInstanceRef.current) {
-        try {
-          mapInstanceRef.current.remove();
-          mapInstanceRef.current = null;
-        } catch {
-          // ignore cleanup errors
-        }
-      }
-    };
-  }, []);
-
-  // Initialize and update Leaflet Map
+  // Initialize and update Leaflet Map in GPS mode
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const L = (window as any).L;
-    if (!leafletLoaded || !L || !mapContainerRef.current) return;
+    if (mapMode !== "gps" || !leafletLoaded || !L || !mapContainerRef.current) return;
 
     if (!mapInstanceRef.current) {
       try {
@@ -265,25 +353,23 @@ export function TravelRouteMap({
         }).addTo(map);
 
         // Add Outer Glow Polyline for curved route
-        const glowLine = L.polyline(SCENIC_ROUTE_WAYPOINTS, {
+        L.polyline(SCENIC_ROUTE_WAYPOINTS, {
           color: isNightMode ? "#38bdf8" : "#fb7185",
           weight: 8,
           opacity: 0.35,
           smoothFactor: 1.5,
         }).addTo(map);
-        routeGlowPolylineRef.current = glowLine;
 
         // Add Styled Dashed Road Polyline
-        const roadLine = L.polyline(SCENIC_ROUTE_WAYPOINTS, {
+        L.polyline(SCENIC_ROUTE_WAYPOINTS, {
           color: isNightMode ? "#06b6d4" : "#e11d48",
           weight: 4,
           dashArray: "8, 12",
           opacity: 0.85,
           smoothFactor: 1.5,
         }).addTo(map);
-        routePolylineRef.current = roadLine;
 
-        // Add markers for all real destinations with mini Polaroid thumbnails
+        // Add markers for all real destinations
         REAL_DESTINATIONS.forEach((dest) => {
           const markerHtml = `
             <div style="cursor: pointer; text-align: center; transform: translate(-50%, -50%); transition: all 0.3s ease;">
@@ -304,8 +390,7 @@ export function TravelRouteMap({
 
           const marker = L.marker([dest.lat, dest.lng], { icon: customIcon }).addTo(map);
           marker.on("click", () => {
-            setActiveDestId(dest.id);
-            map.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
+            handleDriveTo(dest);
           });
         });
 
@@ -331,60 +416,19 @@ export function TravelRouteMap({
 
         mapInstanceRef.current = map;
       } catch (err) {
-        console.warn("Leaflet initialization warning:", err);
+        console.warn("Leaflet warning:", err);
       }
     } else {
-      // Smooth movement along route
       try {
-        mapInstanceRef.current.flyTo([activeDest.lat, activeDest.lng], 7, {
-          duration: 1.4,
-        });
-
+        mapInstanceRef.current.flyTo([activeDest.lat, activeDest.lng], 7, { duration: 1.2 });
         if (carMarkerRef.current) {
-          const startLatLng = carMarkerRef.current.getLatLng();
-          const targetLat = activeDest.lat;
-          const targetLng = activeDest.lng;
-
-          let progress = 0;
-          const duration = 1200; // 1.2s smooth drive
-          const startTime = performance.now();
-
-          const animateStep = (now: number) => {
-            progress = Math.min((now - startTime) / duration, 1);
-            // Ease in out quad
-            const ease =
-              progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-            const currLat = startLatLng.lat + (targetLat - startLatLng.lat) * ease;
-            const currLng = startLatLng.lng + (targetLng - startLatLng.lng) * ease;
-
-            if (carMarkerRef.current) {
-              carMarkerRef.current.setLatLng([currLat, currLng]);
-            }
-
-            if (progress < 1) {
-              animFrameRef.current = requestAnimationFrame(animateStep);
-            }
-          };
-
-          if (animFrameRef.current) {
-            cancelAnimationFrame(animFrameRef.current);
-          }
-          animFrameRef.current = requestAnimationFrame(animateStep);
+          carMarkerRef.current.setLatLng([activeDest.lat, activeDest.lng]);
         }
       } catch {
-        // ignore pan error
+        // ignore
       }
     }
-  }, [leafletLoaded, activeDest, isNightMode, mapZoom]);
-
-  const handleZoom = (delta: number) => {
-    const nextZoom = Math.max(4, Math.min(12, mapZoom + delta));
-    setMapZoom(nextZoom);
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.setZoom(nextZoom);
-    }
-  };
+  }, [mapMode, leafletLoaded, activeDest, isNightMode, mapZoom]);
 
   const handleOpenPhoto = (dest?: RealDestination) => {
     const targetDest = dest || activeDest;
@@ -423,9 +467,10 @@ export function TravelRouteMap({
   return (
     <div className="relative my-6 select-none">
       {/* ===================================================================== */}
-      {/* TOP CONTROLS BAR: Destination Buttons & Road Trip Auto-Drive          */}
+      {/* TOP CONTROLS BAR: Destination Stops, Auto Cruise & View Mode Toggle    */}
       {/* ===================================================================== */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+        {/* Destination Quick Selector Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           {REAL_DESTINATIONS.map((dest) => {
             const isActive = activeDest.id === dest.id;
@@ -433,12 +478,7 @@ export function TravelRouteMap({
               <button
                 key={dest.id}
                 type="button"
-                onClick={() => {
-                  setActiveDestId(dest.id);
-                  if (mapInstanceRef.current) {
-                    mapInstanceRef.current.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
-                  }
-                }}
+                onClick={() => handleDriveTo(dest)}
                 className={`group flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-serif font-bold transition-all duration-300 cursor-pointer ${
                   isActive
                     ? isNightMode
@@ -451,17 +491,47 @@ export function TravelRouteMap({
               >
                 <span>{dest.icon}</span>
                 <span>{dest.name.split("·")[0].trim()}</span>
+                {isActive && <span className="text-[10px] animate-pulse">🚗💨</span>}
               </button>
             );
           })}
         </div>
 
-        {/* Road Trip Auto-Drive & Zoom Controls */}
-        <div className="flex items-center gap-2">
+        {/* View Toggle & Cruise Control */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* 3D Diorama vs Live GPS Mode Switcher */}
+          <div className="flex items-center rounded-full p-0.5 border bg-muted/40 text-xs font-serif font-bold">
+            <button
+              type="button"
+              onClick={() => setMapMode("3d")}
+              className={`px-3 py-1 rounded-full transition flex items-center gap-1 ${
+                mapMode === "3d"
+                  ? "bg-brand text-primary-foreground shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Sparkles className="h-3 w-3" />
+              <span>3D Diorama Map</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMapMode("gps")}
+              className={`px-3 py-1 rounded-full transition flex items-center gap-1 ${
+                mapMode === "gps"
+                  ? "bg-brand text-primary-foreground shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Navigation className="h-3 w-3" />
+              <span>GPS Map</span>
+            </button>
+          </div>
+
+          {/* Road Trip Auto-Cruise Toggle Button */}
           <button
             type="button"
             onClick={() => setIsAutoDriving((prev) => !prev)}
-            className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-mono font-bold transition shadow-md border ${
+            className={`flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-mono font-bold transition shadow-md border ${
               isAutoDriving
                 ? "bg-rose-500 text-white border-rose-300 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.6)]"
                 : isNightMode
@@ -481,42 +551,17 @@ export function TravelRouteMap({
               </>
             )}
           </button>
-
-          <button
-            type="button"
-            onClick={() => handleZoom(1)}
-            aria-label="Zoom in map"
-            className={`rounded-full p-1.5 text-xs border shadow-xs transition hover:scale-105 ${
-              isNightMode
-                ? "bg-slate-900 border-cyan-500/40 text-cyan-200"
-                : "bg-white border-teal-300 text-teal-900"
-            }`}
-          >
-            <ZoomIn className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => handleZoom(-1)}
-            aria-label="Zoom out map"
-            className={`rounded-full p-1.5 text-xs border shadow-xs transition hover:scale-105 ${
-              isNightMode
-                ? "bg-slate-900 border-cyan-500/40 text-cyan-200"
-                : "bg-white border-teal-300 text-teal-900"
-            }`}
-          >
-            <ZoomOut className="h-3.5 w-3.5" />
-          </button>
         </div>
       </div>
 
       {/* ===================================================================== */}
-      {/* 2-COLUMN SPREAD: Interactive Map (Left) + Destination Spotlight (Right) */}
+      {/* 2-COLUMN SPREAD: 3D Animated Map (Left) + Destination Spotlight (Right)*/}
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* LEFT COLUMN: 3D Aesthetic Map Container */}
+        {/* LEFT COLUMN: 3D Map Canvas with Moving Girl Car Animation */}
         <div className="lg:col-span-7 flex flex-col relative">
           <div
-            className={`relative min-h-[380px] sm:min-h-[440px] w-full flex-1 rounded-3xl overflow-hidden border-4 shadow-2xl transition duration-500 ${
+            className={`relative min-h-[380px] sm:min-h-[460px] w-full flex-1 rounded-3xl overflow-hidden border-4 shadow-2xl transition duration-500 ${
               isNightMode
                 ? "border-cyan-500/50 shadow-[0_15px_40px_rgba(6,182,212,0.25)]"
                 : "border-amber-300/90 shadow-[0_15px_40px_rgba(20,184,166,0.2)]"
@@ -532,62 +577,320 @@ export function TravelRouteMap({
             <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-amber-400 rounded-bl-2xl z-30 pointer-events-none shadow-xs" />
             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-amber-400 rounded-br-2xl z-30 pointer-events-none shadow-xs" />
 
-            {/* Leaflet Map Canvas */}
-            <div ref={mapContainerRef} className="absolute inset-0 h-full w-full z-10" />
+            {/* MODE 1: 3D ILLUSTRATED PICTORIAL DIORAMA MAP */}
+            {mapMode === "3d" ? (
+              <div className="relative h-full w-full min-h-[440px] overflow-hidden bg-[#faf5eb] dark:bg-[#0c1322]">
+                {/* 3D Illustrated Map Background Image */}
+                <img
+                  src="/media/diary/travel/3d-travel-route-map.jpg"
+                  alt="3D Illustrated Travel Map of India Road Trip"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-103"
+                />
 
-            {/* Offline Fallback Vector Map Canvas */}
-            {!leafletLoaded && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-teal-900/10 backdrop-blur z-0">
-                <Compass className="h-10 w-10 text-teal-500 animate-spin-slow mb-2" />
-                <p className="font-serif font-bold text-sm">Loading Scenic Route Canvas…</p>
-                <p className="text-xs font-mono opacity-70">
-                  {activeDest.name} · [{activeDest.lat}°N, {activeDest.lng}°E]
-                </p>
+                {/* Ambient Depth & Vignette Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
+
+                {/* SVG Overlay: Curved Road Highway & Moving Girl Car Animation */}
+                <svg
+                  viewBox="0 0 800 480"
+                  className="absolute inset-0 h-full w-full z-10 pointer-events-none"
+                >
+                  <defs>
+                    <linearGradient id="headlightBeam" x1="0%" y1="50%" x2="100%" y2="50%">
+                      <stop offset="0%" stopColor="#fef08a" stopOpacity="0.75" />
+                      <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
+                    </linearGradient>
+                    <filter id="roadGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                  </defs>
+
+                  {/* Highway Underlay Glow */}
+                  <path
+                    d={SVG_ROUTE_PATH_D}
+                    fill="none"
+                    stroke="#f43f5e"
+                    strokeWidth="16"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.35"
+                    filter="url(#roadGlow)"
+                  />
+
+                  {/* Asphalt Highway Body */}
+                  <path
+                    d={SVG_ROUTE_PATH_D}
+                    fill="none"
+                    stroke="#1e293b"
+                    strokeWidth="9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                  />
+
+                  {/* Yellow Center Road Dashes */}
+                  <path
+                    ref={svgPathRef}
+                    d={SVG_ROUTE_PATH_D}
+                    fill="none"
+                    stroke="#fde047"
+                    strokeWidth="2.5"
+                    strokeDasharray="8 9"
+                    strokeLinecap="round"
+                    opacity="0.95"
+                  />
+
+                  {/* 3 Destination Milestones & Pins on the 3D Map */}
+                  {REAL_DESTINATIONS.map((dest) => {
+                    const isArrived = activeDest.id === dest.id;
+                    const coords =
+                      dest.id === "bhopal"
+                        ? { x: 184, y: 115 }
+                        : dest.id === "pachmarhi"
+                          ? { x: 400, y: 230 }
+                          : { x: 616, y: 365 };
+
+                    return (
+                      <g key={dest.id} transform={`translate(${coords.x}, ${coords.y})`}>
+                        {/* Ripple Aura when active */}
+                        {isArrived && (
+                          <circle
+                            cx="0"
+                            cy="0"
+                            r="22"
+                            fill="none"
+                            stroke="#f43f5e"
+                            strokeWidth="2"
+                            className="animate-ping"
+                            opacity="0.75"
+                          />
+                        )}
+
+                        {/* Milestone Flagpole & Pin */}
+                        <circle
+                          cx="0"
+                          cy="0"
+                          r="14"
+                          fill={isArrived ? "#f43f5e" : "#0f766e"}
+                          stroke="#ffffff"
+                          strokeWidth="2.5"
+                          filter="drop-shadow(0 4px 8px rgba(0,0,0,0.4))"
+                        />
+                        <text
+                          x="0"
+                          y="4"
+                          textAnchor="middle"
+                          fontSize="11"
+                          fill="#ffffff"
+                          className="pointer-events-none"
+                        >
+                          {dest.icon}
+                        </text>
+
+                        {/* Milestone Pill Label */}
+                        <g transform="translate(0, -22)">
+                          <rect
+                            x="-48"
+                            y="-9"
+                            width="96"
+                            height="18"
+                            rx="9"
+                            fill="rgba(15, 23, 42, 0.88)"
+                            stroke={isArrived ? "#f43f5e" : "#38bdf8"}
+                            strokeWidth="1.2"
+                          />
+                          <text
+                            x="0"
+                            y="3.5"
+                            textAnchor="middle"
+                            fill="#ffffff"
+                            fontSize="9"
+                            fontWeight="bold"
+                            fontFamily="serif"
+                          >
+                            {dest.name.split("·")[0].trim()}
+                          </text>
+                        </g>
+                      </g>
+                    );
+                  })}
+
+                  {/* ======================================================= */}
+                  {/* ANIMATED CAR WITH GIRL RIDING / DRIVING ALONG THE ROAD  */}
+                  {/* ======================================================= */}
+                  <g
+                    transform={`translate(${carCoords.x}, ${carCoords.y}) rotate(${carCoords.angle})`}
+                    style={{ transition: "none" }}
+                  >
+                    {/* Ground Shadow underneath the car */}
+                    <ellipse cx="0" cy="12" rx="24" ry="5" fill="rgba(0,0,0,0.35)" />
+
+                    {/* Headlight beam illuminating the highway ahead */}
+                    <polygon
+                      points="24,-2 65,-12 65,16 24,6"
+                      fill="url(#headlightBeam)"
+                      opacity="0.7"
+                    />
+
+                    {/* Exhaust Smoke Puffs & Floating Hearts behind the car */}
+                    <g transform="translate(-26, 4)">
+                      <circle cx="0" cy="0" r="2.5" fill="#fbcfe8" className="animate-ping" />
+                      <text x="-9" y="3" fontSize="9" className="animate-bounce">
+                        💨
+                      </text>
+                      <text x="-3" y="-7" fontSize="8" className="animate-pulse">
+                        💖
+                      </text>
+                    </g>
+
+                    {/* Windshield with Sky Reflection */}
+                    <path
+                      d="M-4,-4 L4,-15 L18,-15 L22,-4 Z"
+                      fill="#e0f2fe"
+                      stroke="#38bdf8"
+                      strokeWidth="1.2"
+                      opacity="0.9"
+                    />
+
+                    {/* Cute Girl Driver (Palak) with fluttering hair & scarf */}
+                    {/* Fluttering hair */}
+                    <path d="M4,-10 C-4,-13 -8,-8 -10,-4 C-5,-5 2,-2 5,-2 Z" fill="#451a03" />
+                    {/* Pink Scarf fluttering in breeze */}
+                    <path
+                      d="M-2,-3 Q-14,-9 -20,-5 Q-12,-1 0,-1 Z"
+                      fill="#f43f5e"
+                      className="animate-pulse"
+                    />
+                    {/* Head */}
+                    <circle cx="8" cy="-10" r="5" fill="#fed7aa" />
+                    {/* Bangs */}
+                    <path d="M5,-14 C8,-17 13,-16 14,-12 C12,-13 9,-13 6,-11 Z" fill="#451a03" />
+                    {/* Cute Retro Sunglasses */}
+                    <rect x="8" y="-11" width="3" height="2.2" rx="0.5" fill="#0f172a" />
+                    <rect x="12" y="-11" width="2.5" height="2.2" rx="0.5" fill="#0f172a" />
+                    <path d="M11,-10 L12,-10" stroke="#0f172a" strokeWidth="0.5" />
+                    {/* Smile */}
+                    <path
+                      d="M9,-7 Q10.5,-5.5 12,-7"
+                      fill="none"
+                      stroke="#e11d48"
+                      strokeWidth="0.7"
+                    />
+                    <circle cx="7.5" cy="-7.5" r="0.9" fill="#fda4af" />
+                    {/* Waving Arm */}
+                    <path
+                      d="M4,-2 Q1,-5 -2,-7"
+                      stroke="#fed7aa"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="-2.5" cy="-7.5" r="1.3" fill="#fed7aa" />
+
+                    {/* Vintage Pastel Roadster Body */}
+                    <path
+                      d="M-20,2 C-20,-1 -16,-3 -11,-3 L20,-3 C24,-3 27,0 27,4 L27,11 C27,13 25,14 23,14 L-18,14 C-20,14 -20,13 -20,11 Z"
+                      fill="#fb7185"
+                      stroke="#e11d48"
+                      strokeWidth="1.4"
+                    />
+                    {/* Chrome Side Accent */}
+                    <path d="M-18,5 L23,5" stroke="#ffffff" strokeWidth="1" strokeLinecap="round" />
+                    {/* Shiny Headlight */}
+                    <circle
+                      cx="26"
+                      cy="3"
+                      r="2.5"
+                      fill="#fef08a"
+                      stroke="#ca8a04"
+                      strokeWidth="0.8"
+                    />
+
+                    {/* Wheels with Whitewall Hubcaps */}
+                    <g transform="translate(-12, 12)">
+                      <circle
+                        cx="0"
+                        cy="0"
+                        r="5"
+                        fill="#1e293b"
+                        stroke="#cbd5e1"
+                        strokeWidth="1.2"
+                      />
+                      <circle cx="0" cy="0" r="2" fill="#f8fafc" />
+                    </g>
+                    <g transform="translate(16, 12)">
+                      <circle
+                        cx="0"
+                        cy="0"
+                        r="5"
+                        fill="#1e293b"
+                        stroke="#cbd5e1"
+                        strokeWidth="1.2"
+                      />
+                      <circle cx="0" cy="0" r="2" fill="#f8fafc" />
+                    </g>
+
+                    {/* Floating Name Badge above the car */}
+                    <g transform="translate(0, -24)">
+                      <rect
+                        x="-30"
+                        y="-8"
+                        width="60"
+                        height="15"
+                        rx="7.5"
+                        fill="rgba(15,23,42,0.85)"
+                        stroke="#fb7185"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x="0"
+                        y="2.5"
+                        textAnchor="middle"
+                        fill="#ffffff"
+                        fontSize="8"
+                        fontWeight="bold"
+                        fontFamily="sans-serif"
+                      >
+                        🚗 Palak 🌸
+                      </text>
+                    </g>
+                  </g>
+                </svg>
+
+                {/* Compass Rose Accent */}
+                <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 rounded-full bg-black/65 px-3 py-1 font-serif text-xs text-amber-300 backdrop-blur border border-amber-300/30">
+                  <Compass className="h-4 w-4 animate-spin-slow text-amber-400" />
+                  <span>3D Scenic Expedition</span>
+                </div>
+
+                {/* Weather & Scenic Driving Status Badge */}
+                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 rounded-full bg-black/80 px-3.5 py-1.5 font-mono text-xs text-white backdrop-blur border border-white/20 shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span>
+                    🚗 Palak Cruising to{" "}
+                    <b className="text-amber-300">{activeDest.name.split("·")[0].trim()}</b>
+                  </span>
+                </div>
+              </div>
+            ) : (
+              /* MODE 2: LIVE OPENSTREETMAP GPS CANVAS */
+              <div className="relative h-full w-full min-h-[440px]">
+                <div ref={mapContainerRef} className="absolute inset-0 h-full w-full z-10" />
+
+                {!leafletLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-teal-900/10 backdrop-blur z-0">
+                    <Compass className="h-10 w-10 text-teal-500 animate-spin-slow mb-2" />
+                    <p className="font-serif font-bold text-sm">
+                      Loading Live OpenStreetMap Canvas…
+                    </p>
+                  </div>
+                )}
               </div>
             )}
-
-            {/* POPUP BUBBLE: Shows iconic highlights of the active stop */}
-            <div className="absolute top-4 left-4 z-20 max-w-[280px] sm:max-w-xs rounded-2xl bg-black/85 p-3 text-white backdrop-blur-md border border-white/20 shadow-2xl animate-in fade-in slide-in-from-top duration-300">
-              <div className="flex items-center gap-1.5 mb-1.5 border-b border-white/15 pb-1">
-                <span className="text-base">{activeDest.icon}</span>
-                <span className="font-serif text-xs font-bold text-amber-300 truncate">
-                  {activeDest.name.split("·")[0].trim()}
-                </span>
-                <span className="ml-auto rounded-full bg-emerald-500/80 px-2 py-0.2 text-[9px] font-mono text-white">
-                  Stop #{activeDest.stopNumber}
-                </span>
-              </div>
-
-              <div className="text-[10px] font-serif uppercase tracking-wider text-cyan-300 font-bold mb-1">
-                ✨ Iconic Landmarks:
-              </div>
-              <div className="grid grid-cols-1 gap-1 text-[11px] font-mono leading-tight">
-                {activeDest.famousStateElements.map((el, i) => (
-                  <div key={i} className="flex items-center gap-1.5 text-slate-200">
-                    <span>{el.emoji}</span>
-                    <span className="truncate">{el.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Coordinates Overlay Pill */}
-            <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 font-mono text-[10px] text-cyan-300 backdrop-blur border border-white/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <span>
-                {activeDest.lat.toFixed(4)}° N, {activeDest.lng.toFixed(4)}° E
-              </span>
-            </div>
-
-            {/* Live Route Verification Badge */}
-            <div className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-md bg-black/60 px-2 py-0.5 text-[9px] font-mono text-white/80 backdrop-blur">
-              <Layers className="h-2.5 w-2.5" />
-              <span>Scenic Route · Madhya Pradesh ➔ Tamil Nadu</span>
-            </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: 3D Destination Card + Cute Girl in Vintage Car */}
+        {/* RIGHT COLUMN: 3D Destination Card + Live Travel Details */}
         <div className="lg:col-span-5 flex flex-col justify-between">
           <div
             className={`popup-3d-element relative rounded-3xl border-2 p-5 shadow-2xl transition-all duration-300 ${
@@ -596,7 +899,7 @@ export function TravelRouteMap({
                 : "border-teal-300/80 bg-[#fffdf9] text-stone-900"
             }`}
           >
-            {/* Top Bar with Cute Animated Girl Driving Vintage Car SVG */}
+            {/* Top Bar with Mini Animated Car Graphic */}
             <div className="flex items-center justify-between border-b pb-2.5 mb-3 border-teal-500/20">
               <div className="flex items-center gap-2">
                 <span className="font-cinzel text-xs font-extrabold tracking-[0.28em] uppercase text-teal-600 dark:text-cyan-300 animate-pulse">
@@ -604,103 +907,9 @@ export function TravelRouteMap({
                 </span>
               </div>
 
-              {/* Cute Animated Car with Girl Inside SVG */}
               <div className="flex items-center gap-1.5 text-xs font-bold text-rose-500 dark:text-pink-300">
-                <div className="relative inline-flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 110 56"
-                    className="w-20 h-10 filter drop-shadow-md overflow-visible"
-                  >
-                    {/* Wind lines & exhaust puffs */}
-                    <circle cx="6" cy="42" r="2" fill="#fb7185" className="animate-ping" />
-                    <text x="2" y="32" fontSize="9" className="animate-bounce">
-                      💨
-                    </text>
-                    <text x="12" y="18" fontSize="8" className="animate-pulse">
-                      💖
-                    </text>
-
-                    {/* Windshield */}
-                    <path
-                      d="M38 30 L48 14 L72 14 L82 30 Z"
-                      fill="#e0f2fe"
-                      stroke="#38bdf8"
-                      strokeWidth="1.5"
-                      opacity="0.95"
-                    />
-
-                    {/* Girl inside */}
-                    <path d="M52 18 C46 16 40 20 38 25 C44 24 50 27 54 27 Z" fill="#451a03" />
-                    <circle cx="58" cy="20" r="7" fill="#fed7aa" />
-                    <path d="M53 14 C56 11 63 12 65 16 C63 15 59 15 55 17 Z" fill="#451a03" />
-                    {/* Cute sunglasses */}
-                    <rect x="58" y="18" width="4" height="3" rx="0.8" fill="#0f172a" />
-                    <rect x="63" y="18" width="3.5" height="3" rx="0.8" fill="#0f172a" />
-                    <path d="M62 19 L63 19" stroke="#0f172a" strokeWidth="0.8" />
-                    {/* Smile & Cheek */}
-                    <path d="M59 23 Q61 25 63 23" fill="none" stroke="#e11d48" strokeWidth="0.8" />
-                    <circle cx="58" cy="22" r="1.2" fill="#fda4af" />
-                    {/* Waving Arm */}
-                    <path
-                      d="M52 28 Q48 24 45 22"
-                      stroke="#fed7aa"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="44" cy="21" r="1.8" fill="#fed7aa" />
-
-                    {/* Vintage Roadster Pink Body */}
-                    <path
-                      d="M16 34 C16 30 20 28 26 28 L88 28 C94 28 98 32 98 36 L98 44 C98 46 96 48 94 48 L18 48 C16 48 16 46 16 44 Z"
-                      fill="#fb7185"
-                      stroke="#e11d48"
-                      strokeWidth="1.8"
-                    />
-                    {/* Chrome side trim */}
-                    <path
-                      d="M20 38 L94 38"
-                      stroke="#ffffff"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    {/* Headlight with warm glow */}
-                    <ellipse
-                      cx="96"
-                      cy="35"
-                      rx="2.5"
-                      ry="3.5"
-                      fill="#fef08a"
-                      stroke="#ca8a04"
-                      strokeWidth="1.2"
-                    />
-                    <path d="M99 33 L107 30 L107 40 L99 37 Z" fill="#fef08a" opacity="0.4" />
-
-                    {/* Wheels */}
-                    <g className="animate-spin-slow origin-[32px_46px]">
-                      <circle
-                        cx="32"
-                        cy="46"
-                        r="8"
-                        fill="#1e293b"
-                        stroke="#cbd5e1"
-                        strokeWidth="2"
-                      />
-                      <circle cx="32" cy="46" r="3" fill="#f8fafc" />
-                    </g>
-                    <g className="animate-spin-slow origin-[82px_46px]">
-                      <circle
-                        cx="82"
-                        cy="46"
-                        r="8"
-                        fill="#1e293b"
-                        stroke="#cbd5e1"
-                        strokeWidth="2"
-                      />
-                      <circle cx="82" cy="46" r="3" fill="#f8fafc" />
-                    </g>
-                  </svg>
-                </div>
-                <span className="text-[10px] font-mono font-bold">Palak Driving 🌸</span>
+                <span className="text-base animate-bounce">🚗</span>
+                <span className="text-[11px] font-mono font-bold">Palak On The Road 🌸</span>
               </div>
             </div>
 
@@ -817,12 +1026,7 @@ export function TravelRouteMap({
                 key={dest.id}
                 onMouseEnter={() => setHoveredCardId(dest.id)}
                 onMouseLeave={() => setHoveredCardId(null)}
-                onClick={() => {
-                  setActiveDestId(dest.id);
-                  if (mapInstanceRef.current) {
-                    mapInstanceRef.current.flyTo([dest.lat, dest.lng], 7, { duration: 1.2 });
-                  }
-                }}
+                onClick={() => handleDriveTo(dest)}
                 style={{
                   transform: isCarAtThisStop
                     ? `translateY(-10px) scale(1.03) rotate(${isHovered ? "0deg" : baseRotation})`
