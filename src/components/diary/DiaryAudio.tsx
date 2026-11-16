@@ -21,6 +21,37 @@ function getAudioContext(): AudioContext | null {
 }
 
 // Separate Magical Book Opening Sound (Celestial Harp & Sparkle Glissando)
+export function playStepChime(step: 1 | 2 | 3) {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const baseFreqs: Record<number, number[]> = {
+      1: [523.25, 659.25], // C5, E5
+      2: [659.25, 830.61], // E5, G#5
+      3: [783.99, 1046.5, 1318.51], // G5, C6, E6
+    };
+    const freqs = baseFreqs[step] || [523.25, 659.25];
+    freqs.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      const startTime = ctx.currentTime + idx * 0.06;
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.14, startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.55);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + 0.6);
+    });
+  } catch {
+    // audio restricted
+  }
+}
+
 export function playMagicalOpenSound() {
   try {
     const ctx = getAudioContext();

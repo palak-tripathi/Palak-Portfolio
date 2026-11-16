@@ -3,20 +3,48 @@ import { Sparkles, Crown, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DiarySparkles } from "./DiarySparkles";
 import { DiaryDeskDecorations } from "./DiaryDeskDecorations";
-import { playMagicalOpenSound } from "./DiaryAudio";
+import { playMagicalOpenSound, playStepChime } from "./DiaryAudio";
 
 interface DiaryCoverProps {
   isNightMode?: boolean;
   onOpen: () => void;
 }
 
+const COUNTDOWN_STEPS = [
+  {
+    step: 1,
+    number: "1",
+    badge: "STAGE I",
+    title: "Unlocking Secret Keys ✨",
+    subtitle: "Releasing fairy-tale ribbon straps & brass clasps",
+    icon: "🗝️",
+  },
+  {
+    step: 2,
+    number: "2",
+    badge: "STAGE II",
+    title: "Gathering Stardust & Memories 🌸",
+    subtitle: "Summoning Polaroid frames, code editor & melodies",
+    icon: "✨",
+  },
+  {
+    step: 3,
+    number: "3",
+    badge: "STAGE III",
+    title: "Opening Palak's Diary 🦋",
+    subtitle: "Entering a cozy realm of stills and sound...",
+    icon: "📖",
+  },
+];
+
 export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [countdown, setCountdown] = useState<number | null>(null);
   const [opening, setOpening] = useState(false);
   const coverRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!coverRef.current || opening) return;
+    if (!coverRef.current || opening || countdown !== null) return;
     const rect = coverRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -28,12 +56,35 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
   };
 
   const handleTriggerOpen = () => {
-    if (opening) return;
-    setOpening(true);
-    playMagicalOpenSound();
+    if (opening || countdown !== null) return;
+
+    // Step 1: 1... Unlocking
+    setCountdown(1);
+    playStepChime(1);
+
+    // Step 2: 2... Gathering
+    setTimeout(() => {
+      setCountdown(2);
+      playStepChime(2);
+    }, 700);
+
+    // Step 3: 3... Turning page
+    setTimeout(() => {
+      setCountdown(3);
+      playStepChime(3);
+    }, 1400);
+
+    // Final grand 3D rotation & open sound
+    setTimeout(() => {
+      setCountdown(null);
+      setOpening(true);
+      playMagicalOpenSound();
+    }, 2100);
+
+    // Transition into open diary spread
     setTimeout(() => {
       onOpen();
-    }, 750);
+    }, 2850);
   };
 
   return (
@@ -66,6 +117,81 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
                 : "bg-gradient-to-r from-amber-200/90 via-pink-200/90 to-purple-200/90"
             }`}
           />
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MAGICAL "1 - 2 - 3" COUNTDOWN UNLOCK PORTAL OVERLAY     */}
+      {/* ======================================================== */}
+      {countdown !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/85 p-4 backdrop-blur-md animate-in fade-in duration-200 select-none">
+          <div className="relative w-full max-w-md rounded-3xl border-2 border-amber-300/90 bg-gradient-to-b from-stone-900 via-purple-950/90 to-stone-950 p-6 sm:p-8 text-center shadow-[0_0_70px_rgba(251,191,36,0.5)]">
+            {/* Ambient Badge */}
+            <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-gradient-to-r from-amber-400 to-rose-400 text-stone-950 font-mono text-xs font-black tracking-widest shadow-md">
+              <Sparkles className="h-3 w-3 fill-current" /> MAGIC UNLOCK SEQUENCE
+            </div>
+
+            {/* Step Indicators: 1 ── 2 ── 3 */}
+            <div className="flex items-center justify-center gap-3 mt-5 mb-5">
+              {[1, 2, 3].map((s) => {
+                const isActive = countdown === s;
+                const isPassed = countdown > s;
+                return (
+                  <div key={s} className="flex items-center gap-2">
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-full font-mono text-xs font-bold transition-all duration-300 ${
+                        isActive
+                          ? "scale-125 border-2 border-amber-300 bg-amber-400 text-stone-950 shadow-[0_0_20px_rgba(251,191,36,0.9)]"
+                          : isPassed
+                            ? "border border-emerald-400 bg-emerald-500/30 text-emerald-300"
+                            : "border border-white/20 bg-white/5 text-stone-400"
+                      }`}
+                    >
+                      {isPassed ? "✓" : s}
+                    </div>
+                    {s < 3 && (
+                      <div
+                        className={`h-0.5 w-8 transition-colors duration-300 ${
+                          isPassed ? "bg-emerald-400" : "bg-white/10"
+                        }`}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Giant Glowing Countdown Number with Zoom Pulse */}
+            <div className="relative my-4 flex items-center justify-center min-h-[170px]">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-36 w-36 rounded-full bg-amber-400/20 blur-2xl animate-ping" />
+              </div>
+
+              {COUNTDOWN_STEPS.filter((cs) => cs.step === countdown).map((cs) => (
+                <div
+                  key={cs.step}
+                  className="relative z-10 flex flex-col items-center animate-in zoom-in-75 duration-300"
+                >
+                  <span className="text-4xl sm:text-5xl mb-1">{cs.icon}</span>
+                  <div className="font-serif text-7xl sm:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-amber-300 to-rose-400 drop-shadow-[0_4px_30px_rgba(251,191,36,0.9)]">
+                    {cs.number}
+                  </div>
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-amber-100 mt-2">
+                    {cs.title}
+                  </h3>
+                  <p className="font-handwriting text-sm sm:text-base text-pink-200/90 font-medium mt-1">
+                    "{cs.subtitle}"
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Aesthetic marginalia note */}
+            <div className="mt-5 pt-3 border-t border-white/10 text-xs font-mono text-stone-400 flex items-center justify-center gap-2">
+              <Sparkles className="h-3 w-3 text-amber-300 animate-spin-slow" />
+              <span>Unlocking Palak's 3D scrapbook diary...</span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -297,6 +423,7 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
           <div className="absolute bottom-6 inset-x-7 text-center">
             <Button
               size="lg"
+              disabled={opening || countdown !== null}
               className={`group/btn relative w-full overflow-hidden rounded-full border-2 font-serif text-xs font-bold tracking-[0.2em] text-white shadow-lg transition duration-300 hover:scale-[1.02] ${
                 isNightMode
                   ? "border-cyan-300 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 shadow-[0_8px_25px_rgba(99,102,241,0.5)] hover:shadow-[0_12px_32px_rgba(99,102,241,0.7)]"
@@ -305,7 +432,11 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <Sparkles className="h-4 w-4 animate-spin-slow text-amber-200" />
-                OPEN PALAK'S DIARY
+                {countdown !== null
+                  ? `UNLOCKING... ${countdown} / 3 ✨`
+                  : opening
+                    ? "OPENING PALAK'S WORLD... 🌸"
+                    : "OPEN PALAK'S DIARY"}
                 <BookOpen className="h-4 w-4 transition group-hover/btn:translate-x-1" />
               </span>
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/btn:translate-x-full" />
@@ -315,7 +446,9 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
                 isNightMode ? "text-cyan-200" : "text-pink-900/80"
               }`}
             >
-              ✨ Click anywhere on the storybook to enter
+              {countdown !== null
+                ? `✨ Step ${countdown} of 3: Unlocking Palak's Memories...`
+                : "✨ Click anywhere on the storybook to enter"}
             </p>
           </div>
         </div>
