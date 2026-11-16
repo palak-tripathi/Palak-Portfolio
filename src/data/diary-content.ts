@@ -133,7 +133,7 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
   },
 
   // =========================================================================
-  // CHAPTER 2: MY TALENTS (Singing, Melodies & Acoustic Passion)
+  // CHAPTER 2: MY TALENTS (Authentic Singing Videos & Acoustic Soul)
   // =========================================================================
   {
     id: "chapter-talents",
@@ -148,8 +148,8 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         title: "Acoustic Vocal Cover · Track 01",
         caption: "Raw acoustic vocals & heartfelt notes recorded with soul",
         description:
-          "Palak's authentic acoustic singing performance with natural vocals and melody.",
-        date: "Studio Session 01",
+          "Palak's authentic acoustic singing performance with natural vocals, pure melody, and warm resonance.",
+        date: "Live Recording 01",
         category: "singing",
         mediaType: "video",
         mediaUrl: "/media/videos/talents/palak-singing-1.mp4",
@@ -166,8 +166,8 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         title: "Soulful Harmony · Track 02",
         caption: "Unplugged melodic singing cover with acoustic warmth and resonance",
         description:
-          "A heartfelt singing session exploring acoustic nuance, expression, and gentle rhythms.",
-        date: "Studio Session 02",
+          "A heartfelt singing session exploring acoustic nuance, vocal expression, and gentle rhythms.",
+        date: "Live Recording 02",
         category: "singing",
         mediaType: "video",
         mediaUrl: "/media/videos/talents/palak-singing-2.mp4",
@@ -178,45 +178,6 @@ export const INITIAL_CHAPTERS: DiaryChapter[] = [
         sortOrder: 2,
         published: true,
         featured: true,
-      },
-      {
-        id: "hobby-acoustic-guitar",
-        title: "Acoustic Chords & Soulful Harmonies",
-        caption:
-          "When screens turn off, music begins. Unplugged chords, soothing guitar rhythms, and soulful singing covers.",
-        description:
-          "Acoustic jamming session at dusk. Finding comfort in acoustic melodies between programming sprints.",
-        date: "Dusk Jamming",
-        location: "Music Room",
-        category: "music",
-        mediaType: "image",
-        mediaUrl: "/media/diary/talents/acoustic-guitar.jpg",
-        image: "/media/diary/talents/acoustic-guitar.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "polaroid",
-        tags: ["Acoustic", "Guitar", "Singing", "CozyVibes"],
-        sortOrder: 3,
-        published: true,
-        featured: true,
-      },
-      {
-        id: "hobby-vinyl-record",
-        title: "Vintage Vinyl & Classical Melodies",
-        caption:
-          "Warm crackle of analog records. Slow evenings spent listening to timeless melodies and old soulful hits.",
-        description:
-          "Spinning retro records on an old turntable. A reminder that classic craftsmanship never goes out of style.",
-        date: "Vintage Collection",
-        location: "Listening Nook",
-        category: "music",
-        mediaType: "image",
-        mediaUrl: "/media/diary/talents/vinyl-turntable.jpg",
-        image: "/media/diary/talents/vinyl-turntable.jpg",
-        aspectRatio: "landscape",
-        frameStyle: "tape",
-        tags: ["Vinyl", "Turntable", "AnalogSound", "RetroMelodies"],
-        sortOrder: 4,
-        published: true,
       },
     ],
   },

@@ -14,25 +14,25 @@ const COUNTDOWN_STEPS = [
   {
     step: 1,
     number: "1",
-    badge: "STAGE I",
-    title: "Unlocking Secret Keys ✨",
+    badge: "STAGE 1 · UNLOCKING",
+    title: "1... Turning the Secret Key 🗝️",
     subtitle: "Releasing fairy-tale ribbon straps & brass clasps",
-    icon: "🗝️",
+    icon: "✨",
   },
   {
     step: 2,
     number: "2",
-    badge: "STAGE II",
-    title: "Gathering Stardust & Memories 🌸",
-    subtitle: "Summoning Polaroid frames, code editor & melodies",
-    icon: "✨",
+    badge: "STAGE 2 · HARMONIES",
+    title: "2... Tuning Acoustic Harmonies 🎸",
+    subtitle: "Summoning guitar chords, polaroid snapshots & memories",
+    icon: "🎵",
   },
   {
     step: 3,
     number: "3",
-    badge: "STAGE III",
-    title: "Opening Palak's Diary 🦋",
-    subtitle: "Entering a cozy realm of stills and sound...",
+    badge: "STAGE 3 · STORYBOOK",
+    title: "3... Opening Palak's Scrapbook 🌸",
+    subtitle: "Entering a cozy 3D realm of stills and sound...",
     icon: "📖",
   },
 ];
@@ -58,33 +58,41 @@ export function DiaryCover({ isNightMode = false, onOpen }: DiaryCoverProps) {
   const handleTriggerOpen = () => {
     if (opening || countdown !== null) return;
 
-    // Step 1: 1... Unlocking
+    // Immediately trigger step 1 and chime
     setCountdown(1);
-    playStepChime(1);
+    try {
+      playStepChime(1);
+    } catch {}
 
-    // Step 2: 2... Gathering
+    // Step 2: 2... Chords & Harmonies
     setTimeout(() => {
       setCountdown(2);
-      playStepChime(2);
-    }, 700);
+      try {
+        playStepChime(2);
+      } catch {}
+    }, 800);
 
-    // Step 3: 3... Turning page
+    // Step 3: 3... Unfolding Scrapbook
     setTimeout(() => {
       setCountdown(3);
-      playStepChime(3);
-    }, 1400);
+      try {
+        playStepChime(3);
+      } catch {}
+    }, 1600);
 
     // Final grand 3D rotation & open sound
     setTimeout(() => {
       setCountdown(null);
       setOpening(true);
-      playMagicalOpenSound();
-    }, 2100);
+      try {
+        playMagicalOpenSound();
+      } catch {}
+    }, 2400);
 
     // Transition into open diary spread
     setTimeout(() => {
       onOpen();
-    }, 2850);
+    }, 3100);
   };
 
   return (

@@ -121,41 +121,6 @@
           "sortOrder": 2,
           "published": true,
           "featured": true
-        },
-        {
-          "id": "hobby-acoustic-guitar",
-          "title": "Acoustic Chords & Soulful Harmonies",
-          "caption": "When screens turn off, music begins. Unplugged chords, soothing guitar rhythms, and soulful singing covers.",
-          "description": "Acoustic jamming session at dusk. Finding comfort in acoustic melodies between programming sprints.",
-          "date": "Dusk Jamming",
-          "location": "Music Room",
-          "category": "music",
-          "mediaType": "image",
-          "mediaUrl": "/media/diary/talents/acoustic-guitar.jpg",
-          "image": "/media/diary/talents/acoustic-guitar.jpg",
-          "aspectRatio": "landscape",
-          "frameStyle": "polaroid",
-          "tags": ["Acoustic", "Guitar", "Singing", "CozyVibes"],
-          "sortOrder": 3,
-          "published": true,
-          "featured": true
-        },
-        {
-          "id": "hobby-vinyl-record",
-          "title": "Vintage Vinyl & Classical Melodies",
-          "caption": "Warm crackle of analog records. Slow evenings spent listening to timeless melodies and old soulful hits.",
-          "description": "Spinning retro records on an old turntable. A reminder that classic craftsmanship never goes out of style.",
-          "date": "Vintage Collection",
-          "location": "Listening Nook",
-          "category": "music",
-          "mediaType": "image",
-          "mediaUrl": "/media/diary/talents/vinyl-turntable.jpg",
-          "image": "/media/diary/talents/vinyl-turntable.jpg",
-          "aspectRatio": "landscape",
-          "frameStyle": "tape",
-          "tags": ["Vinyl", "Turntable", "AnalogSound", "RetroMelodies"],
-          "sortOrder": 4,
-          "published": true
         }
       ]
     },

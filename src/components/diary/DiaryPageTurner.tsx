@@ -45,30 +45,65 @@ const CHAPTER_ICONS = [
   Camera, // Chapter 4: Memories
 ];
 
-const RIBBON_STYLES = [
+const DAY_RIBBON_STYLES = [
   {
-    bg: "bg-pink-200 hover:bg-pink-300",
-    text: "text-pink-950",
+    bg: "bg-pink-100/90 hover:bg-pink-200",
+    text: "text-pink-950 font-bold",
     border: "border-pink-300/80",
-    shadow: "shadow-pink-300/40",
+    shadow: "shadow-pink-300/30",
+    iconBg: "bg-white/90 text-pink-700",
   },
   {
-    bg: "bg-sky-200 hover:bg-sky-300",
-    text: "text-sky-950",
+    bg: "bg-sky-100/90 hover:bg-sky-200",
+    text: "text-sky-950 font-bold",
     border: "border-sky-300/80",
-    shadow: "shadow-sky-300/40",
+    shadow: "shadow-sky-300/30",
+    iconBg: "bg-white/90 text-sky-700",
   },
   {
-    bg: "bg-teal-100 hover:bg-teal-200",
-    text: "text-teal-950",
-    border: "border-teal-200/80",
-    shadow: "shadow-teal-200/40",
+    bg: "bg-teal-50/90 hover:bg-teal-100",
+    text: "text-teal-950 font-bold",
+    border: "border-teal-300/80",
+    shadow: "shadow-teal-300/30",
+    iconBg: "bg-white/90 text-teal-700",
   },
   {
-    bg: "bg-purple-200 hover:bg-purple-300",
-    text: "text-purple-950",
+    bg: "bg-purple-100/90 hover:bg-purple-200",
+    text: "text-purple-950 font-bold",
     border: "border-purple-300/80",
-    shadow: "shadow-purple-300/40",
+    shadow: "shadow-purple-300/30",
+    iconBg: "bg-white/90 text-purple-700",
+  },
+];
+
+const NIGHT_RIBBON_STYLES = [
+  {
+    bg: "bg-pink-950/85 hover:bg-pink-900/90",
+    text: "text-pink-100 hover:text-white font-bold",
+    border: "border-pink-400/80 hover:border-pink-300",
+    shadow: "shadow-[0_0_15px_rgba(244,114,182,0.35)]",
+    iconBg: "bg-pink-900 text-pink-200 border border-pink-400/50",
+  },
+  {
+    bg: "bg-sky-950/85 hover:bg-sky-900/90",
+    text: "text-cyan-100 hover:text-white font-bold",
+    border: "border-cyan-400/80 hover:border-cyan-300",
+    shadow: "shadow-[0_0_15px_rgba(34,211,238,0.35)]",
+    iconBg: "bg-sky-900 text-cyan-200 border border-cyan-400/50",
+  },
+  {
+    bg: "bg-emerald-950/85 hover:bg-emerald-900/90",
+    text: "text-emerald-100 hover:text-white font-bold",
+    border: "border-emerald-400/80 hover:border-emerald-300",
+    shadow: "shadow-[0_0_15px_rgba(52,211,153,0.35)]",
+    iconBg: "bg-emerald-900 text-emerald-200 border border-emerald-400/50",
+  },
+  {
+    bg: "bg-purple-950/85 hover:bg-purple-900/90",
+    text: "text-purple-100 hover:text-white font-bold",
+    border: "border-purple-400/80 hover:border-purple-300",
+    shadow: "shadow-[0_0_15px_rgba(192,132,252,0.35)]",
+    iconBg: "bg-purple-900 text-purple-200 border border-purple-400/50",
   },
 ];
 
@@ -353,14 +388,14 @@ export function DiaryPageTurner({
 
                     {/* Left Page Fairytale Card & Ribbon Note */}
                     <div
-                      className={`mt-8 rounded-2xl border p-5 shadow-sm transition-all duration-500 ${
+                      className={`mt-6 sm:mt-8 rounded-2xl border p-5 shadow-sm transition-all duration-500 ${
                         isNightMode
-                          ? "border-indigo-400/40 bg-gradient-to-br from-indigo-950/80 to-slate-900/80 text-slate-200 shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                          ? "border-indigo-400/50 bg-gradient-to-br from-indigo-950/90 to-slate-900/95 text-slate-100 shadow-[0_0_20px_rgba(99,102,241,0.25)]"
                           : "border-amber-300/80 bg-gradient-to-br from-pink-50/85 to-amber-50/85 text-stone-800"
                       }`}
                     >
                       <h4
-                        className={`font-serif text-sm font-bold flex items-center gap-2 ${
+                        className={`font-serif text-sm sm:text-base font-bold flex items-center gap-2 ${
                           isNightMode ? "text-cyan-200" : "text-pink-950"
                         }`}
                       >
@@ -370,8 +405,8 @@ export function DiaryPageTurner({
                         A Gentle Memory Book
                       </h4>
                       <p
-                        className={`font-handwriting mt-2 text-base leading-relaxed font-semibold ${
-                          isNightMode ? "text-slate-200" : "text-stone-800"
+                        className={`font-handwriting mt-2 text-base leading-relaxed font-bold ${
+                          isNightMode ? "text-slate-100" : "text-stone-800"
                         }`}
                       >
                         Here you will find real memories, singing recordings, travel adventures,
@@ -432,26 +467,38 @@ export function DiaryPageTurner({
                     </div>
                   </div>
 
-                  {/* 7 Handcrafted Ribbon Tabs (Left) & Polaroid Photos (Right) */}
+                  {/* Handcrafted Ribbon Tabs (Left) & Polaroid Photos (Right) */}
                   <div className="mt-6 grid grid-cols-1 sm:grid-cols-[1.25fr_0.9fr] gap-4 items-center">
-                    {/* The 7 Chapter Ribbons */}
-                    <div className="space-y-2">
+                    {/* The 4 Chapter Ribbons */}
+                    <div className="space-y-2.5">
                       {chapters.map((chapter, idx) => {
                         const Icon = CHAPTER_ICONS[idx % CHAPTER_ICONS.length];
-                        const style = RIBBON_STYLES[idx % RIBBON_STYLES.length];
+                        const ribbonStyles = isNightMode ? NIGHT_RIBBON_STYLES : DAY_RIBBON_STYLES;
+                        const style = ribbonStyles[idx % ribbonStyles.length];
                         return (
                           <button
                             key={chapter.id}
                             onClick={() => jumpToChapter(idx)}
-                            className={`diary-ribbon-tab group w-full flex items-center gap-3 px-3.5 py-2.5 rounded-r-2xl rounded-l-md border ${style.bg} ${style.border} ${style.text} ${style.shadow} shadow-md text-left transition duration-200`}
+                            className={`diary-ribbon-tab group w-full flex items-center gap-3 px-4 py-3 rounded-r-2xl rounded-l-md border ${style.bg} ${style.border} ${style.text} ${style.shadow} shadow-md text-left transition-all duration-200 hover:scale-[1.02]`}
                           >
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/80 shadow-xs">
+                            <span
+                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full shadow-xs ${style.iconBg}`}
+                            >
                               <Icon className="h-4 w-4" />
                             </span>
-                            <span className="font-serif text-sm font-bold tracking-wide truncate">
-                              {chapter.title}
-                            </span>
-                            <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity font-serif text-xs">
+                            <div className="min-w-0 flex-1">
+                              <span className="font-serif text-sm sm:text-base font-extrabold tracking-wide block truncate">
+                                {chapter.title}
+                              </span>
+                              <span
+                                className={`text-[11px] font-handwriting block truncate ${
+                                  isNightMode ? "text-cyan-200/90" : "text-stone-600"
+                                }`}
+                              >
+                                {chapter.subtitle}
+                              </span>
+                            </div>
+                            <span className="ml-auto opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all font-serif text-sm">
                               →
                             </span>
                           </button>
@@ -459,27 +506,59 @@ export function DiaryPageTurner({
                       })}
                     </div>
 
-                    {/* Polaroid Scrapbook Photos with Pink Washi Tape (From Reference Image) */}
+                    {/* Polaroid Scrapbook Photos with Washi Tape */}
                     <div className="relative flex flex-col items-center gap-3 py-2">
                       {/* Polaroid 1: Pastel Clouds */}
-                      <div className="relative w-28 p-2 pb-5 bg-white rounded-sm shadow-md transform rotate-6 hover:rotate-0 transition duration-300">
-                        <div className="diary-washi-tape absolute -top-2 left-6 w-12 h-3" />
-                        <div className="h-16 w-full rounded-xs bg-gradient-to-t from-sky-200 to-pink-100 flex items-center justify-center text-xs">
+                      <div
+                        className={`relative w-32 p-2.5 pb-5 rounded-sm shadow-md transform rotate-6 hover:rotate-0 transition duration-300 border ${
+                          isNightMode
+                            ? "bg-slate-900 border-indigo-400/50 shadow-[0_4px_20px_rgba(99,102,241,0.25)]"
+                            : "bg-white border-stone-200"
+                        }`}
+                      >
+                        <div className="diary-washi-tape absolute -top-2 left-8 w-12 h-3" />
+                        <div
+                          className={`h-18 w-full rounded-xs flex items-center justify-center text-sm ${
+                            isNightMode
+                              ? "bg-gradient-to-t from-indigo-950 to-slate-800 text-cyan-200"
+                              : "bg-gradient-to-t from-sky-200 to-pink-100 text-stone-700"
+                          }`}
+                        >
                           ☁️ 🌸
                         </div>
-                        <span className="block mt-1 font-handwriting text-[10px] text-center text-stone-600 font-bold">
-                          Cloudscapes
+                        <span
+                          className={`block mt-1.5 font-handwriting text-xs text-center font-bold ${
+                            isNightMode ? "text-cyan-200" : "text-stone-700"
+                          }`}
+                        >
+                          Cloudscapes ♡
                         </span>
                       </div>
 
                       {/* Polaroid 2: Crescent Moon Sky */}
-                      <div className="relative w-28 p-2 pb-5 bg-white rounded-sm shadow-md transform -rotate-6 hover:rotate-0 transition duration-300 -mt-2">
-                        <div className="diary-washi-tape absolute -top-2 right-4 w-12 h-3" />
-                        <div className="h-16 w-full rounded-xs bg-gradient-to-t from-stone-900 to-indigo-950 flex items-center justify-center text-xs">
+                      <div
+                        className={`relative w-32 p-2.5 pb-5 rounded-sm shadow-md transform -rotate-6 hover:rotate-0 transition duration-300 -mt-2 border ${
+                          isNightMode
+                            ? "bg-slate-900 border-cyan-400/50 shadow-[0_4px_20px_rgba(34,211,238,0.25)]"
+                            : "bg-white border-stone-200"
+                        }`}
+                      >
+                        <div className="diary-washi-tape absolute -top-2 right-6 w-12 h-3" />
+                        <div
+                          className={`h-18 w-full rounded-xs flex items-center justify-center text-sm ${
+                            isNightMode
+                              ? "bg-gradient-to-t from-slate-950 to-purple-950 text-amber-200"
+                              : "bg-gradient-to-t from-stone-900 to-indigo-950 text-amber-100"
+                          }`}
+                        >
                           🌙 ✨
                         </div>
-                        <span className="block mt-1 font-handwriting text-[10px] text-center text-stone-600 font-bold">
-                          Starry Dreams
+                        <span
+                          className={`block mt-1.5 font-handwriting text-xs text-center font-bold ${
+                            isNightMode ? "text-amber-200" : "text-stone-700"
+                          }`}
+                        >
+                          Starry Dreams ✨
                         </span>
                       </div>
                     </div>
