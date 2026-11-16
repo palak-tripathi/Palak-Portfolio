@@ -485,6 +485,14 @@ export function StoryChapter({
               <span className="rounded-lg bg-amber-100/80 dark:bg-amber-950/60 px-2.5 py-1 font-mono text-[10px] font-bold text-amber-800 dark:text-amber-200 border border-amber-300/50">
                 🎨 Pinterest Aesthetic
               </span>
+              <a
+                href="/Palak_Tripathi_Resume.pdf"
+                download="Palak_Tripathi_Resume.pdf"
+                className="rounded-lg bg-emerald-100/90 dark:bg-emerald-950/80 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-900 dark:text-emerald-200 border border-emerald-400/60 hover:scale-105 transition flex items-center gap-1 shadow-xs"
+                title="Download Official Resume PDF"
+              >
+                📄 Resume .PDF
+              </a>
             </div>
           </div>
         </div>

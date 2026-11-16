@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Code2,
@@ -19,6 +19,9 @@ import {
   Instagram,
   Linkedin,
   Phone,
+  Download,
+  Eye,
+  FileText,
 } from "lucide-react";
 import { MeetPalak } from "@/components/MeetPalak";
 import portrait from "@/assets/palak-portrait.jpg.asset.json";
@@ -28,6 +31,7 @@ import { DiaryExperience } from "@/components/diary/DiaryExperience";
 import { CertificatesSection } from "@/components/certificates/CertificatesSection";
 import { ProjectsSection } from "@/components/projects/ProjectsSection";
 import { TechStack3D } from "@/components/TechStack3D";
+import { ResumeModal } from "@/components/resume/ResumeModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -104,10 +108,11 @@ function Section({
 
 function Index() {
   useReveal();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header className="fixed inset-x-0 top-4 z-40 mx-auto flex w-[min(92%,64rem)] items-center justify-between rounded-full glass px-5 py-3 shadow-card">
+      <header className="fixed inset-x-0 top-4 z-40 mx-auto flex w-[min(94%,68rem)] items-center justify-between rounded-full glass px-4 sm:px-6 py-2.5 shadow-card">
         <a href="#top" className="font-display text-lg font-bold">
           <span className="text-gradient">Palak</span>.dev
         </a>
@@ -118,12 +123,25 @@ function Index() {
             </a>
           ))}
         </nav>
-        <a
-          href="#contact"
-          className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-primary-foreground"
-        >
-          Let's talk
-        </a>
+        <div className="flex items-center gap-2">
+          {/* Resume View & Download Button in Header */}
+          <button
+            type="button"
+            onClick={() => setIsResumeOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/20 hover:scale-105"
+            title="View Palak's Resume"
+          >
+            <FileText className="h-3.5 w-3.5" />
+            <span>Resume</span>
+          </button>
+
+          <a
+            href="#contact"
+            className="rounded-full bg-brand px-4 py-1.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition hover:scale-105"
+          >
+            Let's talk
+          </a>
+        </div>
       </header>
 
       {/* HERO */}
@@ -143,18 +161,38 @@ function Index() {
               Computer Science and Business Systems student exploring full-stack development,
               creative technology, and meaningful software projects.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#about"
                 className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3.5 font-semibold text-primary-foreground shadow-glow transition hover:-translate-y-0.5"
               >
                 Explore Portfolio <ArrowRight className="h-4 w-4" />
               </a>
+
+              {/* View / See Resume Button */}
+              <button
+                type="button"
+                onClick={() => setIsResumeOpen(true)}
+                className="inline-flex items-center gap-2 rounded-full border-2 border-primary/40 bg-card px-5 py-3.5 font-semibold text-primary transition hover:bg-primary/10 hover:-translate-y-0.5 shadow-sm"
+              >
+                <Eye className="h-4 w-4" /> View Resume
+              </button>
+
+              {/* Direct Download CV Button */}
+              <a
+                href="/Palak_Tripathi_Resume.pdf"
+                download="Palak_Tripathi_Resume.pdf"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3.5 font-semibold transition hover:bg-accent hover:-translate-y-0.5"
+                title="Download Palak's Resume PDF"
+              >
+                <Download className="h-4 w-4 text-primary" /> Download CV
+              </a>
+
               <a
                 href="#projects"
-                className="rounded-full border border-border bg-card px-6 py-3.5 font-semibold transition hover:bg-accent"
+                className="rounded-full border border-border bg-card px-5 py-3.5 font-semibold transition hover:bg-accent"
               >
-                View Projects
+                Projects
               </a>
             </div>
           </div>
@@ -206,7 +244,7 @@ function Index() {
             </p>
             <div className="grid gap-4 sm:grid-cols-3">
               {[
-                { icon: GraduationCap, t: "Education", d: "B.Tech in CSBS" },
+                { icon: GraduationCap, t: "Education", d: "B.Tech in CSBS (7.56 CGPA)" },
                 { icon: Lightbulb, t: "Interests", d: "Web dev & creative tech" },
                 { icon: Rocket, t: "Direction", d: "Full-stack developer" },
               ].map(({ icon: I, t, d }) => (
@@ -219,6 +257,41 @@ function Index() {
                   <p className="text-sm text-muted-foreground">{d}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Resume Interactive Callout Card */}
+            <div className="rounded-2xl border border-border bg-card/80 p-4 sm:p-5 shadow-card flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm sm:text-base">
+                    Palak Tripathi · Official Resume
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Aspiring Full-Stack Developer | React.js · Node.js · Gemini AI
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsResumeOpen(true)}
+                  className="rounded-full gap-1.5 font-semibold transition hover:scale-105"
+                >
+                  <Eye className="h-3.5 w-3.5 text-primary" /> View Resume
+                </Button>
+                <a
+                  href="/Palak_Tripathi_Resume.pdf"
+                  download="Palak_Tripathi_Resume.pdf"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:scale-105"
+                  title="Download Palak's Resume PDF"
+                >
+                  <Download className="h-3.5 w-3.5" /> Download PDF
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -314,6 +387,9 @@ function Index() {
           </a>
         </p>
       </section>
+
+      {/* Interactive Resume View & Download Modal */}
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
     </div>
   );
 }
