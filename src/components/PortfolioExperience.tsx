@@ -1,21 +1,39 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { PortfolioChat } from "@/components/chat/PortfolioChat";
+import { playMagicalOpenSound, playStepChime } from "@/components/diary/DiaryAudio";
 import { shouldShowOpening } from "@/lib/portfolio-experience";
 
 const IntroPlaybackContext = createContext(false);
 export const useIntroPlayback = () => useContext(IntroPlaybackContext);
 
-// SCREEN 1: Minimalist, Powerful Full-Screen Cinematic Countdown (1 -> 2 -> 3)
+// Track in-memory session status: fresh page load / reload starts false so 1-2-3 always displays
+let hasPlayedInSession = false;
+
+// SCREEN 1: Snappy, Aesthetic, Futuristic 3D Countdown (1 -> 2 -> 3)
 function TechSplashScreen({ onDone, onBegin }: { onDone: () => void; onBegin: () => void }) {
   const [count, setCount] = useState<1 | 2 | 3>(1);
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    // Snappy, energetic countdown (600ms per number = 1.8s total)
-    const t1 = setTimeout(() => setCount(2), 650);
-    const t2 = setTimeout(() => setCount(3), 1300);
-    const t3 = setTimeout(() => handleComplete(), 1950);
+    // Play initial chime for Step 1 immediately
+    playStepChime(1);
+
+    // Fast, crisp pacing: ~580ms per number = 1.74s total
+    const t1 = setTimeout(() => {
+      setCount(2);
+      playStepChime(2);
+    }, 580);
+
+    const t2 = setTimeout(() => {
+      setCount(3);
+      playStepChime(3);
+      playMagicalOpenSound();
+    }, 1160);
+
+    const t3 = setTimeout(() => {
+      handleComplete();
+    }, 1740);
 
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -31,7 +49,7 @@ function TechSplashScreen({ onDone, onBegin }: { onDone: () => void; onBegin: ()
   const handleComplete = () => {
     setExiting(true);
     onBegin();
-    setTimeout(onDone, 400);
+    setTimeout(onDone, 350);
   };
 
   const handleSkip = () => {
@@ -41,43 +59,52 @@ function TechSplashScreen({ onDone, onBegin }: { onDone: () => void; onBegin: ()
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col justify-between overflow-hidden bg-[#040714] text-white transition-opacity duration-600 ${
+      className={`fixed inset-0 z-50 flex flex-col justify-between overflow-hidden bg-[#030612] text-white transition-opacity duration-400 ${
         exiting ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
       role="dialog"
       aria-modal="true"
       aria-label="Cinematic countdown"
     >
-      {/* Immersive Deep Blue, Violet, Cyan & Golden Futuristic Lighting */}
+      {/* Immersive Deep Holographic Lighting & Grid */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Holographic Cyber Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e1b4b25_1px,transparent_1px),linear-gradient(to_bottom,#1e1b4b25_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_65%_65%_at_50%_50%,#000_70%,transparent_100%)] opacity-80" />
+        {/* Cyber Perspective Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e1b4b30_1px,transparent_1px),linear-gradient(to_bottom,#1e1b4b30_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_75%,transparent_100%)] opacity-85" />
 
-        {/* Ambient Ethereal Glow Orbs */}
-        <div className="absolute -top-32 left-1/4 h-[500px] w-[500px] rounded-full bg-indigo-600/30 blur-[140px] animate-pulse" />
+        {/* Dynamic Glowing Ambient Light Spheres */}
         <div
-          className="absolute top-1/3 -right-24 h-[520px] w-[520px] rounded-full bg-cyan-500/25 blur-[150px] animate-pulse"
-          style={{ animationDuration: "3.5s" }}
+          className={`absolute -top-32 left-1/4 h-[550px] w-[550px] rounded-full blur-[140px] transition-colors duration-700 ${
+            count === 1 ? "bg-cyan-600/35" : count === 2 ? "bg-purple-600/35" : "bg-amber-500/35"
+          }`}
         />
-        <div className="absolute -bottom-24 left-1/3 h-[450px] w-[450px] rounded-full bg-amber-400/20 blur-[130px]" />
+        <div
+          className={`absolute top-1/3 -right-24 h-[520px] w-[520px] rounded-full blur-[150px] transition-colors duration-700 ${
+            count === 1
+              ? "bg-indigo-600/30"
+              : count === 2
+                ? "bg-fuchsia-600/30"
+                : "bg-orange-500/30"
+          }`}
+        />
+        <div className="absolute -bottom-24 left-1/3 h-[450px] w-[450px] rounded-full bg-indigo-900/30 blur-[130px]" />
 
-        {/* Floating Digital Particles */}
+        {/* Sparkle particles */}
         <div className="absolute top-1/4 left-1/5 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_#06b6d4] animate-ping" />
         <div
-          className="absolute top-2/3 right-1/4 h-2 w-2 rounded-full bg-indigo-300 shadow-[0_0_14px_#6366f1] animate-ping"
-          style={{ animationDelay: "0.8s" }}
+          className="absolute top-2/3 right-1/4 h-2 w-2 rounded-full bg-purple-300 shadow-[0_0_14px_#a855f7] animate-ping"
+          style={{ animationDelay: "0.4s" }}
         />
         <div
           className="absolute bottom-1/4 left-1/3 h-2.5 w-2.5 rounded-full bg-amber-200 shadow-[0_0_16px_#fde047] animate-ping"
-          style={{ animationDelay: "1.6s" }}
+          style={{ animationDelay: "0.8s" }}
         />
 
-        {/* Laser Light Streaks */}
-        <div className="absolute inset-x-0 top-1/3 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
-        <div className="absolute inset-x-0 bottom-1/3 h-px bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent" />
+        {/* Ambient Horizontal Beam Lines */}
+        <div className="absolute inset-x-0 top-1/3 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+        <div className="absolute inset-x-0 bottom-1/3 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent" />
       </div>
 
-      {/* Top Header — Minimal Skip */}
+      {/* Top Header — Skip Button */}
       <header className="relative z-10 flex items-center justify-end px-6 sm:px-12 py-6">
         <button
           onClick={handleSkip}
@@ -87,53 +114,127 @@ function TechSplashScreen({ onDone, onBegin }: { onDone: () => void; onBegin: ()
         </button>
       </header>
 
-      {/* Main Center Stage: HUGE BOLD 3D NUMBERS ONLY (1 -> 2 -> 3) */}
+      {/* Main Center Stage: 3D NUMBER (1 -> 2 -> 3) WITH SUBTITLES */}
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 text-center">
         {count === 1 && (
           <div
             key="count-1"
-            className="flex items-center justify-center animate-in fade-in zoom-in-75 duration-400"
+            className="flex flex-col items-center justify-center animate-in fade-in zoom-in-90 duration-350"
           >
-            <span className="splash-number-3d text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-100 to-cyan-500 select-none">
-              1
-            </span>
+            {/* Holographic Glowing Ring Backdrop */}
+            <div className="relative flex items-center justify-center">
+              <div className="absolute h-52 w-52 sm:h-64 sm:w-64 rounded-full border border-cyan-400/35 bg-cyan-500/10 blur-[2px] shadow-[0_0_70px_rgba(6,182,212,0.35)] animate-pulse" />
+              <span className="splash-number-3d splash-num-1">1</span>
+            </div>
+
+            <div className="mt-5 flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-950/60 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+                <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-ping" />
+                <span>STAGE 01 · INITIALIZING</span>
+              </div>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-md">
+                Palak Tripathi
+              </h2>
+              <p className="mt-1 text-sm font-medium text-cyan-200/80">
+                Full-Stack Engineer & Vocalist
+              </p>
+            </div>
           </div>
         )}
 
         {count === 2 && (
           <div
             key="count-2"
-            className="flex items-center justify-center animate-in fade-in zoom-in-75 duration-400"
+            className="flex flex-col items-center justify-center animate-in fade-in zoom-in-90 duration-350"
           >
-            <span className="splash-number-3d text-transparent bg-clip-text bg-gradient-to-b from-white via-indigo-100 to-indigo-500 select-none">
-              2
-            </span>
+            {/* Holographic Glowing Ring Backdrop */}
+            <div className="relative flex items-center justify-center">
+              <div className="absolute h-52 w-52 sm:h-64 sm:w-64 rounded-full border border-purple-400/35 bg-purple-500/10 blur-[2px] shadow-[0_0_70px_rgba(168,85,247,0.35)] animate-pulse" />
+              <span className="splash-number-3d splash-num-2">2</span>
+            </div>
+
+            <div className="mt-5 flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="inline-flex items-center gap-2 rounded-full border border-purple-400/40 bg-purple-950/60 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.25)]">
+                <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc] animate-ping" />
+                <span>STAGE 02 · HARMONIES & CODE</span>
+              </div>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-md">
+                Story in Stills & Sound
+              </h2>
+              <p className="mt-1 text-sm font-medium text-purple-200/80">
+                Interactive 3D Diary & Acoustic Sessions
+              </p>
+            </div>
           </div>
         )}
 
         {count === 3 && (
           <div
             key="count-3"
-            className="flex items-center justify-center animate-in fade-in zoom-in-75 duration-400"
+            className="flex flex-col items-center justify-center animate-in fade-in zoom-in-90 duration-350"
           >
-            <span className="splash-number-3d text-transparent bg-clip-text bg-gradient-to-b from-white via-amber-200 to-amber-400 select-none">
-              3
-            </span>
+            {/* Holographic Glowing Ring Backdrop */}
+            <div className="relative flex items-center justify-center">
+              <div className="absolute h-52 w-52 sm:h-64 sm:w-64 rounded-full border border-amber-400/35 bg-amber-500/10 blur-[2px] shadow-[0_0_75px_rgba(245,158,11,0.4)] animate-pulse" />
+              <span className="splash-number-3d splash-num-3">3</span>
+            </div>
+
+            <div className="mt-5 flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-950/60 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] animate-ping" />
+                <span>STAGE 03 · READY TO LAUNCH</span>
+              </div>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-md">
+                Welcome to Palak's Portfolio ✨
+              </h2>
+              <p className="mt-1 text-sm font-medium text-amber-200/80">Opening Digital Space...</p>
+            </div>
           </div>
         )}
       </main>
 
-      {/* Minimal Footer Progress Indicator */}
-      <footer className="relative z-10 flex items-center justify-center px-6 py-6">
-        <div className="flex gap-2">
-          {[1, 2, 3].map((s) => (
-            <div
-              key={s}
-              className={`h-1.5 rounded-full transition-all duration-400 ${
-                count === s ? "w-8 bg-cyan-400 shadow-[0_0_10px_#06b6d4]" : "w-2 bg-white/20"
-              }`}
-            />
-          ))}
+      {/* Sleek Stage Indicator Footer */}
+      <footer className="relative z-10 flex flex-col items-center justify-center gap-3 px-6 py-8">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {[
+            { step: 1 as const, label: "01 · INIT" },
+            { step: 2 as const, label: "02 · HARMONY" },
+            { step: 3 as const, label: "03 · LAUNCH" },
+          ].map((item) => {
+            const active = count === item.step;
+            const done = count > item.step;
+            return (
+              <div
+                key={item.step}
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[11px] font-semibold transition-all duration-300 ${
+                  active
+                    ? count === 1
+                      ? "border border-cyan-400/80 bg-cyan-500/25 text-cyan-200 shadow-[0_0_12px_rgba(6,182,212,0.45)]"
+                      : count === 2
+                        ? "border border-purple-400/80 bg-purple-500/25 text-purple-200 shadow-[0_0_12px_rgba(168,85,247,0.45)]"
+                        : "border border-amber-400/80 bg-amber-500/25 text-amber-200 shadow-[0_0_12px_rgba(245,158,11,0.45)]"
+                    : done
+                      ? "border border-white/20 bg-white/10 text-white/70"
+                      : "border border-white/10 bg-transparent text-white/30"
+                }`}
+              >
+                <span>{item.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress Track */}
+        <div className="h-1 w-48 sm:w-64 overflow-hidden rounded-full bg-white/10">
+          <div
+            className={`h-full transition-all duration-500 ease-out ${
+              count === 1
+                ? "w-1/3 bg-cyan-400 shadow-[0_0_10px_#06b6d4]"
+                : count === 2
+                  ? "w-2/3 bg-purple-400 shadow-[0_0_10px_#a855f7]"
+                  : "w-full bg-amber-400 shadow-[0_0_10px_#f59e0b]"
+            }`}
+          />
         </div>
       </footer>
     </div>
@@ -143,30 +244,31 @@ function TechSplashScreen({ onDone, onBegin }: { onDone: () => void; onBegin: ()
 // SCREEN 2 & WRAPPER: Website Reveal Animation & Audio Controls
 export function PortfolioExperience({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const [ready, setReady] = useState(false);
-  const [showOpening, setShowOpening] = useState(true);
+
+  // Compute synchronously on first render: zero blank flash, fast startup!
+  const [showOpening, setShowOpening] = useState(() => {
+    if (typeof window === "undefined") return false;
+    // Clear stale sessionStorage flags from previous sessions
+    try {
+      sessionStorage.removeItem("introSeen");
+    } catch {}
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    return shouldShowOpening(window.location.pathname, hasPlayedInSession, reducedMotion);
+  });
   const [introPlayback, setIntroPlayback] = useState(false);
 
   useEffect(() => {
-    // Show splash screen on initial visit unless already seen in session or reduced-motion requested
-    const seen = Boolean(sessionStorage.getItem("introSeen"));
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setShowOpening(shouldShowOpening(pathname, seen, reducedMotion));
-    setReady(true);
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    setShowOpening(shouldShowOpening(pathname, hasPlayedInSession, reducedMotion));
   }, [pathname]);
 
   const finish = useCallback(() => {
-    sessionStorage.setItem("introSeen", "1");
+    hasPlayedInSession = true;
     setShowOpening(false);
   }, []);
 
   const begin = useCallback(() => setIntroPlayback(true), []);
   const openingVisible = pathname === "/" && showOpening;
-
-  // IMPORTANT: Keep the actual website completely hidden while the splash screen is running!
-  if (!ready) {
-    return <div className="fixed inset-0 bg-[#050814]" />;
-  }
 
   if (openingVisible) {
     return (
