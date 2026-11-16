@@ -112,7 +112,7 @@ function Index() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header className="fixed inset-x-0 top-4 z-40 mx-auto flex w-[min(94%,68rem)] items-center justify-between rounded-full glass px-4 sm:px-6 py-2.5 shadow-card">
+      <header className="fixed inset-x-0 top-4 z-40 mx-auto flex w-[min(92%,64rem)] items-center justify-between rounded-full glass px-5 py-3 shadow-card">
         <a href="#top" className="font-display text-lg font-bold">
           <span className="text-gradient">Palak</span>.dev
         </a>
@@ -123,25 +123,12 @@ function Index() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
-          {/* Resume View & Download Button in Header */}
-          <button
-            type="button"
-            onClick={() => setIsResumeOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/20 hover:scale-105"
-            title="View Palak's Resume"
-          >
-            <FileText className="h-3.5 w-3.5" />
-            <span>Resume</span>
-          </button>
-
-          <a
-            href="#contact"
-            className="rounded-full bg-brand px-4 py-1.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition hover:scale-105"
-          >
-            Let's talk
-          </a>
-        </div>
+        <a
+          href="#contact"
+          className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:scale-105"
+        >
+          Let's talk
+        </a>
       </header>
 
       {/* HERO */}
